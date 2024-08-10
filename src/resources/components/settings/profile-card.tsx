@@ -1,8 +1,8 @@
-import type { TwitchUser } from "~types/types";
+import type { User} from "~types/types";
 import { t } from "~utils/i18nUtils";
 
 type ProfileCardProps = {
-  user: TwitchUser;
+  user: User;
   pronouns?: string;
   occupation?: string;
 };
@@ -21,7 +21,7 @@ export default function ProfileCard({
   return (
     <div className="flex items-center rounded-xl bg-muted">
       <img
-        src={user.profile_image_url}
+        src={user.accounts[0].avatar}
         alt="The user's profile"
         className="size-28 rounded-xl p-1"
       />
@@ -31,7 +31,7 @@ export default function ProfileCard({
             className="font-extrabold text-lg m-0 line-clamp-1"
             id="usernameEl"
           >
-            {user.display_name}
+            {user.name}
           </h1>
           <p
             className="text-gray-600 dark:text-gray-300 text-sm m-0 p-0"
@@ -44,7 +44,7 @@ export default function ProfileCard({
           <p className="text-sm">
             <span className="font-bold">ID:</span>
             <span className="text-gray-600 dark:text-gray-300 ml-2" id="idEl">
-              {user.id}
+              {user.accounts[0].id}
             </span>
           </p>
           <p className="text-sm">
