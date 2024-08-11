@@ -4,7 +4,8 @@
     "enabled": true
   },
   "files": {
-    "ignore": [".plasmo", "node_modules", "build"]
+    "ignore": [".plasmo", "node_modules", "build"],
+    "ignoreUnknown": true
   },
   "linter": {
     "enabled": true,
