@@ -3,109 +3,35 @@ import browser from "webextension-polyfill";
 import type { PlasmoMessaging } from "@plasmohq/messaging";
 import { Storage } from "@plasmohq/storage";
 
-import type {
-  AccessTokenResponse,
-  ColorChatUser,
-  TwitchUser,
-  User,
-  UserSettings,
-} from "~types/types";
+import type { AccessTokenResponse, TwitchUser, User } from "~types/types";
 import { env } from "~config/env";
+import { getOccupations } from "~services/occupation-service";
 
 const CLIENT_ID = process.env.PLASMO_PUBLIC_TWITCH_CLIENT_ID;
-const TWITCH_API_URL = process.env.PLASMO_PUBLIC_TWITCH_API_URL;
-const API_URL: string = process.env.PLASMO_PUBLIC_API_URL;
 
 const REDIRECT_URI = browser.identity.getRedirectURL();
 
+
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-  const storage = new Storage();
+
   const accessToken = await authenticateWithTwitch();
-  await storage.set("accessToken", accessToken);
-
-  let  [serverAccessToken, user] = await authenticateWithServer(accessToken);
+  let [serverAccessToken, user, twitchUser] =
+    await authenticateWithServer(accessToken);
   user = user as User;
+  const storage = new Storage();
+
   await storage.set("user", user);
-
-  const settings = await getUserDataByUsername(
-    user.accounts[0].nickname,
-    user.accounts[0].provider_user_id,
-  );
-
-  await storage.set("settings", settings);
-
-  const color = await getUserChatColor(user.accounts[0].token, user.accounts[0].provider_user_id);
-  await storage.set("color", color);
-
-  if (settings) {
-    await storage.set("pronouns", settings.pronouns);
-    await storage.set("occupation", settings.occupation);
-  }
+  await storage.set("accessToken", serverAccessToken);
+  await storage.set("twitchUser", twitchUser);
+  let occupations = await getOccupations();
+  console.log(occupations);
+  await storage.set("occupations",  occupations);
 
   res.send({
     auth: true,
     user: user,
   });
 };
-
-async function getUserDataByUsername(
-  username: string,
-  user_id: string,
-): Promise<UserSettings | null> {
-  const settings = await fetch(`${API_URL}/settings/${username}`, {
-    headers: {
-      "Client-ID": CLIENT_ID,
-    },
-  });
-
-  if (settings.ok) {
-    return (await settings.json()) as UserSettings;
-  }
-
-  const response = await fetch(
-    `${process.env.PLASMO_PUBLIC_API_URL}/settings`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        pronouns: "n/d",
-        locale: navigator.language,
-        occupation: "none",
-        user_id: user_id,
-        username: username,
-      }),
-    },
-  );
-
-  if (settings.ok) {
-    return (await settings.json()) as UserSettings;
-  }
-
-  return null;
-}
-
-async function getUserChatColor(
-  accessToken: string,
-  userId: string,
-): Promise<string | null> {
-  const usernameColorRequest = await fetch(
-    `${TWITCH_API_URL}/chat/color?user_id=${userId}`,
-    {
-      headers: {
-        "Client-ID": CLIENT_ID,
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
-
-  if (usernameColorRequest.ok) {
-    const response: ColorChatUser = await usernameColorRequest.json();
-    return response.data[0].color;
-  }
-  return "gray";
-}
 
 /**
  * Authenticate with Twitch using OAuth2
@@ -141,11 +67,15 @@ async function authenticateWithServer(code: string) {
   console.log(data);
 
   let user = data.user as User;
-  //delete data.user;
 
   let accessToken = data as AccessTokenResponse;
+  let twitchUser = {
+    id: parseInt(user.accounts[0].provider_user_id),
+    login: user.accounts[0].nickname,
+    display_name: user.accounts[0].name,
+  } as TwitchUser;
 
-  return [accessToken, user];
+  return [accessToken, user, twitchUser];
 }
 
 export default handler;

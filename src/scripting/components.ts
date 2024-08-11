@@ -1,6 +1,5 @@
 import { t } from "~utils/i18nUtils";
-import { useStorage } from "@plasmohq/storage/dist/hook";
-import { occupations, pronounsItems } from "@Components/settings/settings-form";
+import { pronounsItems } from "@Components/settings/settings-form";
 
 const API_URL: string = process.env.PLASMO_PUBLIC_API_URL;
 
@@ -94,8 +93,7 @@ async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
   const i18nPronouns = t(`pronouns${currentPronoun.translationKey}`);
   // @ts-ignore
   nameCard.innerHTML += `<span class="pronouns-card">(${i18nPronouns})</span>`;
-  let occupationObject = occupations.find((o) => o.apiValue === res.occupation);
-  const occupation = t(`occupation${occupationObject.translationKey}`);
+  const occupation = t(`occupationNone`);
 
   const occupationContainer = document.createElement("div");
   occupationContainer.className = "occupation-job";

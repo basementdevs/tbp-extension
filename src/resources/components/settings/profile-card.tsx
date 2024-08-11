@@ -1,22 +1,13 @@
-import type { User} from "~types/types";
 import { t } from "~utils/i18nUtils";
+import type { User } from "~types/types";
 
 type ProfileCardProps = {
   user: User;
-  pronouns?: string;
-  occupation?: string;
 };
 
-export default function ProfileCard({
-  user,
-  pronouns,
-  occupation,
-}: ProfileCardProps) {
+export default function ProfileCard({ user }: ProfileCardProps) {
   // frontend-engineer -> FrontEndEngineer
-  const transformedOcuppation = occupation
-    ?.split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("");
+  const occupation = user.settings.occupation;
 
   return (
     <div className="flex items-center rounded-xl bg-muted">
@@ -37,7 +28,8 @@ export default function ProfileCard({
             className="text-gray-600 dark:text-gray-300 text-sm m-0 p-0"
             id="roleEl"
           >
-            {t(`occupation${transformedOcuppation}`) ?? t("occupationNone")}
+            {t(`occupation${occupation.translation_key}`) ??
+              t("occupationNone")}
           </p>
         </div>
         <div className="mt-2">
@@ -53,8 +45,8 @@ export default function ProfileCard({
               className="text-gray-600 dark:text-gray-300 ml-2"
               id="pronounsEl"
             >
-              {pronouns
-                ? t(`pronouns${pronouns.replace("/", "")}`)
+              {user.settings.pronouns
+                ? t(`pronouns${user.settings.pronouns.replace("/", "")}`)
                 : t("pronounsNone")}
             </span>
           </p>
