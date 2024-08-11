@@ -3,3 +3,6 @@
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+# Discord plugin
+# https://plugins.jetbrains.com/plugin/23420-discord-integration-v2
+discord.xml
