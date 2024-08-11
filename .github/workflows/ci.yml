@@ -26,7 +26,6 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Check lint
