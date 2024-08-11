@@ -10,6 +10,23 @@ const TWITCH_USERNAME_CONTAINER = ".chat-line__username";
 const SEVEN_TV_USERNAME_CONTAINER = ".seventv-chat-user-username";
 const USERNAME_CONTAINER = `${TWITCH_USERNAME_CONTAINER},${SEVEN_TV_USERNAME_CONTAINER}`;
 
+type SettingsOption = {
+    name: String,
+    slug: String,
+    translation_key: String
+
+}
+
+type ConsumerUserResponse = {
+  locale: String,
+  occupation: SettingsOption,
+  pronouns: SettingsOption,
+  timezone?: String,
+  updated_at: String,
+  user_id: number,
+  username: String
+}
+
 const enhanceChatMessage = async (messageEl: HTMLElement) => {
   const usernameEl = messageEl.querySelector(USERNAME_CONTAINER);
 
@@ -31,18 +48,20 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
 
   const username = usernameEl.textContent;
   const uri = `${API_URL}/settings/${username}`;
+  console.log(uri)
   const req = await fetch(uri);
 
   if (!req.ok) {
     return;
   }
 
-  const res = await req.json();
+  const res = await req.json() as ConsumerUserResponse;
   const child = usernameEl.firstChild;
 
-  const pronouns = res.pronouns.replace("/", "");
-  const i18nPronouns = t(`pronouns${pronouns}`);
+
+  const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   const pronounsElement = document.createElement("span");
+
   pronounsElement.textContent = `(${i18nPronouns})`;
   pronounsElement.style.color = "gray";
   pronounsElement.style.marginLeft = "4px";
@@ -67,7 +86,7 @@ const buildBadge = (occupation) => {
   img.width = 18;
   img.setAttribute("aria-label", "Just a thing");
   img.className = "chat-badge";
-  const badgeUrl = `${API_URL}/static/icons/${occupation}.png`;
+  const badgeUrl = `${API_URL}/static/icons/${occupation.slug}.png`;
   img.src = badgeUrl;
   img.srcset = `${badgeUrl} 1x,${badgeUrl} 2x,${badgeUrl} 4x`;
 
@@ -87,10 +106,9 @@ async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
     return;
   }
 
-  const res = await req.json();
-  const currentPronoun = pronounsItems.find((p) => p.apiValue === res.pronouns);
+  const res = await req.json() as ConsumerUserResponse;
 
-  const i18nPronouns = t(`pronouns${currentPronoun.translationKey}`);
+  const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   // @ts-ignore
   nameCard.innerHTML += `<span class="pronouns-card">(${i18nPronouns})</span>`;
   const occupation = t(`occupationNone`);
@@ -99,7 +117,7 @@ async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
   occupationContainer.className = "occupation-job";
   occupationContainer.innerHTML = `
             ${buildBadge(res.occupation).outerHTML}
-            <span>${occupation}</span>
+            <span>${res.occupation.name}</span>
           `;
 
   detailsCard.appendChild(occupationContainer);

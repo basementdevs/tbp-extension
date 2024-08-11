@@ -35,7 +35,6 @@ export const pronounsItems = [
 ];
 
 
-
 export default function SettingsForm({ userService }: SettingsFormProps) {
   // TODO: implement caching for refreshing occupations list after 1h
   const [occupations] = useStorage<Occupation[]>("occupations", []);

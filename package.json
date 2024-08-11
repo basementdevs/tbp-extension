@@ -69,7 +69,7 @@
       "*://*.twitch.tv/*",
       "https://twitch-extension.danielheart.dev/*",
       "https://tbp.danielheart.dev/*",
-      "*://localhost:8000/*",
+      "*://localhost/*",
       "storage"
     ]
   }
