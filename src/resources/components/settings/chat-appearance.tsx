@@ -19,34 +19,33 @@ export default function ChatAppearance({
   occupation,
 }: ChatAppearanceProps) {
   const baseUrl = env.data.PLASMO_PUBLIC_API_URL;
-  const occupationIcon = occupation ? occupation.toLowerCase() : "none";
+  const occupationIcon = occupation?.toLowerCase() || "none";
+  const pronounText = pronouns
+    ? t(`pronouns${pronouns.replace("/", "")}`)
+    : null;
+  const greeting = t("chatAppearanceGreeting");
+  const description = t("chatAppearanceDescription");
+  const title = t("chatAppearanceTitle");
 
   return (
     <div className="flex flex-col space-y-2">
-      <h1 className="text-gray-600 dark:text-gray-300">
-        {t("chatAppearanceTitle")}
-      </h1>
-      <div className="flex items-center space-x-0.5">
+      <h1 className="font-medium text-text-medium">{title}</h1>
+      <div className="flex items-center space-x-1">
         <img
           width={18}
           src={`${baseUrl}/static/icons/${occupationIcon}.png`}
-          alt="logo"
+          alt="Occupation icon"
+          className="rounded"
         />
         <span className={cn(`font-bold text-[${color}]`)}>
           {user.display_name}
         </span>
-        {pronouns && (
-          <span className="font-light text-gray-500 dark:text-gray-400">
-            ({t(`pronouns${pronouns.replace("/", "")}`)}):
-          </span>
+        {pronounText && (
+          <span className="font-medium text-text-low">({pronounText}):</span>
         )}
-        <span className="font-light dark:text-gray-300">
-          {t("chatAppearanceGreeting")}
-        </span>
+        <span className="text-text-high">{greeting}</span>
       </div>
-      <p className="text-gray-400 dark:text-gray-500">
-        {t("chatAppearanceDescription")}
-      </p>
+      <p className="text-text-low">{description}</p>
     </div>
   );
 }

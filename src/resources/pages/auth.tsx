@@ -4,10 +4,9 @@ import Hero from "@Components/auth/hero";
 
 export const Auth = () => {
   return (
-    <div className="flex flex-col gap-10 p-3">
+    <div className="flex flex-col gap-y-8">
       <Header />
       <Hero />
-      <AuthenticateButton />
     </div>
   );
 };

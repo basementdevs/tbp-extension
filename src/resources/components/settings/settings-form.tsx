@@ -1,10 +1,8 @@
-import { Label } from "@Shad/components/ui/label";
-import { type MutableRefObject, useRef } from "react";
-
+import { useRef } from "react";
 import { Storage } from "@plasmohq/storage";
+import SelectField from "@Shad/components/ui/SelectField";
 
 import type { TwitchUser } from "~types/types";
-import { t } from "~utils/i18nUtils";
 
 interface SettingsFormProps {
   user?: TwitchUser;
@@ -13,46 +11,16 @@ interface SettingsFormProps {
 }
 
 export const occupations = [
-  {
-    translationKey: "None",
-    apiValue: "none",
-  },
-  {
-    translationKey: "Student",
-    apiValue: "student",
-  },
-  {
-    translationKey: "Lawyer",
-    apiValue: "lawyer",
-  },
-  {
-    translationKey: "Doctor",
-    apiValue: "doctor",
-  },
-  {
-    translationKey: "CivilEngineer",
-    apiValue: "civil-engineer",
-  },
-  {
-    translationKey: "FrontEndEngineer",
-    apiValue: "frontend-engineer",
-  },
-  {
-    translationKey: "SreEngineer",
-    apiValue: "sre-engineer",
-  },
-  {
-    translationKey: "BackEndEngineer",
-    apiValue: "backend-engineer",
-  },
-  {
-    translationKey: "FullstackEngineer",
-    apiValue: "fullstack-engineer",
-  },
-  {
-    translationKey: "UxUiDesigner",
-    apiValue: "designer",
-  },
+  { translationKey: "None", apiValue: "none" },
+  { translationKey: "Student", apiValue: "student" },
+  { translationKey: "Lawyer", apiValue: "lawyer" },
+  { translationKey: "Doctor", apiValue: "doctor" },
+  { translationKey: "CivilEngineer", apiValue: "civil-engineer" },
+  { translationKey: "FrontEndEngineer", apiValue: "frontend-engineer" },
+  { translationKey: "SreEngineer", apiValue: "sre-engineer" },
+  { translationKey: "BackEndEngineer", apiValue: "backend-engineer" },
+  { translationKey: "FullstackEngineer", apiValue: "fullstack-engineer" },
+  { translationKey: "UxUiDesigner", apiValue: "designer" },
 ];
 
 export const pronounsItems = [
@@ -78,26 +46,25 @@ export default function SettingsForm({
   pronouns,
   occupation,
 }: SettingsFormProps) {
-  const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
-  const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
+  const pronounsListEl = useRef<HTMLSelectElement>(null);
+  const occupationListEl = useRef<HTMLSelectElement>(null);
 
   const updateSettings = async () => {
     const storage = new Storage();
-    const selectedPronoun = pronounsListEl.current.value;
-    const selectedOccupation = occupationListEl.current.value;
+    const selectedPronoun = pronounsListEl.current?.value;
+    const selectedOccupation = occupationListEl.current?.value;
+
     const response = await fetch(
       `${process.env.PLASMO_PUBLIC_API_URL}/settings`,
       {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           pronouns: selectedPronoun,
           locale: navigator.language,
           occupation: selectedOccupation,
-          user_id: user.id,
-          username: user.display_name,
+          user_id: user?.id,
+          username: user?.display_name,
         }),
       },
     );
@@ -110,40 +77,23 @@ export default function SettingsForm({
 
   return (
     <form>
-      <div className="flex flex-col w-full items-center gap-4">
-        <div className="flex flex-col gap-2 w-full">
-          <Label htmlFor="pronouns">{t("pronounsLabel")}</Label>
-          <select
-            ref={pronounsListEl}
-            id="pronouns"
-            onChange={updateSettings}
-            value={pronouns}
-            className="flex h-10 w-full items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus:ring-slate-300"
-          >
-            {pronounsItems.map(({ translationKey, apiValue }) => (
-              <option key={translationKey} value={apiValue}>
-                {t(`pronouns${translationKey}`)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-2 w-full">
-          <Label htmlFor="occupation">{t("occupationLabel")}</Label>
-          <select
-            ref={occupationListEl}
-            id="pronouns"
-            onChange={updateSettings}
-            value={occupation}
-            className="flex h-10 w-full items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus:ring-slate-300"
-          >
-            {occupations.map(({ translationKey, apiValue }) => (
-              <option key={translationKey} value={apiValue}>
-                {t(`occupation${translationKey}`)}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="flex flex-col w-full items-center gap-8 mb-8">
+        <SelectField
+          id="pronouns"
+          label="pronounsLabel"
+          ref={pronounsListEl}
+          items={pronounsItems}
+          selectedValue={pronouns}
+          onChange={updateSettings}
+        />
+        <SelectField
+          id="occupation"
+          label="occupationLabel"
+          ref={occupationListEl}
+          items={occupations}
+          selectedValue={occupation}
+          onChange={updateSettings}
+        />
       </div>
     </form>
   );

@@ -12,52 +12,50 @@ export default function ProfileCard({
   pronouns,
   occupation,
 }: ProfileCardProps) {
-  // frontend-engineer -> FrontEndEngineer
-  const transformedOcuppation = occupation
+  // Transform occupation from 'frontend-engineer' to 'FrontEndEngineer'
+  const transformedOccupation = occupation
     ?.split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join("");
 
+  const occupationText =
+    t(`occupation${transformedOccupation}`) || t("occupationNone");
+  const pronounsText = pronouns
+    ? t(`pronouns${pronouns.replace("/", "")}`)
+    : t("pronounsNone");
+
   return (
-    <div className="flex items-center rounded-xl bg-muted">
+    <div className="flex items-center rounded-xl bg-elevation-05dp p-2">
       <img
         src={user.profile_image_url}
         alt="The user's profile"
-        className="size-28 rounded-xl p-1"
+        className="size-28 rounded-xl"
       />
-      <div className="p-2">
+      <div className="pl-4">
         <div className="flex flex-col">
-          <h1
-            className="font-extrabold text-lg m-0 line-clamp-1"
-            id="usernameEl"
-          >
+          <h1 className="font-bold text-sm text-text-high" id="usernameEl">
             {user.display_name}
           </h1>
-          <p
-            className="text-gray-600 dark:text-gray-300 text-sm m-0 p-0"
-            id="roleEl"
-          >
-            {t(`occupation${transformedOcuppation}`) ?? t("occupationNone")}
-          </p>
+          <span className="font-medium text-xs" id="roleEl">
+            {occupationText}
+          </span>
         </div>
-        <div className="mt-2">
-          <p className="text-sm">
-            <span className="font-bold">ID:</span>
-            <span className="text-gray-600 dark:text-gray-300 ml-2" id="idEl">
-              {user.id}
+        <div className="text-sm">
+          <span className="font-bold text-xxs text-text-high">ID: </span>
+          <span className="font-medium text-xs text-text-medium" id="idEl">
+            {user.id}
+          </span>
+          <div className="text-sm">
+            <span className="font-bold text-xxs text-text-high">
+              {t("pronounsTitle")}:&nbsp;
             </span>
-          </p>
-          <p className="text-sm">
-            <span className="font-bold">{t("pronounsTitle")}:</span>
             <span
-              className="text-gray-600 dark:text-gray-300 ml-2"
+              className="font-medium text-xs text-text-medium"
               id="pronounsEl"
             >
-              {pronouns
-                ? t(`pronouns${pronouns.replace("/", "")}`)
-                : t("pronounsNone")}
+              {pronounsText}
             </span>
-          </p>
+          </div>
         </div>
       </div>
     </div>

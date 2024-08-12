@@ -15,16 +15,16 @@
     "message": "System"
   },
   "headerTitle": {
-    "message": "Twitch Profiler"
+    "message": "Twitch Profile"
   },
   "authenticateButtonText": {
     "message": "Authenticate with Twitch"
   },
   "heroTitle": {
-    "message": "Twitch Profiler"
+    "message": "Create your Profile"
   },
   "heroSubtitle": {
-    "message": "Sign in with Twitch to get started"
+    "message": "It looks like you haven't logged in with Twitch yet"
   },
   "pronounsLabel": {
     "message": "Select your pronoun"

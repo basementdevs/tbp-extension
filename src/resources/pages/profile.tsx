@@ -48,14 +48,28 @@ export default function Profile({ user }: ProfileProps) {
   ];
 
   return (
-    <div className="flex flex-col max-w-96 p-3 gap-3">
-      <Header />
-      <ProfileCard
-        user={user}
-        pronouns={currentPronouns}
-        occupation={currentOccupation}
-      />
-      <Tabs tabData={tabData} />
+    <div className="flex flex-col max-w-96">
+      <div className="space-y-5 mb-8">
+        <Header />
+        <ProfileCard
+          user={user}
+          pronouns={currentPronouns}
+          occupation={currentOccupation}
+        />
+      </div>
+      <div className="flex flex-col w-full gap-3">
+        <SettingsForm
+          user={user}
+          pronouns={currentPronouns}
+          occupation={currentOccupation}
+        />
+        <ChatAppearance
+          user={user}
+          pronouns={currentPronouns}
+          color={color}
+          occupation={currentOccupation}
+        />
+      </div>
     </div>
   );
 }

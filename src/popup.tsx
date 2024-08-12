@@ -11,7 +11,7 @@ function IndexPopup() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="min-w-[350px]">
+      <div className="w-96 rounded bg-elevation-surface px-4 py-6">
         {user ? <Profile user={user} /> : <Auth />}
       </div>
     </ThemeProvider>

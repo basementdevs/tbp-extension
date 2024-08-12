@@ -30,7 +30,6 @@ export default function AboutCard() {
       {/*    {t("aboutVersion")} {version}*/}
       {/*  </a>*/}
       {/*</div>*/}
-
       <div className="flex">
         <a href={repositoryUrl}>
           <Github />
