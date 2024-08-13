@@ -1,5 +1,5 @@
-import { t } from "~utils/i18nUtils";
 import type { User } from "~types/types";
+import { t } from "~utils/i18nUtils";
 
 type ProfileCardProps = {
   user: User;

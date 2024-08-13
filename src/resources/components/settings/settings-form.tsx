@@ -1,16 +1,16 @@
 import { Label } from "@Shad/components/ui/label";
 import { type MutableRefObject, useRef } from "react";
 
+import { useStorage } from "@plasmohq/storage/hook";
+import { env } from "~config/env";
+import type UserStorageService from "~services/user/user-storage-service";
 import type {
-  AccessTokenResponse, Occupation,
+  AccessTokenResponse,
+  Occupation,
   TwitchUser,
   UserSettings,
 } from "~types/types";
 import { t } from "~utils/i18nUtils";
-import UserStorageService from "~services/user/user-storage-service";
-import { useStorage } from "@plasmohq/storage/hook";
-import { env } from "~config/env";
-import { getOccupations } from "~services/occupation-service";
 
 interface SettingsFormProps {
   userService: UserStorageService;
@@ -34,17 +34,15 @@ export const pronounsItems = [
   { apiValue: "E/Em", translationKey: "EEm" },
 ];
 
-
 export default function SettingsForm({ userService }: SettingsFormProps) {
   // TODO: implement caching for refreshing occupations list after 1h
   const [occupations] = useStorage<Occupation[]>("occupations", []);
 
-  let settings = userService.getSettings();
+  const settings = userService.getSettings();
   const [twitchUser] = useStorage<TwitchUser>("twitchUser");
   const [accessToken] = useStorage<AccessTokenResponse>("accessToken");
   const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
   const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
-
 
   const saveToDatabase = async () => {
     const selectedPronoun = pronounsListEl.current.value;

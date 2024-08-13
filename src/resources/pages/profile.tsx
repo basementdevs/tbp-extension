@@ -5,9 +5,9 @@ import SettingsForm from "@Components/settings/settings-form";
 import AboutCard from "@Components/about/about";
 import ChatAppearance from "@Components/settings/chat-appearance";
 import Tabs from "@Shad/components/ui/tabs";
-import { t } from "~utils/i18nUtils";
 import UserStorageService from "~services/user/user-storage-service";
 import type { User } from "~types/types";
+import { t } from "~utils/i18nUtils";
 
 type ProfileProps = {
   user: User;

@@ -10,7 +10,7 @@ export interface AccessTokenResponse {
   expires_at: string;
 }
 
-export  interface User {
+export interface User {
   name: string;
   email: string;
   updated_at: string;
@@ -21,7 +21,7 @@ export  interface User {
   accounts: Account[];
 }
 
-export  interface UserSettings {
+export interface UserSettings {
   id: number;
   user_id: number;
   occupation_id: number;

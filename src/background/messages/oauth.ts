@@ -3,17 +3,15 @@ import browser from "webextension-polyfill";
 import type { PlasmoMessaging } from "@plasmohq/messaging";
 import { Storage } from "@plasmohq/storage";
 
-import type { AccessTokenResponse, TwitchUser, User } from "~types/types";
 import { env } from "~config/env";
 import { getOccupations } from "~services/occupation-service";
+import type { AccessTokenResponse, TwitchUser, User } from "~types/types";
 
 const CLIENT_ID = process.env.PLASMO_PUBLIC_TWITCH_CLIENT_ID;
 
 const REDIRECT_URI = browser.identity.getRedirectURL();
 
-
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-
   const accessToken = await authenticateWithTwitch();
   let [serverAccessToken, user, twitchUser] =
     await authenticateWithServer(accessToken);
@@ -23,9 +21,9 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   await storage.set("user", user);
   await storage.set("accessToken", serverAccessToken);
   await storage.set("twitchUser", twitchUser);
-  let occupations = await getOccupations();
+  const occupations = await getOccupations();
   console.log(occupations);
-  await storage.set("occupations",  occupations);
+  await storage.set("occupations", occupations);
 
   res.send({
     auth: true,
@@ -63,14 +61,14 @@ async function authenticateWithServer(code: string) {
     throw new Error("Failed to authenticate with server");
   }
 
-  let data = await response.json();
+  const data = await response.json();
   console.log(data);
 
-  let user = data.user as User;
+  const user = data.user as User;
 
-  let accessToken = data as AccessTokenResponse;
-  let twitchUser = {
-    id: parseInt(user.accounts[0].provider_user_id),
+  const accessToken = data as AccessTokenResponse;
+  const twitchUser = {
+    id: Number.parseInt(user.accounts[0].provider_user_id),
     login: user.accounts[0].nickname,
     display_name: user.accounts[0].name,
   } as TwitchUser;

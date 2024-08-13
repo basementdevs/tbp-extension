@@ -3,9 +3,9 @@ import { cn } from "@Shad/lib/utils";
 import type { TwitchUser, User, UserSettings } from "~types/types";
 
 import { env } from "@Config/env";
-import { t } from "~utils/i18nUtils";
-import type UserStorageService from "~services/user/user-storage-service";
 import { useEffect, useState } from "react";
+import type UserStorageService from "~services/user/user-storage-service";
+import { t } from "~utils/i18nUtils";
 
 type ChatAppearanceProps = {
   userService: UserStorageService;
@@ -27,7 +27,7 @@ export default function ChatAppearance({ userService }: ChatAppearanceProps) {
           src={`${baseUrl}/static/icons/${occupationIcon}.png`}
           alt="logo"
         />
-        <span className={cn(`font-bold text-[gray]`)}>
+        <span className={cn("font-bold text-gray")}>
           {userService.user.name}
         </span>
         <span className="font-light text-gray-500 dark:text-gray-400">

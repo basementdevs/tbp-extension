@@ -1,5 +1,5 @@
-import { t } from "~utils/i18nUtils";
 import { pronounsItems } from "@Components/settings/settings-form";
+import { t } from "~utils/i18nUtils";
 
 const API_URL: string = process.env.PLASMO_PUBLIC_API_URL;
 
@@ -11,21 +11,20 @@ const SEVEN_TV_USERNAME_CONTAINER = ".seventv-chat-user-username";
 const USERNAME_CONTAINER = `${TWITCH_USERNAME_CONTAINER},${SEVEN_TV_USERNAME_CONTAINER}`;
 
 type SettingsOption = {
-    name: String,
-    slug: String,
-    translation_key: String
-
-}
+  name: string;
+  slug: string;
+  translation_key: string;
+};
 
 type ConsumerUserResponse = {
-  locale: String,
-  occupation: SettingsOption,
-  pronouns: SettingsOption,
-  timezone?: String,
-  updated_at: String,
-  user_id: number,
-  username: String
-}
+  locale: string;
+  occupation: SettingsOption;
+  pronouns: SettingsOption;
+  timezone?: string;
+  updated_at: string;
+  user_id: number;
+  username: string;
+};
 
 const enhanceChatMessage = async (messageEl: HTMLElement) => {
   const usernameEl = messageEl.querySelector(USERNAME_CONTAINER);
@@ -54,9 +53,8 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
     return;
   }
 
-  const res = await req.json() as ConsumerUserResponse;
+  const res = (await req.json()) as ConsumerUserResponse;
   const child = usernameEl.firstChild;
-
 
   const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   const pronounsElement = document.createElement("span");
@@ -104,7 +102,7 @@ async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
     return;
   }
 
-  const res = await req.json() as ConsumerUserResponse;
+  const res = (await req.json()) as ConsumerUserResponse;
 
   const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   // @ts-ignore
