@@ -1,7 +1,8 @@
-import { pronounsItems } from "@Components/settings/settings-form";
+import { env } from "~config/env";
+import { getUserFromConsumer } from "~services/user/user-consumer-service";
 import { t } from "~utils/i18nUtils";
 
-const API_URL: string = process.env.PLASMO_PUBLIC_API_URL;
+const API_URL: string = env.data.CONSUMER_API_URL;
 
 const TWITCH_BADGES_CONTAINER = ".chat-line__username-container";
 const SEVEN_TV_BADGES_CONTAINER = ".seventv-chat-user-badge-list";
@@ -10,29 +11,8 @@ const TWITCH_USERNAME_CONTAINER = ".chat-line__username";
 const SEVEN_TV_USERNAME_CONTAINER = ".seventv-chat-user-username";
 const USERNAME_CONTAINER = `${TWITCH_USERNAME_CONTAINER},${SEVEN_TV_USERNAME_CONTAINER}`;
 
-type SettingsOption = {
-  name: string;
-  slug: string;
-  translation_key: string;
-};
-
-type ConsumerUserResponse = {
-  locale: string;
-  occupation: SettingsOption;
-  pronouns: SettingsOption;
-  timezone?: string;
-  updated_at: string;
-  user_id: number;
-  username: string;
-};
-
 const enhanceChatMessage = async (messageEl: HTMLElement) => {
   const usernameEl = messageEl.querySelector(USERNAME_CONTAINER);
-
-  /**
-   * TODO: make adapters based on which plugins the user has installed (compatibility mode)
-   * Restructure the code to make it more modular and easy to maintain (Goal: 1.0.0)
-   **/
   let badgesEl: Element;
   badgesEl = messageEl.querySelector(TWITCH_BADGES_CONTAINER);
   if (badgesEl) {
@@ -46,16 +26,12 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
   }
 
   const username = usernameEl.textContent;
-  const uri = `${API_URL}/settings/${username}`;
-  const req = await fetch(uri);
+  const res = await getUserFromConsumer(username);
 
-  if (!req.ok) {
+  if (!res) {
     return;
   }
-
-  const res = (await req.json()) as ConsumerUserResponse;
   const child = usernameEl.firstChild;
-
   const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   const pronounsElement = document.createElement("span");
   pronounsElement.textContent = `(${i18nPronouns})`;
@@ -95,14 +71,7 @@ const buildBadge = (occupation) => {
 async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
   const username = nameCard.textContent.trim();
 
-  const uri = `${API_URL}/settings/${username}`;
-  const req = await fetch(uri);
-
-  if (!req.ok) {
-    return;
-  }
-
-  const res = (await req.json()) as ConsumerUserResponse;
+  const res = await getUserFromConsumer(username);
 
   const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   // @ts-ignore

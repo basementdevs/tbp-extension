@@ -1,10 +1,8 @@
-import Logo from "data-base64:@Root/assets/icon.png";
 import { cn } from "@Shad/lib/utils";
-import type { TwitchUser, User, UserSettings } from "~types/types";
 
 import { env } from "@Config/env";
-import { useEffect, useState } from "react";
 import type UserStorageService from "~services/user/user-storage-service";
+
 import { t } from "~utils/i18nUtils";
 
 type ChatAppearanceProps = {
@@ -12,8 +10,8 @@ type ChatAppearanceProps = {
 };
 
 export default function ChatAppearance({ userService }: ChatAppearanceProps) {
-  const baseUrl = env.data.PLASMO_PUBLIC_API_URL;
-  const occupationIcon = "none";
+  const baseUrl = env.data.CONSUMER_API_URL;
+  const occupationIcon = userService.user.settings.occupation.slug;
   const settings = userService.getSettings();
 
   return (

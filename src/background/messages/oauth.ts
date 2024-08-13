@@ -7,7 +7,7 @@ import { env } from "~config/env";
 import { getOccupations } from "~services/occupation-service";
 import type { AccessTokenResponse, TwitchUser, User } from "~types/types";
 
-const CLIENT_ID = process.env.PLASMO_PUBLIC_TWITCH_CLIENT_ID;
+const CLIENT_ID = env.data.TWITCH_CLIENT_ID;
 
 const REDIRECT_URI = browser.identity.getRedirectURL();
 
