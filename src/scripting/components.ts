@@ -48,7 +48,6 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
 
   const username = usernameEl.textContent;
   const uri = `${API_URL}/settings/${username}`;
-  console.log(uri)
   const req = await fetch(uri);
 
   if (!req.ok) {
@@ -61,7 +60,6 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
 
   const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   const pronounsElement = document.createElement("span");
-
   pronounsElement.textContent = `(${i18nPronouns})`;
   pronounsElement.style.color = "gray";
   pronounsElement.style.marginLeft = "4px";
@@ -111,7 +109,6 @@ async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
   const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   // @ts-ignore
   nameCard.innerHTML += `<span class="pronouns-card">(${i18nPronouns})</span>`;
-  const occupation = t(`occupationNone`);
 
   const occupationContainer = document.createElement("div");
   occupationContainer.className = "occupation-job";

@@ -4,7 +4,8 @@
     "enabled": true
   },
   "files": {
-    "ignore": [".plasmo", "node_modules", "build"]
+    "ignore": [".plasmo", "node_modules", "build"],
+    "ignoreUnknown": true
   },
   "linter": {
     "enabled": true,
@@ -22,5 +23,10 @@
       "enabled": true
       // Add here things that aren't default
     }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
   }
 }

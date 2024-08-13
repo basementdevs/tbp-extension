@@ -23,9 +23,9 @@ const envSchema = z.object({
     .trim()
     .min(1, "PLASMO_PUBLIC_API_URL is missing or empty"),
   APP_ENVIRONMENT: z
-      .string()
-      .trim()
-      .min(1, "PLASMO_PUBLIC_ENVIRONMENT is missing or empty"),
+    .string()
+    .trim()
+    .min(1, "PLASMO_PUBLIC_ENVIRONMENT is missing or empty"),
   APP_STAGE: z
       .string()
       .trim()
