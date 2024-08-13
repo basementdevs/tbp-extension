@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://json.schemastore.org/lefthook.json
+
+# Refer for explanation to following link:
+# https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
+ 
+assert_lefthook_installed: true
+
+pre-commit:
+  parallel: false
+  commands:
+    lint:
+      run: pnpx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true -- {staged_files}
+pre-push:
+  parallel: false
+  commands:
+    lint:
+      run: pnpx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true -- {push_files}

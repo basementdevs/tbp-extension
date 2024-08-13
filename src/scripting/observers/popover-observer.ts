@@ -1,5 +1,5 @@
-import MessageQueue from "~scripting/queue";
 import { enhanceTwitchPopover } from "~scripting/components";
+import MessageQueue from "~scripting/queue";
 
 const POPOVER_ELEMENT = ".viewer-card-layer";
 
@@ -64,6 +64,7 @@ export default class PopoverMutationObserver {
   }
 
   private processMutation(mutations: MutationRecord[]) {
+    // biome-ignore lint/complexity/noForEach: TODO: check if we can change to for-of method
     mutations.forEach((mutation) => {
       const target = mutation.target as Element;
 
@@ -74,10 +75,10 @@ export default class PopoverMutationObserver {
         mutation.addedNodes.length > 0
       ) {
         const containerNameCard = target.querySelector(
-          ".CoreText-sc-1txzju1-0"
+          ".CoreText-sc-1txzju1-0",
         );
         const containerDetailsCard = target.querySelector(
-          ".viewer-card-header__display-name"
+          ".viewer-card-header__display-name",
         );
 
         if (containerNameCard && containerDetailsCard) {

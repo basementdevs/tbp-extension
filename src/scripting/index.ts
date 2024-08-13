@@ -1,8 +1,8 @@
 import ChatMutationObserver from "@Scripting/observers/chat-observer";
+import PopoverMutationObserver from "@Scripting/observers/popover-observer";
 import PageWatcher, {
   PageWatcherState,
 } from "@Scripting/watchers/page-watcher";
-import PopoverMutationObserver from "@Scripting/observers/popover-observer";
 
 const TWITCH_CHAT_LIST = ".chat-list--default,.chat-list--other,.chat-list";
 const SEVEN_TV_CHAT_LIST = ".seventv-chat-list";
@@ -17,7 +17,7 @@ export default class Kernel {
 
   constructor() {
     this.chatObserver = new ChatMutationObserver();
-    this.popoverObserver = new PopoverMutationObserver()
+    this.popoverObserver = new PopoverMutationObserver();
     this.pageWatcher = new PageWatcher();
     this.pageWatcher.init();
   }
