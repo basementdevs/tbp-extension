@@ -1,32 +1,23 @@
-import Logo from "data-base64:@Root/assets/icon.png";
 import { cn } from "@Shad/lib/utils";
-import type { TwitchUser } from "~types/types";
 
 import { env } from "@Config/env";
+import type UserStorageService from "~services/user/user-storage-service";
+
 import { t } from "~utils/i18nUtils";
 
 type ChatAppearanceProps = {
-  user: TwitchUser;
-  pronouns?: string;
-  color: string;
-  occupation?: string;
+  userService: UserStorageService;
 };
 
-export default function ChatAppearance({
-  user,
-  pronouns,
-  color,
-  occupation,
-}: ChatAppearanceProps) {
-  const baseUrl = env.data.PLASMO_PUBLIC_API_URL;
-  const occupationIcon = occupation?.toLowerCase() || "none";
-  const pronounText = pronouns
-    ? t(`pronouns${pronouns.replace("/", "")}`)
-    : null;
+export default function ChatAppearance({ userService }: ChatAppearanceProps) {
+  const baseUrl = env.data.CONSUMER_API_URL;
+  const occupationIcon = userService.user.settings.occupation.slug;
+  const settings = userService.getSettings();
+  const pronounText =
+    t(`pronouns.${settings.pronouns.translation_key}`) ?? "None";
+  const title = t("chatAppearanceTitle");
   const greeting = t("chatAppearanceGreeting");
   const description = t("chatAppearanceDescription");
-  const title = t("chatAppearanceTitle");
-
   return (
     <div className="flex flex-col space-y-2">
       <h1 className="font-medium text-text-medium">{title}</h1>
@@ -37,12 +28,10 @@ export default function ChatAppearance({
           alt="Occupation icon"
           className="rounded"
         />
-        <span className={cn(`font-bold text-[${color}]`)}>
-          {user.display_name}
+        <span className={cn("font-bold text-gray")}>
+          {userService.user.name}
         </span>
-        {pronounText && (
-          <span className="font-medium text-text-low">({pronounText}):</span>
-        )}
+        <span className="font-medium text-text-low">({pronounText}):</span>
         <span className="text-text-high">{greeting}</span>
       </div>
       <p className="text-text-low">{description}</p>

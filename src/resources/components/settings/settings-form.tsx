@@ -1,27 +1,20 @@
-import { useRef } from "react";
-import { Storage } from "@plasmohq/storage";
 import SelectField from "@Shad/components/ui/SelectField";
+import { type MutableRefObject, useRef } from "react";
 
-import type { TwitchUser } from "~types/types";
+import type {
+  AccessTokenResponse,
+  Occupation,
+  TwitchUser,
+  UserSettings,
+} from "~types/types";
+
+import { useStorage } from "@plasmohq/storage/hook";
+import { env } from "~config/env";
+import type UserStorageService from "~services/user/user-storage-service";
 
 interface SettingsFormProps {
-  user?: TwitchUser;
-  pronouns?: string;
-  occupation?: string;
+  userService: UserStorageService;
 }
-
-export const occupations = [
-  { translationKey: "None", apiValue: "none" },
-  { translationKey: "Student", apiValue: "student" },
-  { translationKey: "Lawyer", apiValue: "lawyer" },
-  { translationKey: "Doctor", apiValue: "doctor" },
-  { translationKey: "CivilEngineer", apiValue: "civil-engineer" },
-  { translationKey: "FrontEndEngineer", apiValue: "frontend-engineer" },
-  { translationKey: "SreEngineer", apiValue: "sre-engineer" },
-  { translationKey: "BackEndEngineer", apiValue: "backend-engineer" },
-  { translationKey: "FullstackEngineer", apiValue: "fullstack-engineer" },
-  { translationKey: "UxUiDesigner", apiValue: "designer" },
-];
 
 export const pronounsItems = [
   { apiValue: "n/d", translationKey: "None" },
@@ -41,37 +34,47 @@ export const pronounsItems = [
   { apiValue: "E/Em", translationKey: "EEm" },
 ];
 
-export default function SettingsForm({
-  user,
-  pronouns,
-  occupation,
-}: SettingsFormProps) {
-  const pronounsListEl = useRef<HTMLSelectElement>(null);
-  const occupationListEl = useRef<HTMLSelectElement>(null);
+export default function SettingsForm({ userService }: SettingsFormProps) {
+  // TODO: implement caching for refreshing occupations list after 1h
+  const [occupations] = useStorage<Occupation[]>("occupations", []);
+  const occupationsItems = occupations.map((occupation) => ({
+    apiValue: `${occupation.id}`,
+    translationKey: occupation.translation_key,
+  }));
+  const settings = userService.getSettings();
 
-  const updateSettings = async () => {
-    const storage = new Storage();
-    const selectedPronoun = pronounsListEl.current?.value;
-    const selectedOccupation = occupationListEl.current?.value;
+  const current_occupation = `${settings.occupation.id}`;
+  const [twitchUser] = useStorage<TwitchUser>("twitchUser");
+  const [accessToken] = useStorage<AccessTokenResponse>("accessToken");
+  const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
+  const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
+
+  const saveToDatabase = async () => {
+    const selectedPronoun = pronounsListEl.current.value;
+    const selectedOccupation = occupationListEl.current.value;
 
     const response = await fetch(
-      `${process.env.PLASMO_PUBLIC_API_URL}/settings`,
+      `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken.access_token}`,
+        },
         body: JSON.stringify({
           pronouns: selectedPronoun,
           locale: navigator.language,
-          occupation: selectedOccupation,
-          user_id: user?.id,
-          username: user?.display_name,
+          occupation_id: selectedOccupation,
+          user_id: twitchUser.id,
+          username: twitchUser.login,
         }),
       },
     );
+    console.log(response);
 
     if (response.ok) {
-      await storage.set("pronouns", selectedPronoun);
-      await storage.set("occupation", selectedOccupation);
+      const updatedSettings = (await response.json()) as UserSettings;
+      await userService.updateSettings(updatedSettings);
     }
   };
 
@@ -83,16 +86,16 @@ export default function SettingsForm({
           label="pronounsLabel"
           ref={pronounsListEl}
           items={pronounsItems}
-          selectedValue={pronouns}
-          onChange={updateSettings}
+          selectedValue={settings.pronouns.slug}
+          onChange={saveToDatabase}
         />
         <SelectField
           id="occupation"
           label="occupationLabel"
           ref={occupationListEl}
-          items={occupations}
-          selectedValue={occupation}
-          onChange={updateSettings}
+          items={occupationsItems}
+          selectedValue={current_occupation}
+          onChange={saveToDatabase}
         />
       </div>
     </form>

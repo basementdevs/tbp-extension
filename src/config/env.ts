@@ -1,26 +1,27 @@
 import { ZodError, z } from "zod";
 
 const raw_env = {
-  PLASMO_PUBLIC_TWITCH_CLIENT_ID: process.env.PLASMO_PUBLIC_TWITCH_CLIENT_ID,
-  PLASMO_PUBLIC_TWITCH_API_URL: process.env.PLASMO_PUBLIC_TWITCH_API_URL,
-  PLASMO_PUBLIC_API_URL: process.env.PLASMO_PUBLIC_API_URL,
+  TWITCH_CLIENT_ID: process.env.PLASMO_PUBLIC_TWITCH_CLIENT_ID,
+  CONSUMER_API_URL: process.env.PLASMO_PUBLIC_API_URL,
+  CONSUMER_API_VERSION: process.env.PLASMO_PUBLIC_API_VERSION,
   APP_ENVIRONMENT: process.env.PLASMO_PUBLIC_ENVIRONMENT,
   APP_STAGE: process.env.PLASMO_PUBLIC_STAGE,
+  APP_PLATFORM_API_URL: process.env.PLASMO_PUBLIC_PLATFORM_API_URL,
 };
 
 const envSchema = z.object({
-  PLASMO_PUBLIC_TWITCH_CLIENT_ID: z
+  TWITCH_CLIENT_ID: z
     .string()
     .trim()
     .min(1, "PLASMO_PUBLIC_TWITCH_CLIENT_ID is missing or empty"),
-  PLASMO_PUBLIC_TWITCH_API_URL: z
-    .string()
-    .trim()
-    .min(1, "PLASMO_PUBLIC_TWITCH_API_URL is missing or empty"),
-  PLASMO_PUBLIC_API_URL: z
+  CONSUMER_API_URL: z
     .string()
     .trim()
     .min(1, "PLASMO_PUBLIC_API_URL is missing or empty"),
+  CONSUMER_API_VERSION: z
+    .string()
+    .trim()
+    .min(1, "PLASMO_PUBLIC_API_VERSION is missing or empty"),
   APP_ENVIRONMENT: z
     .string()
     .trim()
@@ -29,6 +30,10 @@ const envSchema = z.object({
     .string()
     .trim()
     .min(1, "PLASMO_PUBLIC_STAGE is missing or empty"),
+  APP_PLATFORM_API_URL: z
+    .string()
+    .trim()
+    .min(1, "PLASMO_PUBLIC_PLATFORM_API_URL is missing or empty"),
 });
 
 const mapZodErrorMessages = (zodError: ZodError): string[] => {

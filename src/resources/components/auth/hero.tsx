@@ -1,7 +1,7 @@
+import { sendToBackground } from "@plasmohq/messaging";
 import { LucideTwitch } from "lucide-react";
 import type React from "react";
 import { Button } from "~resources/shad/components/ui/button";
-import { sendToBackground } from "@plasmohq/messaging";
 
 import { t } from "~utils/i18nUtils";
 
