@@ -1,13 +1,9 @@
 import Header from "@Components/app/header";
+import ChatAppearance from "@Components/settings/chat-appearance";
 import ProfileCard from "@Components/settings/profile-card";
 import SettingsForm from "@Components/settings/settings-form";
-
-import AboutCard from "@Components/about/about";
-import ChatAppearance from "@Components/settings/chat-appearance";
-import Tabs from "@Shad/components/ui/tabs";
 import UserStorageService from "~services/user/user-storage-service";
 import type { User } from "~types/types";
-import { t } from "~utils/i18nUtils";
 
 type ProfileProps = {
   user: User;

@@ -15,6 +15,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   const accessToken = await authenticateWithTwitch();
   const { authorization, user, twitchUser } =
     await authenticateWithServer(accessToken);
+
   const storage = new Storage();
 
   await storage.set("user", user);

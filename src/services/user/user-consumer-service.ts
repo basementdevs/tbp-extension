@@ -53,7 +53,9 @@ export async function authenticateWithServer(code: string) {
 
   const data: { user: User; authorization: AccessTokenResponse } =
     await response.json();
+  console.log(data);
   const { user, authorization } = data;
+
   const twitchUser = {
     id: Number.parseInt(user.accounts[0].provider_user_id),
     login: user.accounts[0].nickname,

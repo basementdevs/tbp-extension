@@ -19,19 +19,19 @@ interface SettingsFormProps {
 export const pronounsItems = [
   { apiValue: "none", translationKey: "None" },
   { apiValue: "he-him", translationKey: "HeHim" },
-  { apiValue: "She-Her", translationKey: "SheHer" },
-  { apiValue: "They-Them", translationKey: "TheyThem" },
-  { apiValue: "She-They", translationKey: "SheThey" },
-  { apiValue: "He-They", translationKey: "HeThey" },
-  { apiValue: "He-She", translationKey: "HeShe" },
-  { apiValue: "Xe-Xem", translationKey: "XeXem" },
-  { apiValue: "It-Its", translationKey: "ItIts" },
-  { apiValue: "Fae-Faer", translationKey: "FaeFaer" },
-  { apiValue: "Ve-Ver", translationKey: "VeVer" },
-  { apiValue: "Ae-Aer", translationKey: "AeAer" },
-  { apiValue: "Zie-Hir", translationKey: "ZieHir" },
-  { apiValue: "Per-Per", translationKey: "PerPer" },
-  { apiValue: "E-Em", translationKey: "EEm" },
+  { apiValue: "she-her", translationKey: "SheHer" },
+  { apiValue: "they-them", translationKey: "TheyThem" },
+  { apiValue: "she-they", translationKey: "SheThey" },
+  { apiValue: "he-they", translationKey: "HeThey" },
+  { apiValue: "he-she", translationKey: "HeShe" },
+  { apiValue: "xe-xem", translationKey: "XeXem" },
+  { apiValue: "it-its", translationKey: "ItIts" },
+  { apiValue: "fae-faer", translationKey: "FaeFaer" },
+  { apiValue: "ve-ver", translationKey: "VeVer" },
+  { apiValue: "ae-aer", translationKey: "AeAer" },
+  { apiValue: "zie-hir", translationKey: "ZieHir" },
+  { apiValue: "per-per", translationKey: "PerPer" },
+  { apiValue: "e-em", translationKey: "EEm" },
 ];
 
 export default function SettingsForm({ userService }: SettingsFormProps) {
@@ -53,6 +53,15 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
     const selectedPronoun = pronounsListEl.current.value.toLowerCase();
     const selectedOccupation = occupationListEl.current.value;
 
+    const payload = {
+      pronouns: selectedPronoun,
+      locale: navigator.language,
+      occupation_id: selectedOccupation,
+      user_id: twitchUser.id,
+      username: twitchUser.login,
+    };
+
+    console.log(payload);
     const response = await fetch(
       `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
       {
@@ -61,13 +70,7 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken.access_token}`,
         },
-        body: JSON.stringify({
-          pronouns: selectedPronoun,
-          locale: navigator.language,
-          occupation_id: selectedOccupation,
-          user_id: twitchUser.id,
-          username: twitchUser.login,
-        }),
+        body: JSON.stringify(payload),
       },
     );
 
