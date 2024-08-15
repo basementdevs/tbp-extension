@@ -1,4 +1,5 @@
 import { env } from "~config/env";
+import type { AccessTokenResponse, TwitchUser, User } from "~types/types";
 
 const API_URL = env.data.CONSUMER_API_URL;
 const API_VERSION = env.data.CONSUMER_API_VERSION;
@@ -35,4 +36,29 @@ export async function getUserFromConsumer(
   }
 
   return (await req.json()) as ConsumerUserResponse;
+}
+
+export async function authenticateWithServer(code: string) {
+  const uri = `${env.data.APP_PLATFORM_API_URL}/authenticate/twitch?code=${code}`;
+  const response = await fetch(uri, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to authenticate with server");
+  }
+
+  const data: { user: User; authorization: AccessTokenResponse } =
+    await response.json();
+  const { user, authorization } = data;
+  const twitchUser = {
+    id: Number.parseInt(user.accounts[0].provider_user_id),
+    login: user.accounts[0].nickname,
+    display_name: user.accounts[0].name,
+  } as TwitchUser;
+
+  return { authorization, user, twitchUser };
 }
