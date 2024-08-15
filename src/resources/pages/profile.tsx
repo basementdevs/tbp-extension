@@ -1,24 +1,20 @@
 import Header from "@Components/app/header";
 import ProfileCard from "@Components/settings/profile-card";
 import SettingsForm from "@Components/settings/settings-form";
-import { Button } from "@Shad/components/ui/button";
 
 import AboutCard from "@Components/about/about";
 import ChatAppearance from "@Components/settings/chat-appearance";
 import Tabs from "@Shad/components/ui/tabs";
-import { useStorage } from "@plasmohq/storage/dist/hook";
-
-import type { TwitchUser } from "~types/types";
+import UserStorageService from "~services/user/user-storage-service";
+import type { User } from "~types/types";
 import { t } from "~utils/i18nUtils";
 
 type ProfileProps = {
-  user: TwitchUser;
+  user: User;
 };
 
 export default function Profile({ user }: ProfileProps) {
-  const [currentPronouns] = useStorage("pronouns");
-  const [currentOccupation] = useStorage("occupation");
-  const [color] = useStorage("color");
+  const userService = new UserStorageService(user);
 
   const tabData = [
     {
@@ -26,17 +22,8 @@ export default function Profile({ user }: ProfileProps) {
       value: "settings",
       content: (
         <div className="flex flex-col w-full gap-3">
-          <SettingsForm
-            user={user}
-            pronouns={currentPronouns}
-            occupation={currentOccupation}
-          />
-          <ChatAppearance
-            user={user}
-            pronouns={currentPronouns}
-            color={color}
-            occupation={currentOccupation}
-          />
+          <SettingsForm userService={userService} />
+          <ChatAppearance userService={userService} />
         </div>
       ),
     },
@@ -50,11 +37,7 @@ export default function Profile({ user }: ProfileProps) {
   return (
     <div className="flex flex-col max-w-96 p-3 gap-3">
       <Header />
-      <ProfileCard
-        user={user}
-        pronouns={currentPronouns}
-        occupation={currentOccupation}
-      />
+      <ProfileCard user={userService.user} />
       <Tabs tabData={tabData} />
     </div>
   );

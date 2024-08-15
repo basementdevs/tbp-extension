@@ -1,7 +1,8 @@
-import { occupations, pronounsItems } from "@Components/settings/settings-form";
+import { env } from "~config/env";
+import { getUserFromConsumer } from "~services/user/user-consumer-service";
 import { t } from "~utils/i18nUtils";
 
-const API_URL: string = process.env.PLASMO_PUBLIC_API_URL;
+const API_URL: string = env.data.CONSUMER_API_URL;
 
 const TWITCH_BADGES_CONTAINER = ".chat-line__username-container";
 const SEVEN_TV_BADGES_CONTAINER = ".seventv-chat-user-badge-list";
@@ -12,11 +13,6 @@ const USERNAME_CONTAINER = `${TWITCH_USERNAME_CONTAINER},${SEVEN_TV_USERNAME_CON
 
 const enhanceChatMessage = async (messageEl: HTMLElement) => {
   const usernameEl = messageEl.querySelector(USERNAME_CONTAINER);
-
-  /**
-   * TODO: make adapters based on which plugins the user has installed (compatibility mode)
-   * Restructure the code to make it more modular and easy to maintain (Goal: 1.0.0)
-   **/
   let badgesEl: Element;
   badgesEl = messageEl.querySelector(TWITCH_BADGES_CONTAINER);
   if (badgesEl) {
@@ -30,18 +26,13 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
   }
 
   const username = usernameEl.textContent;
-  const uri = `${API_URL}/settings/${username}`;
-  const req = await fetch(uri);
+  const res = await getUserFromConsumer(username);
 
-  if (!req.ok) {
+  if (!res) {
     return;
   }
-
-  const res = await req.json();
   const child = usernameEl.firstChild;
-
-  const pronouns = res.pronouns.replace("/", "");
-  const i18nPronouns = t(`pronouns${pronouns}`);
+  const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   const pronounsElement = document.createElement("span");
   pronounsElement.textContent = `(${i18nPronouns})`;
   pronounsElement.style.color = "gray";
@@ -67,7 +58,7 @@ const buildBadge = (occupation) => {
   img.width = 18;
   img.setAttribute("aria-label", "Just a thing");
   img.className = "chat-badge";
-  const badgeUrl = `${API_URL}/static/icons/${occupation}.png`;
+  const badgeUrl = `${API_URL}/static/icons/${occupation.slug}.png`;
   img.src = badgeUrl;
   img.srcset = `${badgeUrl} 1x,${badgeUrl} 2x,${badgeUrl} 4x`;
 
@@ -80,29 +71,17 @@ const buildBadge = (occupation) => {
 async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
   const username = nameCard.textContent.trim();
 
-  const uri = `${API_URL}/settings/${username}`;
-  const req = await fetch(uri);
+  const res = await getUserFromConsumer(username);
 
-  if (!req.ok) {
-    return;
-  }
-
-  const res = await req.json();
-  const currentPronoun = pronounsItems.find((p) => p.apiValue === res.pronouns);
-
-  const i18nPronouns = t(`pronouns${currentPronoun.translationKey}`);
+  const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
   // @ts-ignore
   nameCard.innerHTML += `<span class="pronouns-card">(${i18nPronouns})</span>`;
-  const occupationObject = occupations.find(
-    (o) => o.apiValue === res.occupation,
-  );
-  const occupation = t(`occupation${occupationObject.translationKey}`);
 
   const occupationContainer = document.createElement("div");
   occupationContainer.className = "occupation-job";
   occupationContainer.innerHTML = `
             ${buildBadge(res.occupation).outerHTML}
-            <span>${occupation}</span>
+            <span>${res.occupation.name}</span>
           `;
 
   detailsCard.appendChild(occupationContainer);

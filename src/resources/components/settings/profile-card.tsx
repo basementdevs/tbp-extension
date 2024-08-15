@@ -1,27 +1,18 @@
-import type { TwitchUser } from "~types/types";
+import type { User } from "~types/types";
 import { t } from "~utils/i18nUtils";
 
 type ProfileCardProps = {
-  user: TwitchUser;
-  pronouns?: string;
-  occupation?: string;
+  user: User;
 };
 
-export default function ProfileCard({
-  user,
-  pronouns,
-  occupation,
-}: ProfileCardProps) {
+export default function ProfileCard({ user }: ProfileCardProps) {
   // frontend-engineer -> FrontEndEngineer
-  const transformedOcuppation = occupation
-    ?.split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("");
+  const occupation = user.settings.occupation;
 
   return (
     <div className="flex items-center rounded-xl bg-muted">
       <img
-        src={user.profile_image_url}
+        src={user.accounts[0].avatar}
         alt="The user's profile"
         className="size-28 rounded-xl p-1"
       />
@@ -31,20 +22,21 @@ export default function ProfileCard({
             className="font-extrabold text-lg m-0 line-clamp-1"
             id="usernameEl"
           >
-            {user.display_name}
+            {user.name}
           </h1>
           <p
             className="text-gray-600 dark:text-gray-300 text-sm m-0 p-0"
             id="roleEl"
           >
-            {t(`occupation${transformedOcuppation}`) ?? t("occupationNone")}
+            {t(`occupation${occupation.translation_key}`) ??
+              t("occupationNone")}
           </p>
         </div>
         <div className="mt-2">
           <p className="text-sm">
             <span className="font-bold">ID:</span>
             <span className="text-gray-600 dark:text-gray-300 ml-2" id="idEl">
-              {user.id}
+              {user.accounts[0].id}
             </span>
           </p>
           <p className="text-sm">
@@ -53,8 +45,8 @@ export default function ProfileCard({
               className="text-gray-600 dark:text-gray-300 ml-2"
               id="pronounsEl"
             >
-              {pronouns
-                ? t(`pronouns${pronouns.replace("/", "")}`)
+              {user.settings.pronouns
+                ? t(`pronouns${user.settings.pronouns.replace("/", "")}`)
                 : t("pronounsNone")}
             </span>
           </p>

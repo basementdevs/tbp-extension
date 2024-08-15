@@ -1,59 +1,20 @@
 import { Label } from "@Shad/components/ui/label";
 import { type MutableRefObject, useRef } from "react";
 
-import { Storage } from "@plasmohq/storage";
-
-import type { TwitchUser } from "~types/types";
+import { useStorage } from "@plasmohq/storage/hook";
+import { env } from "~config/env";
+import type UserStorageService from "~services/user/user-storage-service";
+import type {
+  AccessTokenResponse,
+  Occupation,
+  TwitchUser,
+  UserSettings,
+} from "~types/types";
 import { t } from "~utils/i18nUtils";
 
 interface SettingsFormProps {
-  user?: TwitchUser;
-  pronouns?: string;
-  occupation?: string;
+  userService: UserStorageService;
 }
-
-export const occupations = [
-  {
-    translationKey: "None",
-    apiValue: "none",
-  },
-  {
-    translationKey: "Student",
-    apiValue: "student",
-  },
-  {
-    translationKey: "Lawyer",
-    apiValue: "lawyer",
-  },
-  {
-    translationKey: "Doctor",
-    apiValue: "doctor",
-  },
-  {
-    translationKey: "CivilEngineer",
-    apiValue: "civil-engineer",
-  },
-  {
-    translationKey: "FrontEndEngineer",
-    apiValue: "frontend-engineer",
-  },
-  {
-    translationKey: "SreEngineer",
-    apiValue: "sre-engineer",
-  },
-  {
-    translationKey: "BackEndEngineer",
-    apiValue: "backend-engineer",
-  },
-  {
-    translationKey: "FullstackEngineer",
-    apiValue: "fullstack-engineer",
-  },
-  {
-    translationKey: "UxUiDesigner",
-    apiValue: "designer",
-  },
-];
 
 export const pronounsItems = [
   { apiValue: "n/d", translationKey: "None" },
@@ -73,38 +34,41 @@ export const pronounsItems = [
   { apiValue: "E/Em", translationKey: "EEm" },
 ];
 
-export default function SettingsForm({
-  user,
-  pronouns,
-  occupation,
-}: SettingsFormProps) {
+export default function SettingsForm({ userService }: SettingsFormProps) {
+  // TODO: implement caching for refreshing occupations list after 1h
+  const [occupations] = useStorage<Occupation[]>("occupations", []);
+
+  const settings = userService.getSettings();
+  const [twitchUser] = useStorage<TwitchUser>("twitchUser");
+  const [accessToken] = useStorage<AccessTokenResponse>("accessToken");
   const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
   const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
 
-  const updateSettings = async () => {
-    const storage = new Storage();
+  const saveToDatabase = async () => {
     const selectedPronoun = pronounsListEl.current.value;
     const selectedOccupation = occupationListEl.current.value;
+
     const response = await fetch(
-      `${process.env.PLASMO_PUBLIC_API_URL}/settings`,
+      `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken.access_token}`,
         },
         body: JSON.stringify({
           pronouns: selectedPronoun,
           locale: navigator.language,
-          occupation: selectedOccupation,
-          user_id: user.id,
-          username: user.display_name,
+          occupation_id: selectedOccupation,
+          user_id: twitchUser.id,
+          username: twitchUser.login,
         }),
       },
     );
 
     if (response.ok) {
-      await storage.set("pronouns", selectedPronoun);
-      await storage.set("occupation", selectedOccupation);
+      const updatedSettings = (await response.json()) as UserSettings;
+      await userService.updateSettings(updatedSettings);
     }
   };
 
@@ -116,8 +80,8 @@ export default function SettingsForm({
           <select
             ref={pronounsListEl}
             id="pronouns"
-            onChange={updateSettings}
-            value={pronouns}
+            onChange={saveToDatabase}
+            value={settings.pronouns}
             className="flex h-10 w-full items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus:ring-slate-300"
           >
             {pronounsItems.map(({ translationKey, apiValue }) => (
@@ -133,13 +97,13 @@ export default function SettingsForm({
           <select
             ref={occupationListEl}
             id="pronouns"
-            onChange={updateSettings}
-            value={occupation}
+            onChange={saveToDatabase}
+            value={settings.occupation_id}
             className="flex h-10 w-full items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus:ring-slate-300"
           >
-            {occupations.map(({ translationKey, apiValue }) => (
-              <option key={translationKey} value={apiValue}>
-                {t(`occupation${translationKey}`)}
+            {occupations.map((occupation) => (
+              <option key={occupation.id} value={occupation.id}>
+                {t(`occupation${occupation.translation_key}`)}
               </option>
             ))}
           </select>

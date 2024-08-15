@@ -69,6 +69,8 @@
       "identity",
       "*://*.twitch.tv/*",
       "https://twitch-extension.danielheart.dev/*",
+      "https://tbp.danielheart.dev/*",
+      "*://localhost/*",
       "storage"
     ]
   }

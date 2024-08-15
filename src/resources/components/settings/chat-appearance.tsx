@@ -1,25 +1,18 @@
-import Logo from "data-base64:@Root/assets/icon.png";
 import { cn } from "@Shad/lib/utils";
-import type { TwitchUser } from "~types/types";
 
 import { env } from "@Config/env";
+import type UserStorageService from "~services/user/user-storage-service";
+
 import { t } from "~utils/i18nUtils";
 
 type ChatAppearanceProps = {
-  user: TwitchUser;
-  pronouns?: string;
-  color: string;
-  occupation?: string;
+  userService: UserStorageService;
 };
 
-export default function ChatAppearance({
-  user,
-  pronouns,
-  color,
-  occupation,
-}: ChatAppearanceProps) {
-  const baseUrl = env.data.PLASMO_PUBLIC_API_URL;
-  const occupationIcon = occupation ? occupation.toLowerCase() : "none";
+export default function ChatAppearance({ userService }: ChatAppearanceProps) {
+  const baseUrl = env.data.CONSUMER_API_URL;
+  const occupationIcon = userService.user.settings.occupation.slug;
+  const settings = userService.getSettings();
 
   return (
     <div className="flex flex-col space-y-2">
@@ -32,14 +25,12 @@ export default function ChatAppearance({
           src={`${baseUrl}/static/icons/${occupationIcon}.png`}
           alt="logo"
         />
-        <span className={cn(`font-bold text-[${color}]`)}>
-          {user.display_name}
+        <span className={cn("font-bold text-gray")}>
+          {userService.user.name}
         </span>
-        {pronouns && (
-          <span className="font-light text-gray-500 dark:text-gray-400">
-            ({t(`pronouns${pronouns.replace("/", "")}`)}):
-          </span>
-        )}
+        <span className="font-light text-gray-500 dark:text-gray-400">
+          ({t(`pronouns${settings.pronouns.replace("/", "")}`)}):
+        </span>
         <span className="font-light dark:text-gray-300">
           {t("chatAppearanceGreeting")}
         </span>

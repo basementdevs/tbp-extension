@@ -4,7 +4,7 @@ import { ThemeProvider } from "@Components/app/theme-provide";
 import { Auth } from "@Pages/auth";
 import Profile from "@Pages/profile";
 
-import { useStorage } from "@plasmohq/storage/dist/hook";
+import { useStorage } from "@plasmohq/storage/hook";
 
 function IndexPopup() {
   const [user] = useStorage("user");
