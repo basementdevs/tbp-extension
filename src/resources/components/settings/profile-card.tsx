@@ -9,7 +9,7 @@ export default function ProfileCard({ user }: ProfileCardProps) {
   // frontend-engineer -> FrontEndEngineer
   const occupation = user.settings.occupation;
   const occupationText = t(`occupation${occupation.translation_key}`);
-  const pronounsText = t(`pronouns${user.settings.pronouns.translation_key}`);
+  const pronounsText = t(`pronouns${user.settings.pronouns?.translation_key}`);
   return (
     <div className="flex items-center rounded-xl bg-elevation-05dp p-2">
       <img

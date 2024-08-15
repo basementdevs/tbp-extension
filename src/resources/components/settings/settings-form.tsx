@@ -17,21 +17,21 @@ interface SettingsFormProps {
 }
 
 export const pronounsItems = [
-  { apiValue: "n/d", translationKey: "None" },
-  { apiValue: "He/Him", translationKey: "HeHim" },
-  { apiValue: "She/Her", translationKey: "SheHer" },
-  { apiValue: "They/Them", translationKey: "TheyThem" },
-  { apiValue: "She/They", translationKey: "SheThey" },
-  { apiValue: "He/They", translationKey: "HeThey" },
-  { apiValue: "He/She", translationKey: "HeShe" },
-  { apiValue: "Xe/Xem", translationKey: "XeXem" },
-  { apiValue: "It/Its", translationKey: "ItIts" },
-  { apiValue: "Fae/Faer", translationKey: "FaeFaer" },
-  { apiValue: "Ve/Ver", translationKey: "VeVer" },
-  { apiValue: "Ae/Aer", translationKey: "AeAer" },
-  { apiValue: "Zie/Hir", translationKey: "ZieHir" },
-  { apiValue: "Per/Per", translationKey: "PerPer" },
-  { apiValue: "E/Em", translationKey: "EEm" },
+  { apiValue: "none", translationKey: "None" },
+  { apiValue: "he-him", translationKey: "HeHim" },
+  { apiValue: "She-Her", translationKey: "SheHer" },
+  { apiValue: "They-Them", translationKey: "TheyThem" },
+  { apiValue: "She-They", translationKey: "SheThey" },
+  { apiValue: "He-They", translationKey: "HeThey" },
+  { apiValue: "He-She", translationKey: "HeShe" },
+  { apiValue: "Xe-Xem", translationKey: "XeXem" },
+  { apiValue: "It-Its", translationKey: "ItIts" },
+  { apiValue: "Fae-Faer", translationKey: "FaeFaer" },
+  { apiValue: "Ve-Ver", translationKey: "VeVer" },
+  { apiValue: "Ae-Aer", translationKey: "AeAer" },
+  { apiValue: "Zie-Hir", translationKey: "ZieHir" },
+  { apiValue: "Per-Per", translationKey: "PerPer" },
+  { apiValue: "E-Em", translationKey: "EEm" },
 ];
 
 export default function SettingsForm({ userService }: SettingsFormProps) {
@@ -50,7 +50,7 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
   const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
 
   const saveToDatabase = async () => {
-    const selectedPronoun = pronounsListEl.current.value;
+    const selectedPronoun = pronounsListEl.current.value.toLowerCase();
     const selectedOccupation = occupationListEl.current.value;
 
     const response = await fetch(
@@ -70,7 +70,6 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
         }),
       },
     );
-    console.log(response);
 
     if (response.ok) {
       const updatedSettings = (await response.json()) as UserSettings;

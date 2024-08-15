@@ -16,29 +16,12 @@ type ProfileProps = {
 export default function Profile({ user }: ProfileProps) {
   const userService = new UserStorageService(user);
 
-  const tabData = [
-    {
-      name: t("profileSettings"),
-      value: "settings",
-      content: (
-        <div className="flex flex-col w-full gap-3">
-          <SettingsForm userService={userService} />
-          <ChatAppearance userService={userService} />
-        </div>
-      ),
-    },
-    {
-      name: t("aboutTitle"),
-      value: "about",
-      content: <AboutCard />,
-    },
-  ];
-
   return (
     <div className="flex flex-col max-w-96">
       <Header />
       <ProfileCard user={userService.user} />
-      <Tabs tabData={tabData} />
+      <SettingsForm userService={userService} />
+      <ChatAppearance userService={userService} />
     </div>
   );
 }
