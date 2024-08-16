@@ -1,7 +1,6 @@
-import Header from "@Components/app/header";
-import ChatAppearance from "@Components/settings/chat-appearance";
-import ProfileCard from "@Components/settings/profile-card";
-import SettingsForm from "@Components/settings/settings-form";
+import React, { useState } from "react";
+import Header from "~resources/components/app/header";
+import MainContent from "~resources/components/app/main-content";
 import UserStorageService from "~services/user/user-storage-service";
 import type { User } from "~types/types";
 
@@ -11,13 +10,12 @@ type ProfileProps = {
 
 export default function Profile({ user }: ProfileProps) {
   const userService = new UserStorageService(user);
+  const [selectedItem, setSelectedItem] = useState("Configurações");
 
   return (
-    <div className="flex flex-col max-w-96">
-      <Header />
-      <ProfileCard user={userService.user} />
-      <SettingsForm userService={userService} />
-      <ChatAppearance userService={userService} />
+    <div className="flex flex-col max-w-96 gap">
+      <Header onItemSelect={setSelectedItem} />
+      <MainContent selectedItem={selectedItem} userService={userService} />
     </div>
   );
 }

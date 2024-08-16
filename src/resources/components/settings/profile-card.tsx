@@ -22,26 +22,26 @@ export default function ProfileCard({ user }: ProfileCardProps) {
           <h1 className="font-bold text-sm text-text-high" id="usernameEl">
             {user.name}
           </h1>
-          <span className="font-medium text-xs" id="roleEl">
+          <span className="font-medium text-text-medium" id="roleEl">
             {occupationText}
           </span>
         </div>
-        <div className="text-sm">
-          <span className="font-bold text-xxs text-text-high">ID: </span>
+        <div className="flex items-center mt-2">
+          <span className="font-bold text-xxs text-text-high">ID:&nbsp;</span>
           <span className="font-medium text-xs text-text-medium" id="idEl">
             {user.id}
           </span>
-          <div className="text-sm">
-            <span className="font-bold text-xxs text-text-high">
-              {t("pronounsTitle")}:&nbsp;
-            </span>
-            <span
-              className="font-medium text-xs text-text-medium"
-              id="pronounsEl"
-            >
-              {pronounsText}
-            </span>
-          </div>
+        </div>
+        <div>
+          <span className="font-bold text-xs text-text-high">
+            {t("pronounsTitle")}:&nbsp;
+          </span>
+          <span
+            className="font-medium text-xs text-text-medium"
+            id="pronounsEl"
+          >
+            {pronounsText}
+          </span>
         </div>
       </div>
     </div>

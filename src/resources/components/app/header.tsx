@@ -1,14 +1,19 @@
 import Logo from "data-base64:@Root/assets/icon.png";
-import { ModeToggle } from "@Components/app/mode-toggle";
 import { version } from "@Root/package.json";
-import { H4 } from "@Shad/components/ui/typography/h4";
 import { useStorage } from "@plasmohq/storage/dist/hook";
-import { Menu } from "lucide-react";
 import { env } from "~config/env";
-import { Button } from "~resources/shad/components/ui/button";
 import { t } from "~utils/i18nUtils";
+import Sidebar from "./sidebar";
 
-export default function Header() {
+type HeaderProps = {
+  isSidebarVisible?: boolean;
+  onItemSelect?: (item: string) => void;
+};
+
+export default function Header({
+  isSidebarVisible = true,
+  onItemSelect,
+}: HeaderProps) {
   const [isAuthenticated] = useStorage("accessToken");
   const onStorageClear = async () => {
     const { Storage } = await import("@plasmohq/storage");
@@ -22,7 +27,9 @@ export default function Header() {
       : "(dev)";
 
   return (
-    <header className="flex flex-row justify-between items-center bg-elevation-surface">
+    <header
+      className={`flex flex-row justify-between items-center ${isSidebarVisible ? "w-full" : ""}`}
+    >
       <div className="flex items-center space-x-2 justify-center">
         <img src={Logo} alt="logo" width={20} height={20} />
         <div>
@@ -36,13 +43,7 @@ export default function Header() {
           </span>
         </div>
       </div>
-      <button
-        type="button"
-        className="text-icon-medium"
-        onClick={onStorageClear}
-      >
-        <Menu size={24} />
-      </button>
+      {isSidebarVisible && <Sidebar onItemSelect={onItemSelect} />}
     </header>
   );
 }

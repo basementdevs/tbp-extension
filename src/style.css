@@ -112,7 +112,7 @@
   
   :root,
   :root[data-theme='light'] {
-    --color-primary-900: hsl(266, 71%, 32%);
+    --color-primary-900: rgb(74, 24, 140);
     --color-primary-800: hsl(120, 100%, 18%);
     --color-primary-700: rgb(0, 117, 0);
     --color-primary-600: rgb(146, 64, 251);
@@ -150,7 +150,7 @@
     --color-icon-low: rgb(185, 185, 190);
 
     --color-elevation-surface: rgb(245, 245, 255);
-    --color-elevation-01dp: rgb(233, 233, 242);
+    --color-elevation-01dp: rgb(245, 245, 253);
     --color-elevation-02dp: rgb(228, 228, 237);
     --color-elevation-03dp: rgb(226, 226, 235);
     --color-elevation-04dp: rgb(223, 223, 232);
@@ -160,9 +160,9 @@
   /* Dark mode colors */
   :root[data-theme='dark'] {
     --color-primary-900: rgb(75, 24, 141);
-    --color-primary-800: rgb(98, 32, 184);
-    --color-primary-700: rgb(122, 45, 221);
-    --color-primary-600: rgb(146, 64, 251);
+    --color-primary-800: hsl(266, 70%, 42%);
+    --color-primary-700: hsl(266, 72%, 52%);
+    --color-primary-600: hsl(266, 96%, 62%);
     --color-primary-500: rgb(170, 88, 255);
     --color-primary-400: rgb(193, 114, 255);
     --color-primary-300: rgb(213, 144, 255);
@@ -189,7 +189,7 @@
     --color-helper-outline: rgb(44, 44, 45);
 
     --color-text-high: rgb(9, 9, 10);
-    --color-text-medium: rgb(79, 79, 79);
+    --color-text-medium: rgb(156, 156, 156);
     --color-text-low: rgb(112, 112, 112);
 
     --color-icon-high: rgb(245, 245, 255);
