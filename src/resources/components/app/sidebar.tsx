@@ -1,10 +1,13 @@
 import { Menu, X } from "lucide-react";
+import type React from "react";
 import { useState } from "react";
 import Header from "./header";
 
-const Sidebar: React.FC<{ onItemSelect: (item: string) => void }> = ({
-  onItemSelect,
-}) => {
+type SidebarItems = {
+  setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const Sidebar = ({ setSelectedItem }: SidebarItems) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -49,7 +52,7 @@ const Sidebar: React.FC<{ onItemSelect: (item: string) => void }> = ({
                 <button
                   type="button"
                   onClick={() => {
-                    onItemSelect(item.name);
+                    setSelectedItem(item.name);
                     toggleSidebar();
                   }}
                   className="w-full text-left p-2 hover:bg-elevation-02dp rounded-md transition-colors"

@@ -7,13 +7,9 @@ import Sidebar from "./sidebar";
 
 type HeaderProps = {
   isSidebarVisible?: boolean;
-  onItemSelect?: (item: string) => void;
 };
 
-export default function Header({
-  isSidebarVisible = true,
-  onItemSelect,
-}: HeaderProps) {
+export default function Header({ isSidebarVisible = true }: HeaderProps) {
   const [isAuthenticated] = useStorage("accessToken");
   const onStorageClear = async () => {
     const { Storage } = await import("@plasmohq/storage");
@@ -43,7 +39,6 @@ export default function Header({
           </span>
         </div>
       </div>
-      {isSidebarVisible && <Sidebar onItemSelect={onItemSelect} />}
     </header>
   );
 }

@@ -17,6 +17,7 @@ const MainContent = ({ selectedItem, userService }: MainContentProps) => {
         <>
           <ProfileCard user={userService.user} />
           <SettingsForm userService={userService} />
+          <ChatAppearance userService={userService} />
         </>
       );
     case "Estatísticas":
@@ -30,8 +31,6 @@ const MainContent = ({ selectedItem, userService }: MainContentProps) => {
           <ModeToggle />
         </>
       );
-    default:
-      return <ChatAppearance userService={userService} />;
   }
 };
 
