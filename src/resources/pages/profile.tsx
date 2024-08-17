@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "~resources/components/app/header";
 import MainContent from "~resources/components/app/main-content";
 import Sidebar from "~resources/components/app/sidebar";
+import ProfileCard from "~resources/components/settings/profile-card";
 import UserStorageService from "~services/user/user-storage-service";
 import type { User } from "~types/types";
 
@@ -23,6 +24,7 @@ export default function Profile({ user }: ProfileProps) {
           userService={userService}
         />
       </div>
+      <ProfileCard user={userService.user} />
       <MainContent selectedItem={selectedItem} userService={userService} />
     </div>
   );

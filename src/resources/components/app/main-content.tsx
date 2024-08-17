@@ -15,7 +15,6 @@ const MainContent = ({ selectedItem, userService }: MainContentProps) => {
     case "Configurações":
       return (
         <>
-          <ProfileCard user={userService.user} />
           <SettingsForm userService={userService} />
           <ChatAppearance userService={userService} />
         </>

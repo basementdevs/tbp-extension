@@ -13,8 +13,6 @@ function ProfileRibbon({ user }: ProfileRibbonType) {
     await storage.clear();
   };
 
-  console.log(user);
-
   return (
     <div className="flex items-center justify-between px-6">
       <div className="flex items-center gap-x-2">
@@ -27,7 +25,7 @@ function ProfileRibbon({ user }: ProfileRibbonType) {
         <div className="flex flex-col">
           <span className="text-text-high text-xs font-bold">{user.name}</span>
           <span className="text-text-medium font-medium text-xxs">
-            {user.settings.pronouns.name}
+            {user.settings.occupation.name}
           </span>
         </div>
       </div>
