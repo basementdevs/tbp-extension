@@ -111,7 +111,9 @@
 
   
   :root,
-  .light {
+  .light,
+  [data-theme="light"] {
+    color-scheme: light;
     --color-primary-900: 74 24 140;
     --color-primary-800: 0 117 0;
     --color-primary-700: 0 117 0;
@@ -158,7 +160,9 @@
   }
 
   /* Dark mode colors */
-  .dark {
+  .dark,
+  [data-theme="dark"] {
+    color-scheme: dark;
     --color-primary-900: 75 24 141;
     --color-primary-800: 66 32 128;
     --color-primary-700: 88 49 173;
