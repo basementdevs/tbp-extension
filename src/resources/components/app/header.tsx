@@ -11,11 +11,6 @@ type HeaderProps = {
 
 export default function Header({ isSidebarVisible = true }: HeaderProps) {
   const [isAuthenticated] = useStorage("accessToken");
-  const onStorageClear = async () => {
-    const { Storage } = await import("@plasmohq/storage");
-    const storage = new Storage();
-    await storage.clear();
-  };
 
   const appStage =
     env.data.APP_ENVIRONMENT === "production"

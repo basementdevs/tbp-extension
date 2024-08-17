@@ -17,7 +17,10 @@ export default function Profile({ user }: ProfileProps) {
     <div className="flex flex-col max-w-96 gap min-h-[800px]">
       <div className="flex justify-between w-full">
         <Header />
-        <Sidebar setSelectedItem={setSelectedItem} />
+        <Sidebar
+          setSelectedItem={setSelectedItem}
+          selectedItem={selectedItem}
+        />
       </div>
       <MainContent selectedItem={selectedItem} userService={userService} />
     </div>

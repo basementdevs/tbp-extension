@@ -1,13 +1,52 @@
-import { Menu, X } from "lucide-react";
+import {
+  Info,
+  type LucideIcon,
+  Menu,
+  Palette,
+  PieChart,
+  Settings,
+  X,
+} from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 import Header from "./header";
+import ProfileRibbon from "./profile-ribbon";
 
-type SidebarItems = {
+type SidebarProps = {
   setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
+  selectedItem: string;
 };
 
-const Sidebar = ({ setSelectedItem }: SidebarItems) => {
+type SidebarItemProps = {
+  name: string;
+  icon: LucideIcon;
+  isSelected: boolean;
+  onClick: () => void;
+};
+
+const SidebarItem = ({
+  name,
+  icon: Icon,
+  isSelected,
+  onClick,
+}: SidebarItemProps) => (
+  <li>
+    <button
+      type="button"
+      onClick={onClick}
+      className={twMerge(
+        "w-full text-left p-2 rounded-md flex items-center gap-2 font-medium",
+        isSelected ? "bg-primary-500" : "hover:bg-elevation-02dp",
+      )}
+    >
+      <Icon size={20} className={twMerge(isSelected && "text-white")} />
+      <span className={twMerge(isSelected && "text-white")}>{name}</span>
+    </button>
+  </li>
+);
+
+const Sidebar = ({ setSelectedItem, selectedItem }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -15,10 +54,10 @@ const Sidebar = ({ setSelectedItem }: SidebarItems) => {
   };
 
   const sidebarItems = [
-    { name: "Configurações", icon: "" },
-    { name: "Estatísticas", icon: "" },
-    { name: "Sobre", icon: "" },
-    { name: "Temas", icon: "" },
+    { name: "Configurações", icon: Settings },
+    { name: "Estatísticas", icon: PieChart },
+    { name: "Sobre", icon: Info },
+    { name: "Temas", icon: Palette },
   ];
 
   return (
@@ -48,21 +87,20 @@ const Sidebar = ({ setSelectedItem }: SidebarItems) => {
         <nav className="p-4">
           <ul className="space-y-2">
             {sidebarItems.map((item) => (
-              <li key={item.name}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedItem(item.name);
-                    toggleSidebar();
-                  }}
-                  className="w-full text-left p-2 hover:bg-elevation-02dp rounded-md transition-colors"
-                >
-                  {item.name}
-                </button>
-              </li>
+              <SidebarItem
+                key={item.name}
+                name={item.name}
+                icon={item.icon}
+                isSelected={selectedItem === item.name}
+                onClick={() => {
+                  setSelectedItem(item.name);
+                  toggleSidebar();
+                }}
+              />
             ))}
           </ul>
         </nav>
+        <ProfileRibbon />
       </aside>
     </div>
   );
