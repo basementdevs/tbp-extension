@@ -3,11 +3,19 @@ import PopoverMutationObserver from "@Scripting/observers/popover-observer";
 import PageWatcher, {
   PageWatcherState,
 } from "@Scripting/watchers/page-watcher";
+import browser from "webextension-polyfill";
+import { sendHeartbeat } from "~services/user/user-consumer-service";
+import type { AccessTokenResponse } from "~types/types";
+import { extractUsername } from "~utils/regex";
 
 const TWITCH_CHAT_LIST = ".chat-list--default,.chat-list--other,.chat-list";
 const SEVEN_TV_CHAT_LIST = ".seventv-chat-list";
 const CHAT_LIST = `${TWITCH_CHAT_LIST},${SEVEN_TV_CHAT_LIST}`;
 const POPOVER_ELEMENT = ".viewer-card-layer";
+const CATEGORY_ELEMENT_SELECTOR = 'a[data-a-target="stream-game-link"]';
+
+let interval: number | null = null;
+let currentCategory = "";
 
 export default class Kernel {
   // Core components
@@ -75,11 +83,43 @@ export default class Kernel {
 
     this.pageWatcher.observerRunning = true;
     this.pageWatcher.pageState = PageWatcherState.MATCHED;
+
+    // Check if the category has changed
+    console.log("TBP: Checking for category changes...");
+    const channelName = extractUsername(window.location.href);
+
+    setTimeout(() => {
+      const categoryElement = document.querySelector(CATEGORY_ELEMENT_SELECTOR);
+      if (categoryElement) {
+        const category = categoryElement.getAttribute("href").split("/").pop();
+        currentCategory = category;
+        console.log(`TBP: Category changed to ${category}`);
+      }
+      // @ts-ignore
+      interval = setInterval(() => {
+        browser.storage.sync.get("accessToken").then((res) => {
+          const authorization: AccessTokenResponse = JSON.parse(
+            res.accessToken,
+          );
+          console.log(authorization);
+
+          if (!authorization) {
+            return;
+          }
+          sendHeartbeat(
+            authorization.access_token,
+            channelName,
+            currentCategory,
+          ).then(() => console.log("TBP: Heartbeat sent!"));
+        });
+      }, 60 * 1000);
+    }, 5000);
   }
 
   stop = () => {
     this.pageWatcher.observerRunning = false;
     this.chatObserver.stop();
     this.popoverObserver.stop();
+    clearInterval(interval);
   };
 }
