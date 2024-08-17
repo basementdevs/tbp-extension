@@ -158,7 +158,6 @@
   }
 
   /* Dark mode colors */
-  :root,
   .dark {
     --color-primary-900: 75 24 141;
     --color-primary-800: 66 32 128;
