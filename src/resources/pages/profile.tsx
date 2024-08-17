@@ -20,6 +20,7 @@ export default function Profile({ user }: ProfileProps) {
         <Sidebar
           setSelectedItem={setSelectedItem}
           selectedItem={selectedItem}
+          userService={userService}
         />
       </div>
       <MainContent selectedItem={selectedItem} userService={userService} />

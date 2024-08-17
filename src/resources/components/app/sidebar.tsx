@@ -10,12 +10,14 @@ import {
 import type React from "react";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+import type UserStorageService from "~services/user/user-storage-service";
 import Header from "./header";
 import ProfileRibbon from "./profile-ribbon";
 
 type SidebarProps = {
   setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
   selectedItem: string;
+  userService: UserStorageService;
 };
 
 type SidebarItemProps = {
@@ -46,7 +48,12 @@ const SidebarItem = ({
   </li>
 );
 
-const Sidebar = ({ setSelectedItem, selectedItem }: SidebarProps) => {
+const Sidebar = ({
+  setSelectedItem,
+  selectedItem,
+  userService,
+}: SidebarProps) => {
+  console.log(userService, "user service");
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -100,7 +107,7 @@ const Sidebar = ({ setSelectedItem, selectedItem }: SidebarProps) => {
             ))}
           </ul>
         </nav>
-        <ProfileRibbon />
+        <ProfileRibbon user={userService.user} />
       </aside>
     </div>
   );
