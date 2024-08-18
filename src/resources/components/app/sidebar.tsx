@@ -77,11 +77,11 @@ const Sidebar = ({
         <Menu size={24} />
       </button>
       <aside
-        className={`fixed top-0 right-0 w-80 h-full bg-elevation-01dp shadow-lg transform transition-transform duration-300 ease-in-out z-50 border border-helper-outline rounded-md ${
+        className={`fixed top-0 right-0 w-80 h-full bg-elevation-01dp shadow-lg transform transition-transform duration-300 ease-in-out z-50 border border-helper-outline rounded-md px-4 py-6 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center p-4">
+        <div className="flex justify-between items-center pb-6">
           <Header isSidebarVisible={true} />
           <button
             type="button"
@@ -91,8 +91,8 @@ const Sidebar = ({
             <X size={24} />
           </button>
         </div>
-        <nav className="p-4">
-          <ul className="space-y-2">
+        <nav className="mb-10">
+          <ul className="space-y-5">
             {sidebarItems.map((item) => (
               <SidebarItem
                 key={item.name}

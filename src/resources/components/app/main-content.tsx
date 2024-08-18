@@ -4,6 +4,7 @@ import ChatAppearance from "@Components/settings/chat-appearance";
 import ProfileCard from "@Components/settings/profile-card";
 import SettingsForm from "@Components/settings/settings-form";
 import type UserStorageService from "~services/user/user-storage-service";
+import Stats from "../stats/stats";
 
 type MainContentProps = {
   selectedItem: string;
@@ -20,7 +21,7 @@ const MainContent = ({ selectedItem, userService }: MainContentProps) => {
         </>
       );
     case "Estatísticas":
-      return <div>Estatísticas Content</div>;
+      return <Stats />;
     case "Sobre":
       return <AboutCard />;
     case "Temas":

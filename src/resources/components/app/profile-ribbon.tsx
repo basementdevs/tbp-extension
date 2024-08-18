@@ -14,7 +14,7 @@ function ProfileRibbon({ user }: ProfileRibbonType) {
   };
 
   return (
-    <div className="flex items-center justify-between px-6">
+    <div className="flex items-center justify-between">
       <div className="flex items-center gap-x-2">
         <img
           src={user.accounts[0].avatar}
