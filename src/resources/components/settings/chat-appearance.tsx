@@ -28,11 +28,15 @@ export default function ChatAppearance({ userService }: ChatAppearanceProps) {
           alt="Occupation icon"
           className="rounded"
         />
-        <span className="font-bold text-gray">{userService.user.name}</span>
-        <span className="font-medium text-text-low">({pronounText}):</span>
-        <span className="text-text-high">{greeting}</span>
+        <span className="font-bold text-gray text-xs">
+          {userService.user.name}
+        </span>
+        <span className="font-medium text-text-low text-xs">
+          ({pronounText}):
+        </span>
+        <span className="text-text-high text-xs">{greeting}</span>
       </div>
-      <p className="text-text-low">{description}</p>
+      <p className="text-text-low text-xs">{description}</p>
     </div>
   );
 }

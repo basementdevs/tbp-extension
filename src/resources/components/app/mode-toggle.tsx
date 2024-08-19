@@ -1,38 +1,43 @@
 import { useTheme } from "@Components/app/theme-provide";
-import { Button } from "@Shad/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@Shad/components/ui/dropdown-menu";
-import { Moon, Sun } from "lucide-react";
-
+import { ChevronRight } from "lucide-react";
+import React from "react";
 import { t } from "~utils/i18nUtils";
 
-export function ModeToggle() {
-  const { setTheme } = useTheme();
+export function ThemeSelect() {
+  const { setTheme, theme } = useTheme();
+
+  const themeOptions = [
+    { value: "light", label: t("themeLight") },
+    { value: "dark", label: t("themeDark") },
+    { value: "system", label: t("themeSystem") },
+  ];
+
+  const handleChange = (event) => {
+    setTheme(event.target.value);
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">{t("toggleTheme")}</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          {t("themeLight")}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          {t("themeDark")}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          {t("themeSystem")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="relative w-full">
+      <select
+        id="theme-select"
+        onChange={handleChange}
+        value={theme}
+        className="flex w-full items-center justify-between px-4 py-2 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-pill appearance-none"
+      >
+        {themeOptions.map(({ value, label }) => (
+          <option
+            key={value}
+            value={value}
+            className="bg-helper-outline font-primary text-text-medium focus:border-primary-600"
+          >
+            {label}
+          </option>
+        ))}
+      </select>
+      <ChevronRight
+        size="16"
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 rotate-90 pointer-events-none text-icon-medium"
+      />
+    </div>
   );
 }

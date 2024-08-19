@@ -118,7 +118,7 @@
     --color-primary-800: 0 117 0;
     --color-primary-700: 0 117 0;
     --color-primary-600: 146 64 251;
-    --color-primary-500: 170 88 255;
+    --color-primary-500: 151 71 255;
     --color-primary-400: 193 114 255;
     --color-primary-300: 213 144 255;
     --color-primary-200: 230 175 255;
@@ -167,7 +167,7 @@
     --color-primary-800: 66 32 128;
     --color-primary-700: 88 49 173;
     --color-primary-600: 99 58 249;
-    --color-primary-500: 170 88 255;
+    --color-primary-500: 151 71 255;
     --color-primary-400: 193 114 255;
     --color-primary-300: 213 144 255;
     --color-primary-200: 230 175 255;
@@ -192,12 +192,12 @@
     --color-helper-icon: 200 200 200;
     --color-helper-outline: 44 44 45;
 
-    --color-text-high: 245, 245, 255;
+    --color-text-high: 245 245 255;
     --color-text-medium: 156 156 156;
     --color-text-low: 112 112 112;
 
     --color-icon-high: 252 252 252;
-    --color-icon-medium: 156, 156, 156;
+    --color-icon-medium: 156 156 156;
     --color-icon-low: 122 122 122;
 
     --color-elevation-surface: 9 9 10;

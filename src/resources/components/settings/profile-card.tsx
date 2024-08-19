@@ -11,7 +11,7 @@ export default function ProfileCard({ user }: ProfileCardProps) {
   const occupationText = t(`occupation${occupation.translation_key}`);
   const pronounsText = t(`pronouns${user.settings.pronouns?.translation_key}`);
   return (
-    <div className="flex items-center rounded-xl bg-elevation-05dp dark:bg-helper-outline p-2">
+    <div className="flex items-center rounded-xl bg-elevation-04dp p-2">
       <img
         src={user.accounts[0].avatar}
         alt="The user's profile"

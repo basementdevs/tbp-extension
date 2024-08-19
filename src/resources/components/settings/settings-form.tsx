@@ -61,7 +61,6 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
       username: twitchUser.login,
     };
 
-    console.log(payload);
     const response = await fetch(
       `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
       {

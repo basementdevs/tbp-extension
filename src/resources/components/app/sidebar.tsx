@@ -43,7 +43,9 @@ const SidebarItem = ({
       )}
     >
       <Icon size={20} className={twMerge(isSelected && "text-white")} />
-      <span className={twMerge(isSelected && "text-white")}>{name}</span>
+      <span className={twMerge(isSelected && "text-white font-bold")}>
+        {name}
+      </span>
     </button>
   </li>
 );
@@ -53,7 +55,6 @@ const Sidebar = ({
   selectedItem,
   userService,
 }: SidebarProps) => {
-  console.log(userService, "user service");
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -81,7 +82,7 @@ const Sidebar = ({
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center pb-6">
+        <div className="flex justify-between items-center pb-8">
           <Header isSidebarVisible={true} />
           <button
             type="button"

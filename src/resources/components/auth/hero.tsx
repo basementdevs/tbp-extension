@@ -15,7 +15,7 @@ export default function Hero() {
   return (
     <div className="flex flex-col items-center justify-center gap-y-8">
       <div className="text-center">
-        <h1 className="font-secondary text-lg font-semibold text-text-high dark:text-text-high">
+        <h1 className="font-secondary text-lg font-semibold text-text-high">
           {t("heroTitle")}
         </h1>
         <p className="text-text-medium font-primary text-xs">

@@ -10,7 +10,7 @@ export default function AboutCard() {
   const changelogUrl = `${repositoryUrl}/releases/tag/${version}`;
 
   return (
-    <div className="flex flex-col space-y-5 mt-4">
+    <div className="flex flex-col space-y-5 mt-8">
       <div className="space-y-2">
         <h1 className="font-bold text-xs text-text-high">{t("aboutTitle")}</h1>
         <p className="text-xxs font-medium text-text-medium">
