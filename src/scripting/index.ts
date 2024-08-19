@@ -88,6 +88,10 @@ export default class Kernel {
     console.log("TBP: Checking for category changes...");
     const channelName = extractUsername(window.location.href);
 
+    if (!channelName) {
+      return;
+    }
+
     setTimeout(() => {
       const categoryElement = document.querySelector(CATEGORY_ELEMENT_SELECTOR);
       if (categoryElement) {
@@ -97,6 +101,7 @@ export default class Kernel {
       }
       // @ts-ignore
       interval = setInterval(() => {
+        console.log(currentCategory);
         browser.storage.sync.get("accessToken").then((res) => {
           const authorization: AccessTokenResponse = JSON.parse(
             res.accessToken,
@@ -112,7 +117,7 @@ export default class Kernel {
             currentCategory,
           ).then(() => console.log("TBP: Heartbeat sent!"));
         });
-      }, 60 * 1000);
+      }, 5 * 1000);
     }, 5000);
   }
 

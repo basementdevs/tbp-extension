@@ -1,5 +1,10 @@
 import { env } from "~config/env";
-import type { AccessTokenResponse, TwitchUser, User } from "~types/types";
+import type {
+  AccessTokenResponse,
+  MetricsResponse,
+  TwitchUser,
+  User,
+} from "~types/types";
 
 const API_URL = env.data.CONSUMER_API_URL;
 const API_VERSION = env.data.CONSUMER_API_VERSION;
@@ -77,4 +82,17 @@ export async function sendHeartbeat(
     },
     body: JSON.stringify(payload),
   });
+}
+
+export async function getMetrics(authentication: string) {
+  const uri = `${BASE_URL}/metrics/by-user`;
+
+  const response = await fetch(uri, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authentication,
+    },
+  });
+  return (await response.json()) as MetricsResponse;
 }

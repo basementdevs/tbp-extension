@@ -68,8 +68,7 @@
       "activeTab",
       "identity",
       "*://*.twitch.tv/*",
-      "https://twitch-extension.danielheart.dev/*",
-      "https://tbp.danielheart.dev/*",
+      "https://*.danielheart.dev/*",
       "*://localhost/*",
       "storage"
     ]
