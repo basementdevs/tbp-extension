@@ -99,7 +99,7 @@ const Sidebar = ({
                 key={item.key}
                 name={item.name}
                 icon={item.icon}
-                isSelected={selectedItem === item.name}
+                isSelected={selectedItem === item.key}
                 onClick={() => {
                   setSelectedItem(item.key);
                   toggleSidebar();
