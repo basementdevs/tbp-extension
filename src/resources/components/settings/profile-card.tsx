@@ -8,48 +8,40 @@ type ProfileCardProps = {
 export default function ProfileCard({ user }: ProfileCardProps) {
   // frontend-engineer -> FrontEndEngineer
   const occupation = user.settings.occupation;
-
+  const occupationText = t(`occupation${occupation.translation_key}`);
+  const pronounsText = t(`pronouns${user.settings.pronouns?.translation_key}`);
   return (
-    <div className="flex items-center rounded-xl bg-muted">
+    <div className="flex items-center rounded-xl bg-elevation-04dp p-2">
       <img
         src={user.accounts[0].avatar}
         alt="The user's profile"
-        className="size-28 rounded-xl p-1"
+        className="size-28 rounded-xl"
       />
-      <div className="p-2">
+      <div className="pl-4">
         <div className="flex flex-col">
-          <h1
-            className="font-extrabold text-lg m-0 line-clamp-1"
-            id="usernameEl"
-          >
+          <h1 className="font-bold text-sm text-text-high" id="usernameEl">
             {user.name}
           </h1>
-          <p
-            className="text-gray-600 dark:text-gray-300 text-sm m-0 p-0"
-            id="roleEl"
-          >
-            {t(`occupation${occupation.translation_key}`) ??
-              t("occupationNone")}
-          </p>
+          <span className="font-medium text-text-medium" id="roleEl">
+            {occupationText}
+          </span>
         </div>
-        <div className="mt-2">
-          <p className="text-sm">
-            <span className="font-bold">ID:</span>
-            <span className="text-gray-600 dark:text-gray-300 ml-2" id="idEl">
-              {user.accounts[0].id}
-            </span>
-          </p>
-          <p className="text-sm">
-            <span className="font-bold">{t("pronounsTitle")}:</span>
-            <span
-              className="text-gray-600 dark:text-gray-300 ml-2"
-              id="pronounsEl"
-            >
-              {user.settings.pronouns
-                ? t(`pronouns${user.settings.pronouns.replace("/", "")}`)
-                : t("pronounsNone")}
-            </span>
-          </p>
+        <div className="flex items-center mt-2">
+          <span className="font-bold text-xxs text-text-high">ID:&nbsp;</span>
+          <span className="font-medium text-xs text-text-medium" id="idEl">
+            {user.id}
+          </span>
+        </div>
+        <div>
+          <span className="font-bold text-xs text-text-high">
+            {t("pronounsTitle")}:&nbsp;
+          </span>
+          <span
+            className="font-medium text-xs text-text-medium"
+            id="pronounsEl"
+          >
+            {pronounsText}
+          </span>
         </div>
       </div>
     </div>

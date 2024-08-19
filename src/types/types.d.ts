@@ -21,11 +21,17 @@ export interface User {
   accounts: Account[];
 }
 
+export interface SettingsOption {
+  name: string;
+  slug: string;
+  translation_key: string;
+}
+
 export interface UserSettings {
   id: number;
   user_id: number;
   occupation_id: number;
-  pronouns: string;
+  pronouns: SettingsOption;
   timezone: string;
   locale: string;
   is_developer: boolean;
