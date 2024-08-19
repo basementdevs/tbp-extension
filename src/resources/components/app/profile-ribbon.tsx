@@ -1,5 +1,5 @@
+import { Storage } from "@plasmohq/storage";
 import { LogOut } from "lucide-react";
-import type UserStorageService from "~services/user/user-storage-service";
 import type { User } from "~types/types";
 
 type ProfileRibbonType = {
@@ -8,7 +8,6 @@ type ProfileRibbonType = {
 
 function ProfileRibbon({ user }: ProfileRibbonType) {
   const onStorageClear = async () => {
-    const { Storage } = await import("@plasmohq/storage");
     const storage = new Storage();
     await storage.clear();
   };

@@ -6,8 +6,6 @@ const API_VERSION = env.data.CONSUMER_API_VERSION;
 
 const BASE_URL = `${API_URL}/api/${API_VERSION}`;
 
-console.log(BASE_URL);
-
 export type SettingsOption = {
   name: string;
   slug: string;
@@ -52,7 +50,6 @@ export async function authenticateWithServer(code: string) {
 
   const data: { user: User; authorization: AccessTokenResponse } =
     await response.json();
-
   const { user, authorization } = data;
 
   const twitchUser = {

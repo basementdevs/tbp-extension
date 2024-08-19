@@ -62,10 +62,10 @@ const Sidebar = ({
   };
 
   const sidebarItems = [
-    { name: "Configurações", icon: Settings },
-    { name: "Estatísticas", icon: PieChart },
-    { name: "Sobre", icon: Info },
-    { name: "Temas", icon: Palette },
+    { name: "Configurações", key: "settings", icon: Settings },
+    { name: "Estatísticas", key: "stats", icon: PieChart },
+    { name: "Sobre", key: "about", icon: Info },
+    { name: "Temas", key: "themes", icon: Palette },
   ];
 
   return (
@@ -96,12 +96,12 @@ const Sidebar = ({
           <ul className="space-y-5">
             {sidebarItems.map((item) => (
               <SidebarItem
-                key={item.name}
+                key={item.key}
                 name={item.name}
                 icon={item.icon}
                 isSelected={selectedItem === item.name}
                 onClick={() => {
-                  setSelectedItem(item.name);
+                  setSelectedItem(item.key);
                   toggleSidebar();
                 }}
               />

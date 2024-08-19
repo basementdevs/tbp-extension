@@ -13,18 +13,18 @@ type MainContentProps = {
 
 const MainContent = ({ selectedItem, userService }: MainContentProps) => {
   switch (selectedItem) {
-    case "Configurações":
+    case "settings":
       return (
         <>
           <SettingsForm userService={userService} />
           <ChatAppearance userService={userService} />
         </>
       );
-    case "Estatísticas":
+    case "stats":
       return <Stats />;
-    case "Sobre":
+    case "about":
       return <AboutCard />;
-    case "Temas":
+    case "themes":
       return <Theme />;
   }
 };

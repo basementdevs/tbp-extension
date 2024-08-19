@@ -12,7 +12,7 @@ type ProfileProps = {
 
 export default function Profile({ user }: ProfileProps) {
   const userService = new UserStorageService(user);
-  const [selectedItem, setSelectedItem] = useState("Configurações");
+  const [selectedItem, setSelectedItem] = useState("settings");
 
   return (
     <div className="flex flex-col max-w-96 gap min-h-[800px]">
