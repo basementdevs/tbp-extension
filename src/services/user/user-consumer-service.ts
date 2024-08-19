@@ -28,7 +28,6 @@ export async function getUserFromConsumer(
   username: string,
 ): Promise<ConsumerUserResponse> {
   const uri = `${BASE_URL}/settings/${username}`;
-  console.log(uri);
   const req = await fetch(uri);
 
   if (!req.ok) {
@@ -53,7 +52,7 @@ export async function authenticateWithServer(code: string) {
 
   const data: { user: User; authorization: AccessTokenResponse } =
     await response.json();
-  console.log(data);
+
   const { user, authorization } = data;
 
   const twitchUser = {
@@ -63,4 +62,22 @@ export async function authenticateWithServer(code: string) {
   } as TwitchUser;
 
   return { authorization, user, twitchUser };
+}
+
+export async function sendHeartbeat(
+  authentication: string,
+  channel_id: string,
+  category_id: string,
+) {
+  const uri = `${BASE_URL}/metrics/heartbeat`;
+  const payload = { category_id, channel_id };
+
+  await fetch(uri, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authentication,
+    },
+    body: JSON.stringify(payload),
+  });
 }
