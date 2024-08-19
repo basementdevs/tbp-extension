@@ -61,8 +61,17 @@ const buildBadge = (occupation) => {
   // SevenTV Stuff
   badgeContainer.setAttributeNode(document.createAttribute("data-v-9f956e7d"));
 
+  // Get the occupation object
+  const occupationObject = occupations.find((o) => o.apiValue === occupation);
+
   // Create an img element
   const img = document.createElement("img");
+  // Create a title
+  const title =
+    occupationObject.translationKey === "None"
+      ? "Twitch Better Profile"
+      : t(`occupation${occupationObject.translationKey}`);
+
   img.alt = "Just a thing";
   img.width = 18;
   img.setAttribute("aria-label", "Just a thing");
@@ -71,8 +80,24 @@ const buildBadge = (occupation) => {
   img.src = badgeUrl;
   img.srcset = `${badgeUrl} 1x,${badgeUrl} 2x,${badgeUrl} 4x`;
 
-  // Append the img to the div
-  badgeContainer.appendChild(img);
+  // Wrap img in a tooltip container
+  const tooltipContainer = document.createElement("div");
+  tooltipContainer.className = "tooltip-container";
+
+  // Create a tooltip element
+  const tooltip = document.createElement("div");
+  tooltip.className = "tooltip-text";
+  tooltip.innerText = title;
+
+  tooltipContainer.appendChild(img);
+  tooltipContainer.appendChild(tooltip);
+
+  // Append img and tooltip to the tooltip container
+  tooltipContainer.appendChild(img);
+  tooltipContainer.appendChild(tooltip);
+
+  // Append the tooltip container to the div
+  badgeContainer.appendChild(tooltipContainer);
 
   return badgeContainer;
 };
