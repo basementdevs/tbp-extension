@@ -117,7 +117,7 @@ export default class Kernel {
             currentCategory,
           ).then(() => console.log("TBP: Heartbeat sent!"));
         });
-      }, 5 * 1000);
+      }, 60 * 1000);
     }, 5000);
   }
 
