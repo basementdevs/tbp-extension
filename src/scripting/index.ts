@@ -101,12 +101,10 @@ export default class Kernel {
       }
       // @ts-ignore
       interval = setInterval(() => {
-        console.log(currentCategory);
         browser.storage.sync.get("accessToken").then((res) => {
           const authorization: AccessTokenResponse = JSON.parse(
             res.accessToken,
           );
-          console.log(authorization);
 
           if (!authorization) {
             return;
