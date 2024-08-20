@@ -88,6 +88,10 @@ export default class Kernel {
     console.log("TBP: Checking for category changes...");
     const channelName = extractUsername(window.location.href);
 
+    if (!channelName) {
+      return;
+    }
+
     setTimeout(() => {
       const categoryElement = document.querySelector(CATEGORY_ELEMENT_SELECTOR);
       if (categoryElement) {
@@ -101,7 +105,6 @@ export default class Kernel {
           const authorization: AccessTokenResponse = JSON.parse(
             res.accessToken,
           );
-          console.log(authorization);
 
           if (!authorization) {
             return;

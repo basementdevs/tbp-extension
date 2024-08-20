@@ -1,20 +1,48 @@
+import { useStorage } from "@plasmohq/storage/dist/hook";
+import { useEffect, useMemo, useState } from "react";
+import { getMetrics } from "~services/user/user-consumer-service";
+import type { AccessTokenResponse, MetricsResponse } from "~types/types";
+
 const Stats = () => {
-  const statsData = {
-    hoursWatched: 254,
-    messages: 420,
-    topChannels: [
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-    ],
-    topCategories: [
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/f5c84939-a415-4654-b5da-60ff968280e6-profile_image-150x150.png",
-    ],
-  };
+  const [authorization] = useStorage<AccessTokenResponse>("accessToken");
+
+  const [stats, setStats] = useState<MetricsResponse>();
+
+  useEffect(() => {
+    getMetrics(authorization?.access_token)
+      .then((res) => {
+        setStats(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [authorization]);
+
+  const statsData = useMemo(() => {
+    if (!stats) {
+      return {
+        hoursWatched: 0,
+        messages: 0,
+        topChannels: ["https://http.cat/404"],
+        topCategories: ["https://http.cat/404"],
+      };
+    }
+    return {
+      hoursWatched:
+        stats.main_metrics.minutes_watched > 0
+          ? Math.round(stats.main_metrics.minutes_watched / 60)
+          : 0,
+      messages: 0,
+      topChannels: stats.user_metrics_by_channel.slice(0, 4).map((channel) => {
+        return `https://twitch-cdn.danielheart.dev/u/${channel.channel_id}.png`;
+      }),
+      topCategories: stats.user_metrics_by_category
+        .slice(0, 4)
+        .map((channel) => {
+          return `https://twitch-cdn.danielheart.dev/c/${channel.category_id}.png`;
+        }),
+    };
+  }, [stats]);
 
   const StatItem = ({ label, value }) => (
     <div className="w-1/2">

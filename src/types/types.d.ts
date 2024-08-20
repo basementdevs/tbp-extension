@@ -64,3 +64,28 @@ export interface Account {
   created_at: string;
   updated_at: string;
 }
+
+// ----- Metrics
+export interface UserMetrics {
+  user_id: number;
+  minutes_watched: number | null;
+  messages_count: number | null;
+}
+
+export interface UserMetricsByCategory {
+  user_id: number;
+  minutes_watched: number | null;
+  category_id: string;
+}
+
+export interface UserMetricsByChannel {
+  user_id: number;
+  minutes_watched: number | null;
+  channel_id: string;
+}
+
+export interface MetricsResponse {
+  main_metrics: UserMetrics;
+  user_metrics_by_channel: UserMetricsByChannel[];
+  user_metrics_by_category: UserMetricsByCategory[];
+}

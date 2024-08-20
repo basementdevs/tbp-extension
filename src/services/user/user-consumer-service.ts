@@ -1,5 +1,11 @@
+import axios from "axios";
 import { env } from "~config/env";
-import type { AccessTokenResponse, TwitchUser, User } from "~types/types";
+import type {
+  AccessTokenResponse,
+  MetricsResponse,
+  TwitchUser,
+  User,
+} from "~types/types";
 
 const API_URL = env.data.CONSUMER_API_URL;
 const API_VERSION = env.data.CONSUMER_API_VERSION;
@@ -25,40 +31,35 @@ export type ConsumerUserResponse = {
 export async function getUserFromConsumer(
   username: string,
 ): Promise<ConsumerUserResponse> {
-  const uri = `${BASE_URL}/settings/${username}`;
-  const req = await fetch(uri);
-
-  if (!req.ok) {
-    return;
+  try {
+    const { data } = await axios.get<ConsumerUserResponse>(
+      `${BASE_URL}/settings/${username}`,
+    );
+    return data;
+  } catch (error) {
+    console.error("Error fetching user from consumer:", error);
   }
-
-  return (await req.json()) as ConsumerUserResponse;
 }
 
 export async function authenticateWithServer(code: string) {
-  const uri = `${env.data.APP_PLATFORM_API_URL}/authenticate/twitch?code=${code}`;
-  const response = await fetch(uri, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    const { data } = await axios.post<{
+      user: User;
+      authorization: AccessTokenResponse;
+    }>(`${env.data.APP_PLATFORM_API_URL}/authenticate/twitch`, { code });
 
-  if (!response.ok) {
-    throw new Error("Failed to authenticate with server");
+    const { user, authorization } = data;
+
+    const twitchUser = {
+      id: Number.parseInt(user.accounts[0].provider_user_id),
+      login: user.accounts[0].nickname,
+      display_name: user.accounts[0].name,
+    } as TwitchUser;
+
+    return { authorization, user, twitchUser };
+  } catch (error) {
+    console.error("Error authenticating with server:", error);
   }
-
-  const data: { user: User; authorization: AccessTokenResponse } =
-    await response.json();
-  const { user, authorization } = data;
-
-  const twitchUser = {
-    id: Number.parseInt(user.accounts[0].provider_user_id),
-    login: user.accounts[0].nickname,
-    display_name: user.accounts[0].name,
-  } as TwitchUser;
-
-  return { authorization, user, twitchUser };
 }
 
 export async function sendHeartbeat(
@@ -66,15 +67,35 @@ export async function sendHeartbeat(
   channel_id: string,
   category_id: string,
 ) {
-  const uri = `${BASE_URL}/metrics/heartbeat`;
-  const payload = { category_id, channel_id };
+  try {
+    await axios.post(
+      `${BASE_URL}/metrics/heartbeat`,
+      { category_id, channel_id },
+      {
+        headers: {
+          Authorization: authentication,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  } catch (error) {
+    console.error("Error sending heartbeat:", error);
+  }
+}
 
-  await fetch(uri, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authentication,
-    },
-    body: JSON.stringify(payload),
-  });
+export async function getMetrics(authentication: string) {
+  try {
+    const { data } = await axios.get<MetricsResponse>(
+      `${BASE_URL}/metrics/by-user`,
+      {
+        headers: {
+          Authorization: authentication,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    console.error("Error getting metrics:", error);
+  }
 }
