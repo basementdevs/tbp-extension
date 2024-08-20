@@ -4,7 +4,11 @@ import type { PlasmoMessaging } from "@plasmohq/messaging";
 import { Storage } from "@plasmohq/storage";
 
 import { env } from "~config/env";
-import { getOccupations } from "~services/occupation-service";
+import {
+  getColors,
+  getEffects,
+  getOccupations,
+} from "~services/settings-service";
 import { authenticateWithServer } from "~services/user/user-consumer-service";
 
 const CLIENT_ID = env.data.TWITCH_CLIENT_ID;
@@ -15,14 +19,19 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   const accessToken = await authenticateWithTwitch();
   const { authorization, user, twitchUser } =
     await authenticateWithServer(accessToken);
+  const occupations = await getOccupations();
+  const effects = await getEffects();
+  const colors = await getColors();
 
   const storage = new Storage();
 
   await storage.set("user", user);
   await storage.set("accessToken", authorization);
   await storage.set("twitchUser", twitchUser);
-  const occupations = await getOccupations();
+
   await storage.set("occupations", occupations);
+  await storage.set("settings-effects", effects.data);
+  await storage.set("settings-colors", colors.data);
 
   res.send({
     auth: true,

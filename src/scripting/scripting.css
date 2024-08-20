@@ -10,3 +10,21 @@
     font-size: 14px;
     font-weight: 300; /* font-light */
 }
+
+.glow-purple {
+    text-align: center;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow-purple 1s ease-in-out infinite alternate;
+}
+
+
+@-webkit-keyframes glow-purple {
+    from {
+        text-shadow: 0 0 2px rgb(170, 100, 234), 0 0 2px rgb(170, 100, 234), 0 0 5px rgb(170, 100, 234), 0 0 7px rgb(170, 100, 234), 0 0 9px rgb(170, 100, 234), 0 0 12px rgb(170, 100, 234), 0 0 15px rgb(170, 100, 234);
+    }
+    to {
+        text-shadow: 0 0 2px rgb(170, 100, 234), 0 0 5px rgb(170, 100, 234), 0 0 7px rgb(170, 100, 234), 0 0 9px rgb(170, 100, 234), 0 0 12px rgb(170, 100, 234), 0 0 15px rgb(170, 100, 234), 0 0 15px rgb(170, 100, 234);
+    }
+}
+
