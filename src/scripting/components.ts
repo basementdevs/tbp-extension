@@ -82,17 +82,19 @@ const buildBadge = (occupation) => {
 
   // Wrap img in a tooltip container
   const tooltipContainer = document.createElement("div");
-  tooltipContainer.className = "tooltip-container";
+  tooltipContainer.className = "tooltip-container gJjWWl tw-transition";
 
   // Create a tooltip element
   const tooltip = document.createElement("div");
-  tooltip.className = "tooltip-text";
+  tooltip.className = "tooltip-text cQRCoy etwtmn";
   tooltip.innerText = title;
 
-  tooltipContainer.appendChild(img);
-  tooltipContainer.appendChild(tooltip);
+  // Create the arrow element for the tooltip
+  const tooltipArrow = document.createElement("div");
+  tooltipArrow.className = "tooltip-arrow";
 
   // Append img and tooltip to the tooltip container
+  tooltip.appendChild(tooltipArrow);
   tooltipContainer.appendChild(img);
   tooltipContainer.appendChild(tooltip);
 
