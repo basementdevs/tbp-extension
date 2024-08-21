@@ -12,7 +12,8 @@ const SEVEN_TV_USERNAME_CONTAINER = ".seventv-chat-user-username";
 const USERNAME_CONTAINER = `${TWITCH_USERNAME_CONTAINER},${SEVEN_TV_USERNAME_CONTAINER}`;
 
 const enhanceChatMessage = async (messageEl: HTMLElement) => {
-  const usernameEl = messageEl.querySelector(USERNAME_CONTAINER);
+  const usernameContainer = messageEl.querySelector(USERNAME_CONTAINER);
+
   let badgesEl: Element;
   badgesEl = messageEl.querySelector(TWITCH_BADGES_CONTAINER);
   if (badgesEl) {
@@ -21,26 +22,40 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
     badgesEl = messageEl.querySelector(SEVEN_TV_BADGES_CONTAINER);
   }
 
-  if (!usernameEl) {
+  if (!usernameContainer) {
+    return;
+  }
+  const username = usernameContainer.textContent;
+  const consumerUser = await getUserFromConsumer(username);
+
+  if (!consumerUser) {
     return;
   }
 
-  const username = usernameEl.textContent;
-  const res = await getUserFromConsumer(username);
+  const usernameEl = usernameContainer.querySelector(
+    ".chat-author__display-name",
+  );
 
-  if (!res) {
-    return;
+  if (consumerUser.color && consumerUser.color.slug !== "none") {
+    // @ts-ignore
+    usernameEl.style.color = consumerUser.color.hex;
   }
-  const child = usernameEl.firstChild;
-  const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
+
+  if (consumerUser.effect && consumerUser.effect.slug !== "none") {
+    // @ts-ignore
+    usernameEl.classList.add(consumerUser.effect.class_name);
+  }
+
+  const child = usernameContainer.firstChild;
+  const i18nPronouns = t(`pronouns${consumerUser.pronouns.translation_key}`);
   const pronounsElement = document.createElement("span");
   pronounsElement.textContent = `(${i18nPronouns})`;
   pronounsElement.style.color = "gray";
   pronounsElement.style.marginLeft = "4px";
 
   if (child) {
-    usernameEl.appendChild(pronounsElement);
-    badgesEl.appendChild(buildBadge(res.occupation));
+    usernameContainer.appendChild(pronounsElement);
+    badgesEl.appendChild(buildBadge(consumerUser.occupation));
   }
 };
 

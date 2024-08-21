@@ -31,6 +31,8 @@ export interface UserSettings {
   id: number;
   user_id: number;
   occupation_id: number;
+  color_id: number;
+  effect_id: number;
   pronouns: SettingsOption;
   timezone: string;
   locale: string;
@@ -38,6 +40,8 @@ export interface UserSettings {
   created_at: string;
   updated_at: string;
   occupation: Occupation;
+  color: Color;
+  effect: Effect;
 }
 
 export interface Occupation {
@@ -88,4 +92,47 @@ export interface MetricsResponse {
   main_metrics: UserMetrics;
   user_metrics_by_channel: UserMetricsByChannel[];
   user_metrics_by_category: UserMetricsByCategory[];
+}
+
+interface Link {
+  url: string | null;
+  label: string;
+  active: boolean;
+}
+
+interface Paginator<T> {
+  current_page: number;
+  data: T[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: Link[];
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
+
+interface Effect {
+  id: number;
+  name: string;
+  slug: string;
+  translation_key: string;
+  class_name: string;
+  hex: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Color {
+  id: number;
+  name: string;
+  slug: string;
+  translation_key: string;
+  hex: string | null;
+  created_at: string;
+  updated_at: string;
 }

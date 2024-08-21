@@ -25,7 +25,7 @@ const MainContent = ({ selectedItem, userService }: MainContentProps) => {
     case "about":
       return <AboutCard />;
     case "themes":
-      return <Theme />;
+      return <Theme userService={userService} />;
   }
 };
 

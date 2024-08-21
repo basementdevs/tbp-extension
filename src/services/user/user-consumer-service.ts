@@ -2,6 +2,8 @@ import axios from "axios";
 import { env } from "~config/env";
 import type {
   AccessTokenResponse,
+  Color,
+  Effect,
   MetricsResponse,
   TwitchUser,
   User,
@@ -22,6 +24,8 @@ export type ConsumerUserResponse = {
   locale: string;
   occupation: SettingsOption;
   pronouns: SettingsOption;
+  color: Color;
+  effect: Effect;
   timezone?: string;
   updated_at: string;
   user_id: number;
