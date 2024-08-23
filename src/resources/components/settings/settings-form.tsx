@@ -83,7 +83,7 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
 
   return (
     <form>
-      <div className="flex flex-col w-full items-center gap-8 mb-8 mt-8">
+      <div className="flex flex-col w-full items-center gap-8 mb-8 mt-3">
         <SelectField
           id="pronouns"
           label="pronounsLabel"

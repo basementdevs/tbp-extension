@@ -16,7 +16,7 @@ const TabTrigger: React.FC<{ name: string; value: string }> = ({
   value,
 }) => (
   <Tab.Trigger
-    className="bg-elevation-surface pb-9 flex-1 flex items-center justify-center text-[15px] leading-none text-black dark:text-foreground select-none hover:text-twitch-11 dark:hover:text-twitch-11 data-[state=active]:text-twitch-11 dark:data-[state=active]:text-twitch-11 data-[state=active]:font-bold border-b-2 border-transparent dark:border-foreground transition-all duration-300 ease-in-out data-[state=active]:border-twitch-11 dark:data-[state=active]:border-twitch-8 outline-none cursor-default"
+    className="bg-elevation-surface pb-3 flex-1 flex items-center justify-center leading-none dark:text-foreground select-none font-bold text-text-medium data-[state=active]:text-text-high dark:data-[state=active]:text-twitch-11 data-[state=active]:font-bold border-b-2 border-transparent transition-all duration-300 ease-in-out data-[state=active]:border-primary-500 outline-none cursor-default"
     value={value}
   >
     {name}
@@ -27,10 +27,7 @@ const TabContent: React.FC<{ value: string; content: React.ReactNode }> = ({
   value,
   content,
 }) => (
-  <Tab.Content
-    className="grow bg-white dark:bg-background rounded-b-md"
-    value={value}
-  >
+  <Tab.Content className="grow rounded-b-md" value={value}>
     {content}
   </Tab.Content>
 );

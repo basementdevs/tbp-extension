@@ -77,7 +77,7 @@ const Stats = () => {
         <StatItem label="Horas assistidas" value={statsData.hoursWatched} />
         <StatItem label="Mensagens" value={statsData.messages} />
       </div>
-      <hr className="text-helper-outline w-full my-4" />
+      <hr className="border-helper-outline w-full my-4" />
       <ImageGrid
         title="Canais mais assistidos"
         images={statsData.topChannels}

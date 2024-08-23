@@ -64,8 +64,8 @@ const Sidebar = ({
   const sidebarItems = [
     { name: "Configurações", key: "settings", icon: Settings },
     { name: "Estatísticas", key: "stats", icon: PieChart },
-    { name: "Sobre", key: "about", icon: Info },
     { name: "Temas", key: "themes", icon: Palette },
+    { name: "Sobre", key: "about", icon: Info },
   ];
 
   return (

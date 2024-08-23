@@ -16,7 +16,7 @@ export default function Profile({ user }: ProfileProps) {
 
   return (
     <div className="flex flex-col max-w-96 gap min-h-[800px]">
-      <div className="flex justify-between w-full pb-4">
+      <div className="flex justify-between w-full">
         <Header />
         <Sidebar
           setSelectedItem={setSelectedItem}
@@ -24,6 +24,9 @@ export default function Profile({ user }: ProfileProps) {
           userService={userService}
         />
       </div>
+
+      <hr className="border-helper-outline w-full mb-2 mt-1" />
+
       <ProfileCard user={userService.user} />
       <MainContent selectedItem={selectedItem} userService={userService} />
     </div>

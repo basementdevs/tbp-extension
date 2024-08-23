@@ -11,15 +11,14 @@ interface ThemeProps {
 const Theme = ({ userService }: ThemeProps) => {
   return (
     <div className="flex flex-col gap-y-8 mt-8">
-      <div className="space-y-2">
-        <h1 className="font-bold text-xs text-text-high">Escolha seu tema</h1>
-        <p className="text-xxs font-medium text-text-medium">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
-      </div>
-
       <div className="space-y-2 flex items-center justify-between">
-        <h1 className="font-bold text-xs text-text-high w-2/3">Tema</h1>
+        <div className="flex flex-col">
+          <h1 className="font-bold text-xs text-text-high w-2/3">Dark Theme</h1>
+          <p className="text-xxs font-medium text-text-medium">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            pulvinar nisi eget sapien mollis aliquam.
+          </p>
+        </div>
         <div className="w-1/3">
           <ThemeSelect />
         </div>
