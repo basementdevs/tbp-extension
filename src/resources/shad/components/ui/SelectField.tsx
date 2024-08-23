@@ -1,22 +1,27 @@
 import { ChevronRight } from "lucide-react";
 import React, { type MutableRefObject } from "react";
 import { t } from "../../../../utils/i18nUtils";
+import Switch from "../switch";
 
 type SelectFieldProps = {
   id: string;
   label: string;
   items: { translationKey: string; apiValue: string }[];
   selectedValue?: string;
+  liveProfile: boolean;
   onChange: () => void;
 };
 
 const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
-  ({ id, label, items, selectedValue, onChange }, ref) => {
+  ({ id, label, items, selectedValue, liveProfile, onChange }, ref) => {
     return (
       <div className="flex flex-col gap-3 w-full">
-        <label className="font-medium text-text-high" htmlFor={id}>
-          {t(label)}
-        </label>
+        <div className="flex flex-row gap-x-5 items-center">
+          <label className="font-medium text-text-high" htmlFor={id}>
+            {t(label)}
+          </label>
+          {liveProfile && <Switch />}
+        </div>
         <div className="relative">
           <select
             ref={ref as MutableRefObject<HTMLSelectElement>}
