@@ -4,6 +4,7 @@ import type React from "react";
 type Tabs = {
   name: string;
   value: string;
+  disabled?: boolean;
   content: React.ReactNode;
 };
 
@@ -11,13 +12,15 @@ type TabsProps = {
   tabData: Tabs[];
 };
 
-const TabTrigger: React.FC<{ name: string; value: string }> = ({
-  name,
-  value,
-}) => (
+const TabTrigger: React.FC<{
+  name: string;
+  value: string;
+  disabled: boolean;
+}> = ({ name, value, disabled }) => (
   <Tab.Trigger
     className="bg-elevation-surface pb-3 flex-1 flex items-center justify-center leading-none dark:text-foreground select-none font-bold text-text-medium data-[state=active]:text-text-high dark:data-[state=active]:text-twitch-11 data-[state=active]:font-bold border-b-2 border-transparent transition-all duration-300 ease-in-out data-[state=active]:border-primary-500 outline-none cursor-default"
     value={value}
+    disabled={disabled}
   >
     {name}
   </Tab.Trigger>
@@ -42,7 +45,12 @@ const Tabs: React.FC<TabsProps> = ({ tabData }) => (
       aria-label="Sections"
     >
       {tabData.map((tab) => (
-        <TabTrigger name={tab.name} value={tab.value} key={tab.value} />
+        <TabTrigger
+          name={tab.name}
+          value={tab.value}
+          key={tab.value}
+          disabled={tab.disabled}
+        />
       ))}
     </Tab.List>
     {tabData.map((tab) => (

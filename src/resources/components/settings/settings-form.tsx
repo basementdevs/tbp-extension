@@ -1,5 +1,5 @@
 import SelectField from "@Shad/components/ui/SelectField";
-import { type MutableRefObject, useRef } from "react";
+import { type MutableRefObject, useRef, useState } from "react";
 
 import type {
   AccessTokenResponse,
@@ -11,9 +11,11 @@ import type {
 import { useStorage } from "@plasmohq/storage/hook";
 import { env } from "~config/env";
 import type UserStorageService from "~services/user/user-storage-service";
+import AnnounceBadge from "../app/announce-badge";
 
 interface SettingsFormProps {
   userService: UserStorageService;
+  liveProfile?: boolean;
 }
 
 export const pronounsItems = [
@@ -34,7 +36,10 @@ export const pronounsItems = [
   { apiValue: "e-em", translationKey: "EEm" },
 ];
 
-export default function SettingsForm({ userService }: SettingsFormProps) {
+export default function SettingsForm({
+  userService,
+  liveProfile,
+}: SettingsFormProps) {
   // TODO: implement caching for refreshing occupations list after 1h
   const [occupations] = useStorage<Occupation[]>("occupations", []);
   const occupationsItems = occupations.map((occupation) => ({
@@ -48,6 +53,7 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
   const [accessToken] = useStorage<AccessTokenResponse>("accessToken");
   const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
   const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
+  const [channelName] = useStorage("channelName");
 
   const saveToDatabase = async () => {
     const selectedPronoun = pronounsListEl.current.value.toLowerCase();
@@ -84,6 +90,16 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
   return (
     <form>
       <div className="flex flex-col w-full items-center gap-8 mb-8 mt-3">
+        {liveProfile && (
+          <AnnounceBadge>
+            <p className="text-xs text-text-medium">
+              Você está editando o canal{" "}
+              <span className="font-bold text-text-high capitalize">
+                {channelName}
+              </span>
+            </p>
+          </AnnounceBadge>
+        )}
         <SelectField
           id="pronouns"
           label="pronounsLabel"
@@ -91,6 +107,7 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
           items={pronounsItems}
           selectedValue={settings.pronouns.slug}
           onChange={saveToDatabase}
+          liveProfile={liveProfile}
         />
         <SelectField
           id="occupation"
@@ -99,6 +116,7 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
           items={occupationsItems}
           selectedValue={current_occupation}
           onChange={saveToDatabase}
+          liveProfile={liveProfile}
         />
       </div>
     </form>

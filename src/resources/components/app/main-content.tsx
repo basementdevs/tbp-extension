@@ -11,13 +11,20 @@ import Theme from "../theme/theme";
 type MainContentProps = {
   selectedItem: string;
   userService: UserStorageService;
+  watchingChannelName: string | null;
 };
 
-const MainContent = ({ selectedItem, userService }: MainContentProps) => {
+const MainContent = ({
+  selectedItem,
+  userService,
+  watchingChannelName,
+}: MainContentProps) => {
+  console.log(watchingChannelName);
   const tabSettingsList = [
     {
       name: "Perfil Global",
       value: "global-profile",
+      disabled: false,
       content: (
         <>
           <SettingsForm userService={userService} />
@@ -30,9 +37,10 @@ const MainContent = ({ selectedItem, userService }: MainContentProps) => {
     {
       name: "Perfil da Live",
       value: "live-profile",
+      disabled: !watchingChannelName,
       content: (
         <>
-          <SettingsForm userService={userService} />
+          <SettingsForm userService={userService} liveProfile />
           <ChatAppearance userService={userService} />
           <ColorCustomizer userService={userService} />
         </>

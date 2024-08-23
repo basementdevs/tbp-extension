@@ -8,9 +8,10 @@ import type { User } from "~types/types";
 
 type ProfileProps = {
   user: User;
+  watchingChannelName: string;
 };
 
-export default function Profile({ user }: ProfileProps) {
+export default function Profile({ user, watchingChannelName }: ProfileProps) {
   const userService = new UserStorageService(user);
   const [selectedItem, setSelectedItem] = useState("settings");
 
@@ -25,10 +26,12 @@ export default function Profile({ user }: ProfileProps) {
         />
       </div>
 
-      <hr className="border-helper-outline w-full mb-2 mt-1" />
-
       <ProfileCard user={userService.user} />
-      <MainContent selectedItem={selectedItem} userService={userService} />
+      <MainContent
+        selectedItem={selectedItem}
+        userService={userService}
+        watchingChannelName={watchingChannelName}
+      />
     </div>
   );
 }
