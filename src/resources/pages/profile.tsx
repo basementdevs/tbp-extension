@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import Header from "~resources/components/app/header";
 import MainContent from "~resources/components/app/main-content";
@@ -27,11 +28,21 @@ export default function Profile({ user, watchingChannelName }: ProfileProps) {
       </div>
 
       <ProfileCard user={userService.user} />
-      <MainContent
-        selectedItem={selectedItem}
-        userService={userService}
-        watchingChannelName={watchingChannelName}
-      />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={selectedItem}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+        >
+          <MainContent
+            selectedItem={selectedItem}
+            userService={userService}
+            watchingChannelName={watchingChannelName}
+          />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
