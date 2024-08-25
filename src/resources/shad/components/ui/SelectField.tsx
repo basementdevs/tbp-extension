@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import React, { type MutableRefObject } from "react";
+import React, { useState, type MutableRefObject } from "react";
 import { t } from "../../../../utils/i18nUtils";
 import Switch from "../switch";
 
@@ -14,13 +14,20 @@ type SelectFieldProps = {
 
 const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
   ({ id, label, items, selectedValue, liveProfile, onChange }, ref) => {
+    const [switchInput, setSwitchInput] = useState(false);
+
     return (
       <div className="flex flex-col gap-3 w-full">
         <div className="flex flex-row gap-x-5 items-center">
           <label className="font-medium text-text-high" htmlFor={id}>
             {t(label)}
           </label>
-          {liveProfile && <Switch />}
+          {liveProfile && (
+            <Switch
+              onCheckedChange={(value) => setSwitchInput(value)}
+              checked={switchInput}
+            />
+          )}
         </div>
         <div className="relative">
           <select

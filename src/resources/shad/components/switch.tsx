@@ -1,9 +1,16 @@
 import * as SwitchRadix from "@radix-ui/react-switch";
 import React from "react";
 
-const Switch = () => (
+interface SwitchProps {
+  onCheckedChange: (checked: boolean) => void;
+  checked: boolean;
+}
+
+const Switch = ({ onCheckedChange, checked }: SwitchProps) => (
   <div className="flex items-center">
     <SwitchRadix.Root
+      onCheckedChange={onCheckedChange}
+      checked={checked}
       className="w-[44px] h-[20px] bg-elevation-04dp rounded-full relative focus:shadow-black data-[state=checked]:bg-icon-high outline-none cursor-default border border-helper-outline"
       id="airplane-mode"
     >
