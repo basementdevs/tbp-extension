@@ -57,7 +57,7 @@ export async function updateSettings(
   try {
     const { data } = await axios.put<UserSettings>(
       `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
-      payload,
+      { ...payload, enabled: true, channel_id: "global" },
       {
         headers: {
           "Content-Type": "application/json",

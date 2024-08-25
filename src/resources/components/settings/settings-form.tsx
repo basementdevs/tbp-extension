@@ -59,6 +59,8 @@ export default function SettingsForm({ userService }: SettingsFormProps) {
       occupation_id: selectedOccupation,
       user_id: twitchUser.id,
       username: twitchUser.login,
+      enabled: true,
+      channel_id: "global",
     };
 
     const response = await fetch(

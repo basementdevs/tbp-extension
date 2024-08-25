@@ -60,6 +60,8 @@ export async function authenticateWithServer(code: string) {
       display_name: user.accounts[0].name,
     } as TwitchUser;
 
+    user.settings = user.settings[0];
+
     return { authorization, user, twitchUser };
   } catch (error) {
     console.error("Error authenticating with server:", error);
