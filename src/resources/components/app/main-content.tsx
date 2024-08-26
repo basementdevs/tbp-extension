@@ -18,20 +18,23 @@ const MainContent = ({
   userService,
   watchingChannelName,
 }: MainContentProps) => {
-  const renderSettingsContent = (liveProfile = false) => (
+  const renderSettingsContent = (isLiveProfile: boolean) => (
     <>
-      <SettingsForm userService={userService} liveProfile={liveProfile} />
+      <SettingsForm
+        userService={userService}
+        liveProfile={isLiveProfile}
+        watchingChannelName={watchingChannelName}
+      />
       <ChatAppearance userService={userService} />
       <ColorCustomizer userService={userService} />
     </>
   );
-
   const tabSettingsList = [
     {
       name: "Perfil Global",
       value: "global-profile",
       disabled: false,
-      content: renderSettingsContent(),
+      content: renderSettingsContent(false),
     },
     {
       name: "Perfil da Live",

@@ -1,5 +1,5 @@
 import SelectField from "@Shad/components/ui/SelectField";
-import { type MutableRefObject, useRef, useState } from "react";
+import { type MutableRefObject, useEffect, useRef, useState } from "react";
 
 import type {
   AccessTokenResponse,
@@ -11,13 +11,14 @@ import type {
 import { useStorage } from "@plasmohq/storage/hook";
 import { env } from "~config/env";
 import type UserStorageService from "~services/user/user-storage-service";
+import Switch from "../../shad/components/switch";
 import AnnounceBadge from "../app/announce-badge";
 
-interface SettingsFormProps {
+type SettingsFormProps = {
   userService: UserStorageService;
-  liveProfile?: boolean;
-}
-
+  liveProfile: boolean;
+  watchingChannelName: string | null;
+};
 export const pronounsItems = [
   { apiValue: "none", translationKey: "None" },
   { apiValue: "he-him", translationKey: "HeHim" },
@@ -39,6 +40,7 @@ export const pronounsItems = [
 export default function SettingsForm({
   userService,
   liveProfile,
+  watchingChannelName,
 }: SettingsFormProps) {
   // TODO: implement caching for refreshing occupations list after 1h
   const [occupations] = useStorage<Occupation[]>("occupations", []);
@@ -55,19 +57,40 @@ export default function SettingsForm({
   const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
   const [channelName] = useStorage("channelName");
 
-  const saveToDatabase = async () => {
-    const selectedPronoun = pronounsListEl.current.value.toLowerCase();
-    const selectedOccupation = occupationListEl.current.value;
+  const [formState, setFormState] = useState({
+    editingLiveProfile: true,
+    pronouns: settings.pronouns.slug,
+    occupation: current_occupation,
+    pronounsActive: true,
+    occupationActive: true,
+  });
 
+  const handleChange = async (field: string, value: string | boolean) => {
+    setFormState((prev) => ({ ...prev, [field]: value }));
+    await saveToDatabase({ ...formState, [field]: value });
+  };
+
+  const saveToDatabase = async (updatedFormState: typeof formState) => {
     const payload = {
-      pronouns: selectedPronoun,
+      pronouns: updatedFormState.pronounsActive
+        ? updatedFormState.pronouns.toLowerCase()
+        : "none",
       locale: navigator.language,
-      occupation_id: selectedOccupation,
+      occupation_id: updatedFormState.occupationActive
+        ? updatedFormState.occupation
+        : "1",
       user_id: twitchUser.id,
       username: twitchUser.login,
-      enabled: true,
-      channel_id: "global",
+      channel_id: liveProfile ? watchingChannelName : "global",
+      enabled: liveProfile ? updatedFormState.editingLiveProfile : true,
+      pronouns_active: updatedFormState.pronounsActive,
+      occupation_active: updatedFormState.occupationActive,
     };
+
+    if (liveProfile && !updatedFormState.editingLiveProfile) {
+      payload.pronouns = "none";
+      payload.occupation_id = "1";
+    }
 
     const response = await fetch(
       `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
@@ -92,31 +115,43 @@ export default function SettingsForm({
       <div className="flex flex-col w-full items-center gap-8 mb-8 mt-3">
         {liveProfile && (
           <AnnounceBadge>
-            <p className="text-xs text-text-medium">
-              Você está editando o canal{" "}
-              <span className="font-bold text-text-high capitalize">
-                {channelName}
-              </span>
-            </p>
+            <div className="flex flex-col items-center justify-center w-full gap-y-2">
+              <p className="text-xs text-text-medium">
+                Você está editando o canal{" "}
+                <span className="font-bold text-text-high capitalize">
+                  {channelName}
+                </span>
+              </p>
+              <Switch
+                onCheckedChange={(checked) =>
+                  handleChange("editingLiveProfile", checked)
+                }
+                checked={formState.editingLiveProfile}
+              />
+            </div>
           </AnnounceBadge>
         )}
         <SelectField
           id="pronouns"
           label="pronounsLabel"
-          ref={pronounsListEl}
           items={pronounsItems}
-          selectedValue={settings.pronouns.slug}
-          onChange={saveToDatabase}
+          ref={pronounsListEl}
+          selectedValue={formState.pronouns}
+          onChange={(value: string) => handleChange("pronouns", value)}
           liveProfile={liveProfile}
+          active={formState.pronounsActive}
+          onActiveChange={(active) => handleChange("pronounsActive", active)}
         />
         <SelectField
           id="occupation"
           label="occupationLabel"
-          ref={occupationListEl}
           items={occupationsItems}
-          selectedValue={current_occupation}
-          onChange={saveToDatabase}
+          ref={occupationListEl}
+          selectedValue={formState.occupation}
+          onChange={(value: string) => handleChange("occupation", value)}
           liveProfile={liveProfile}
+          active={formState.occupationActive}
+          onActiveChange={(active) => handleChange("occupationActive", active)}
         />
       </div>
     </form>

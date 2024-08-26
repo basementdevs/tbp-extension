@@ -9,13 +9,25 @@ type SelectFieldProps = {
   items: { translationKey: string; apiValue: string }[];
   selectedValue?: string;
   liveProfile: boolean;
-  onChange: () => void;
+  onChange: (value: string) => void;
+  active: boolean;
+  onActiveChange: (active: boolean) => void;
 };
 
 const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
-  ({ id, label, items, selectedValue, liveProfile, onChange }, ref) => {
-    const [switchInput, setSwitchInput] = useState(false);
-
+  (
+    {
+      id,
+      label,
+      items,
+      selectedValue,
+      liveProfile,
+      onChange,
+      active,
+      onActiveChange,
+    },
+    ref,
+  ) => {
     return (
       <div className="flex flex-col gap-3 w-full">
         <div className="flex flex-row gap-x-5 items-center">
@@ -23,19 +35,17 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
             {t(label)}
           </label>
           {liveProfile && (
-            <Switch
-              onCheckedChange={(value) => setSwitchInput(value)}
-              checked={switchInput}
-            />
+            <Switch onCheckedChange={onActiveChange} checked={active} />
           )}
         </div>
         <div className="relative">
           <select
             ref={ref as MutableRefObject<HTMLSelectElement>}
             id={id}
-            onChange={onChange}
+            onChange={(e) => onChange(e.target.value)}
             value={selectedValue}
             className="flex w-full items-center justify-between px-4 py-3 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-pill appearance-none pr-10"
+            disabled={!active}
           >
             {items.map(({ translationKey, apiValue }) => (
               <option
