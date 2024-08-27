@@ -37,7 +37,10 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
     return (
       <div className="flex flex-col gap-3 w-full">
         <div className="flex flex-row gap-x-5 items-center">
-          <label className="font-medium text-text-high" htmlFor={id}>
+          <label
+            className="font-medium text-text-high disabled:text-text-high"
+            htmlFor={id}
+          >
             {t(label)}
           </label>
           {liveProfile && (
@@ -50,7 +53,7 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
             id={id}
             onChange={(e) => onChange(e.target.value)}
             value={selectedValue}
-            className="flex w-full items-center justify-between px-4 py-3 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-pill appearance-none pr-10"
+            className="flex w-full items-center justify-between px-4 py-3 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-pill appearance-none pr-10 disabled:border-helper-outline"
             disabled={isDisabled}
           >
             {items.map(({ translationKey, apiValue }) => (
