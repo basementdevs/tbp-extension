@@ -1,7 +1,6 @@
 import AboutCard from "@Components/about/about";
 import ChatAppearance from "@Components/settings/chat-appearance";
 import SettingsForm from "@Components/settings/settings-form";
-import { useState } from "react";
 import Tabs from "~resources/shad/components/ui/tabs";
 import type UserStorageService from "~services/user/user-storage-service";
 import Stats from "../stats/stats";
@@ -38,7 +37,7 @@ const MainContent = ({
     },
     {
       name: "Perfil da Live",
-      value: "live-profile",
+      value: "channel-profile",
       disabled: !watchingChannelName,
       content: renderSettingsContent(true),
     },

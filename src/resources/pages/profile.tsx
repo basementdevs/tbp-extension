@@ -51,7 +51,7 @@ function ProfileContent({ user, watchingChannelName }: ProfileProps) {
   useEffect(() => {
     if (currentTabValue === "global-profile") {
       setCurrentSettings(globalSettings);
-    } else if (currentTabValue === "live-profile") {
+    } else if (currentTabValue === "channel-profile") {
       setCurrentSettings(channelSettings);
     }
   }, [currentTabValue, channelSettings, globalSettings]);

@@ -1,4 +1,3 @@
-import AuthenticateButton from "@Components/auth/authenticate-button";
 import Hero from "@Components/auth/hero";
 import Header from "~resources/components/app/header";
 

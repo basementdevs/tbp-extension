@@ -75,8 +75,8 @@ export default function SettingsForm({
   const updateFormState = (settings) => {
     setFormState({
       editingLiveProfile: settings.enabled,
-      pronouns: settings.pronouns.slug,
-      occupation: `${settings.occupation_id}`,
+      pronouns: settings.pronouns.slug || "none",
+      occupation: `${settings.occupation_id || 1}`,
       pronounsActive: settings.pronouns.slug !== "none",
       occupationActive: settings.occupation_id !== 1,
     });
@@ -98,17 +98,19 @@ export default function SettingsForm({
   const saveToDatabase = async (updatedFormState: FormState) => {
     const isGlobalProfile = currentTabValue === "global-profile";
 
-    const payload: UpdateSettingsDTO = {
-      pronouns: isGlobalProfile
+    const getPronouns = () =>
+      isGlobalProfile || updatedFormState.pronounsActive
         ? pronounsListEl.current.value.toLowerCase()
-        : updatedFormState.pronounsActive
-          ? pronounsListEl.current.value.toLowerCase()
-          : "none",
-      occupation_id: isGlobalProfile
+        : "none";
+
+    const getOccupationId = () =>
+      isGlobalProfile || updatedFormState.occupationActive
         ? Number.parseInt(occupationListEl.current.value)
-        : updatedFormState.occupationActive
-          ? Number.parseInt(occupationListEl.current.value)
-          : 1,
+        : 1;
+
+    const payload: UpdateSettingsDTO = {
+      pronouns: getPronouns(),
+      occupation_id: getOccupationId(),
       enabled: liveProfile ? updatedFormState.editingLiveProfile : false,
       channel_id: liveProfile ? watchingChannelName : "global",
       effect_id: 1,
@@ -122,7 +124,6 @@ export default function SettingsForm({
       channelName: liveProfile ? watchingChannelName : undefined,
     });
   };
-
   return (
     <form>
       <div className="flex flex-col w-full items-center gap-8 mb-8 mt-3">

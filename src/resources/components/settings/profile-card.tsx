@@ -9,33 +9,11 @@ type ProfileCardProps = {
   isLoading: boolean;
 };
 
-export default function ProfileCard({
-  settings,
-  user,
-  isLoading,
-}: ProfileCardProps) {
-  const occupationText = t(`occupation${settings?.occupation_id}`);
-  const pronounsText = t(`pronouns${settings?.pronouns.translation_key}`);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center rounded-xl bg-elevation-04dp p-2">
-        <Skeleton width={112} height={112} className="rounded-xl" />
-        <div className="pl-4 w-full">
-          <div className="flex flex-col">
-            <Skeleton width={120} height={16} className="mb-1" />
-            <Skeleton width={100} height={14} />
-          </div>
-          <div className="flex items-center mt-2">
-            <Skeleton width={80} height={12} />
-          </div>
-          <div className="mt-1">
-            <Skeleton width={100} height={12} />
-          </div>
-        </div>
-      </div>
-    );
-  }
+export default function ProfileCard({ settings, user }: ProfileCardProps) {
+  const occupationText = t(`occupation${settings?.occupation_id || 1}`);
+  const pronounsText = t(
+    `pronouns${settings?.pronouns?.translation_key || "none"}`,
+  );
 
   return (
     <div className="flex items-center rounded-xl bg-elevation-04dp p-2">

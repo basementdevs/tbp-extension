@@ -59,8 +59,10 @@ export function SettingsProvider({ children }) {
   const fetchSettings = useCallback(
     async (params?: FetchSettingsParams) => {
       if (!accessToken || !isTokenReady) return;
+
+      setIsLoading(true);
+
       try {
-        setIsLoading(true);
         const handleUrlSettings =
           params.currentTabValue === "global-profile"
             ? null
@@ -70,17 +72,16 @@ export function SettingsProvider({ children }) {
           handleUrlSettings,
         );
 
-        if (settingsData.length === 2) {
-          if (params.currentTabValue === "global-profile") {
-            setGlobalSettings(settingsData[0]);
-            setChannelSettings(null);
-          } else {
-            setChannelSettings(settingsData[1]);
-            setGlobalSettings(settingsData[0]);
-          }
+        const [globalSettings, channelSettings = null] = settingsData;
+
+        setGlobalSettings(globalSettings);
+
+        if (params.currentTabValue === "global-profile") {
+          setChannelSettings(null);
+        } else if (settingsData.length === 2) {
+          setChannelSettings(channelSettings);
         } else {
-          setChannelSettings({ ...settingsData[0], enabled: false });
-          setGlobalSettings(settingsData[0]);
+          setChannelSettings({ ...globalSettings, enabled: false });
         }
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -94,27 +95,28 @@ export function SettingsProvider({ children }) {
   const saveSettings = useCallback(
     async (updatedSettings: UpdateSettingsDTO) => {
       if (!accessToken || !isTokenReady) return;
+
+      setIsLoading(true);
+
       try {
-        setIsLoading(true);
         const updatedSettingsData = await updateSettings(
           accessToken,
           updatedSettings,
         );
-        if (updatedSettingsData.channel_id === "global") {
+
+        const isGlobalUpdate = updatedSettings.channel_id === "global";
+
+        if (isGlobalUpdate) {
           setGlobalSettings(updatedSettingsData);
         } else {
           setChannelSettings(updatedSettingsData);
         }
 
         await fetchSettings({
-          currentTabValue:
-            updatedSettings.channel_id === "global"
-              ? "global-profile"
-              : "channel-profile",
-          channelName:
-            updatedSettings.channel_id !== "global"
-              ? updatedSettings.channel_id
-              : undefined,
+          currentTabValue: isGlobalUpdate
+            ? "global-profile"
+            : "channel-profile",
+          channelName: isGlobalUpdate ? undefined : updatedSettings.channel_id,
         });
       } catch (error) {
         console.error("Error updating settings:", error);
