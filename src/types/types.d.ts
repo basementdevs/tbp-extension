@@ -43,6 +43,7 @@ export interface UserSettings {
   occupation: Occupation;
   color: Color;
   effect: Effect;
+  enabled: boolean;
 }
 
 export interface Occupation {

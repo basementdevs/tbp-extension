@@ -70,13 +70,17 @@ export function SettingsProvider({ children }) {
           handleUrlSettings,
         );
 
-        console.log(params.currentTabValue);
-        if (params.currentTabValue === "global-profile") {
-          setGlobalSettings(settingsData[0]);
-          setChannelSettings(null);
+        if (settingsData.length === 2) {
+          if (params.currentTabValue === "global-profile") {
+            setGlobalSettings(settingsData[0]);
+            setChannelSettings(null);
+          } else {
+            setChannelSettings(settingsData[1]);
+            setGlobalSettings(settingsData[0]);
+          }
         } else {
-          setChannelSettings(settingsData[1]);
-          setGlobalSettings(null);
+          setChannelSettings({ ...settingsData[0], enabled: false });
+          setGlobalSettings(settingsData[0]);
         }
       } catch (error) {
         console.error("Error fetching settings:", error);

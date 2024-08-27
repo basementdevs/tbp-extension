@@ -2,17 +2,14 @@ import SelectField from "@Shad/components/ui/SelectField";
 import { useStorage } from "@plasmohq/storage/hook";
 import { type MutableRefObject, useEffect, useRef, useState } from "react";
 import type { UpdateSettingsDTO } from "~services/settings-service";
-import type UserStorageService from "~services/user/user-storage-service";
 import type { Occupation } from "~types/types";
 import Switch from "../../shad/components/switch";
 import AnnounceBadge from "../app/announce-badge";
 import { useSettings } from "../settings-provider";
 
 type SettingsFormProps = {
-  userService: UserStorageService;
   liveProfile: boolean;
   watchingChannelName: string | null;
-  currentTab: string;
 };
 
 type FormState = {
@@ -42,15 +39,15 @@ export const pronounsItems = [
 ];
 
 export default function SettingsForm({
-  userService,
   liveProfile,
   watchingChannelName,
-  currentTab,
 }: SettingsFormProps) {
   const { globalSettings, channelSettings, saveSettings, fetchSettings } =
     useSettings();
   const [occupations] = useStorage<Occupation[]>("occupations", []);
   const [channelName] = useStorage("channelName");
+
+  const [currentTabValue] = useStorage("currentTabValue", "global-profile");
 
   const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
   const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
@@ -99,7 +96,7 @@ export default function SettingsForm({
   };
 
   const saveToDatabase = async (updatedFormState: FormState) => {
-    const isGlobalProfile = currentTab === undefined || "global-profile";
+    const isGlobalProfile = currentTabValue === "global-profile";
 
     const payload: UpdateSettingsDTO = {
       pronouns: isGlobalProfile
@@ -121,7 +118,7 @@ export default function SettingsForm({
     await saveSettings(payload);
 
     await fetchSettings({
-      currentTabValue: currentTab,
+      currentTabValue: currentTabValue,
       channelName: liveProfile ? watchingChannelName : undefined,
     });
   };
@@ -157,7 +154,7 @@ export default function SettingsForm({
           active={formState.pronounsActive}
           onActiveChange={(active) => handleChange("pronounsActive", active)}
           disabled={isInputDisabled}
-          currentTab={currentTab}
+          currentTab={currentTabValue}
           ref={pronounsListEl}
         />
         <SelectField
@@ -170,7 +167,7 @@ export default function SettingsForm({
           active={formState.occupationActive}
           onActiveChange={(active) => handleChange("occupationActive", active)}
           disabled={isInputDisabled}
-          currentTab={currentTab}
+          currentTab={currentTabValue}
           ref={occupationListEl}
         />
       </div>
