@@ -1,20 +1,60 @@
+import { useStorage } from "@plasmohq/storage/hook";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "~resources/components/app/header";
 import MainContent from "~resources/components/app/main-content";
 import Sidebar from "~resources/components/app/sidebar";
+import {
+  SettingsProvider,
+  useSettings,
+} from "~resources/components/settings-provider";
 import ProfileCard from "~resources/components/settings/profile-card";
 import UserStorageService from "~services/user/user-storage-service";
-import type { User } from "~types/types";
+import type { User, UserSettings } from "~types/types";
 
 type ProfileProps = {
   user: User;
   watchingChannelName: string;
 };
 
-export default function Profile({ user, watchingChannelName }: ProfileProps) {
+function ProfileContent({ user, watchingChannelName }: ProfileProps) {
   const userService = new UserStorageService(user);
+  const [currentTabValue] = useStorage("currentTabValue", "global-profile");
   const [selectedItem, setSelectedItem] = useState("settings");
+  const {
+    fetchSettings,
+    globalSettings,
+    channelSettings,
+    isLoading,
+    isTokenReady,
+  } = useSettings();
+  const [currentSettings, setCurrentSettings] = useState<UserSettings | null>(
+    null,
+  );
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (isTokenReady) {
+        try {
+          await fetchSettings({
+            currentTabValue: currentTabValue || "global-profile",
+            channelName: watchingChannelName,
+          });
+        } catch (err) {
+          console.error("Error fetching settings:", err);
+        }
+      }
+    };
+    loadSettings();
+  }, [isTokenReady, fetchSettings, currentTabValue, watchingChannelName]);
+
+  useEffect(() => {
+    if (currentTabValue === "global-profile") {
+      setCurrentSettings(globalSettings);
+    } else if (currentTabValue === "live-profile") {
+      setCurrentSettings(channelSettings);
+    }
+  }, [currentTabValue, channelSettings, globalSettings]);
 
   return (
     <div className="flex flex-col max-w-96 gap min-h-[800px]">
@@ -27,7 +67,12 @@ export default function Profile({ user, watchingChannelName }: ProfileProps) {
         />
       </div>
 
-      <ProfileCard user={userService.user} />
+      <ProfileCard
+        settings={currentSettings}
+        user={userService.user}
+        isLoading={isLoading}
+      />
+
       <AnimatePresence mode="wait">
         <motion.div
           key={selectedItem}
@@ -44,5 +89,13 @@ export default function Profile({ user, watchingChannelName }: ProfileProps) {
         </motion.div>
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function Profile(props: ProfileProps) {
+  return (
+    <SettingsProvider>
+      <ProfileContent {...props} />
+    </SettingsProvider>
   );
 }

@@ -48,6 +48,8 @@ export type UpdateSettingsDTO = {
   pronouns?: string;
   timezone?: string;
   locale?: string;
+  enabled?: boolean;
+  channel_id?: string;
 };
 
 export async function updateSettings(
@@ -57,7 +59,7 @@ export async function updateSettings(
   try {
     const { data } = await axios.put<UserSettings>(
       `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
-      { ...payload, enabled: true, channel_id: "global" },
+      payload,
       {
         headers: {
           "Content-Type": "application/json",
@@ -68,5 +70,29 @@ export async function updateSettings(
     return data;
   } catch (error) {
     console.error("Error fetching effects from platform:", error);
+  }
+}
+
+export async function getUserSettings(
+  authorization: AccessTokenResponse,
+  channelId?: string,
+): Promise<UserSettings[]> {
+  if (!authorization) return [];
+
+  const url = `${env.data.APP_PLATFORM_API_URL}/me/settings${
+    channelId ? `?channel_id=${channelId}` : ""
+  }`;
+
+  try {
+    const { data } = await axios.get<{ data: UserSettings[] }>(url, {
+      headers: {
+        Authorization: `Bearer ${authorization.access_token}`,
+      },
+    });
+
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching user settings:", error);
+    throw error;
   }
 }

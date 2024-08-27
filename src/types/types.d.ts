@@ -33,6 +33,7 @@ export interface UserSettings {
   occupation_id: number;
   color_id: number;
   effect_id: number;
+  channel_id: string;
   pronouns: SettingsOption;
   timezone: string;
   locale: string;

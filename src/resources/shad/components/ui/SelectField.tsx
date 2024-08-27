@@ -12,6 +12,8 @@ type SelectFieldProps = {
   onChange: (value: string) => void;
   active: boolean;
   onActiveChange: (active: boolean) => void;
+  disabled?: boolean;
+  currentTab: string;
 };
 
 const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
@@ -25,9 +27,13 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
       onChange,
       active,
       onActiveChange,
+      disabled,
+      currentTab,
     },
     ref,
   ) => {
+    const isDisabled = currentTab === "global-profile" ? disabled : !active;
+
     return (
       <div className="flex flex-col gap-3 w-full">
         <div className="flex flex-row gap-x-5 items-center">
@@ -45,7 +51,7 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
             onChange={(e) => onChange(e.target.value)}
             value={selectedValue}
             className="flex w-full items-center justify-between px-4 py-3 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-pill appearance-none pr-10"
-            disabled={!active}
+            disabled={isDisabled}
           >
             {items.map(({ translationKey, apiValue }) => (
               <option

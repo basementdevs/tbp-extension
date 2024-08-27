@@ -1,8 +1,10 @@
 import AboutCard from "@Components/about/about";
 import ChatAppearance from "@Components/settings/chat-appearance";
 import SettingsForm from "@Components/settings/settings-form";
+import { useState } from "react";
 import Tabs from "~resources/shad/components/ui/tabs";
 import type UserStorageService from "~services/user/user-storage-service";
+import type { UserSettings } from "~types/types";
 import Stats from "../stats/stats";
 import ColorCustomizer from "../theme/color-customize";
 import Theme from "../theme/theme";
@@ -18,12 +20,14 @@ const MainContent = ({
   userService,
   watchingChannelName,
 }: MainContentProps) => {
+  const [currentTab, setCurrentTab] = useState("global-profile");
   const renderSettingsContent = (isLiveProfile: boolean) => (
     <>
       <SettingsForm
         userService={userService}
         liveProfile={isLiveProfile}
         watchingChannelName={watchingChannelName}
+        currentTab={currentTab}
       />
       <ChatAppearance userService={userService} />
       <ColorCustomizer userService={userService} />

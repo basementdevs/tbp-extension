@@ -1,24 +1,28 @@
 import SelectField from "@Shad/components/ui/SelectField";
-import { type MutableRefObject, useEffect, useRef, useState } from "react";
-
-import type {
-  AccessTokenResponse,
-  Occupation,
-  TwitchUser,
-  UserSettings,
-} from "~types/types";
-
 import { useStorage } from "@plasmohq/storage/hook";
-import { env } from "~config/env";
+import { type MutableRefObject, useEffect, useRef, useState } from "react";
+import type { UpdateSettingsDTO } from "~services/settings-service";
 import type UserStorageService from "~services/user/user-storage-service";
+import type { Occupation } from "~types/types";
 import Switch from "../../shad/components/switch";
 import AnnounceBadge from "../app/announce-badge";
+import { useSettings } from "../settings-provider";
 
 type SettingsFormProps = {
   userService: UserStorageService;
   liveProfile: boolean;
   watchingChannelName: string | null;
+  currentTab: string;
 };
+
+type FormState = {
+  editingLiveProfile: boolean;
+  pronouns: string;
+  occupation: string;
+  pronounsActive: boolean;
+  occupationActive: boolean;
+};
+
 export const pronounsItems = [
   { apiValue: "none", translationKey: "None" },
   { apiValue: "he-him", translationKey: "HeHim" },
@@ -41,73 +45,85 @@ export default function SettingsForm({
   userService,
   liveProfile,
   watchingChannelName,
+  currentTab,
 }: SettingsFormProps) {
-  // TODO: implement caching for refreshing occupations list after 1h
+  const { globalSettings, channelSettings, saveSettings, fetchSettings } =
+    useSettings();
   const [occupations] = useStorage<Occupation[]>("occupations", []);
+  const [channelName] = useStorage("channelName");
+
+  const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
+  const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
+
   const occupationsItems = occupations.map((occupation) => ({
     apiValue: `${occupation.id}`,
     translationKey: occupation.translation_key,
   }));
-  const settings = userService.getSettings();
 
-  const current_occupation = `${settings.occupation.id}`;
-  const [twitchUser] = useStorage<TwitchUser>("twitchUser");
-  const [accessToken] = useStorage<AccessTokenResponse>("accessToken");
-  const pronounsListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
-  const occupationListEl: MutableRefObject<HTMLSelectElement> = useRef(null);
-  const [channelName] = useStorage("channelName");
-
-  const [formState, setFormState] = useState({
-    editingLiveProfile: true,
-    pronouns: settings.pronouns.slug,
-    occupation: current_occupation,
+  const [formState, setFormState] = useState<FormState>({
+    editingLiveProfile: false,
+    pronouns: "none",
+    occupation: "1",
     pronounsActive: true,
     occupationActive: true,
   });
 
-  const handleChange = async (field: string, value: string | boolean) => {
-    setFormState((prev) => ({ ...prev, [field]: value }));
-    await saveToDatabase({ ...formState, [field]: value });
+  useEffect(() => {
+    const relevantSettings = liveProfile ? channelSettings : globalSettings;
+    if (relevantSettings) {
+      updateFormState(relevantSettings);
+    }
+  }, [globalSettings, channelSettings, liveProfile]);
+
+  const updateFormState = (settings) => {
+    setFormState({
+      editingLiveProfile: settings.enabled,
+      pronouns: settings.pronouns.slug,
+      occupation: `${settings.occupation_id}`,
+      pronounsActive: settings.pronouns.slug !== "none",
+      occupationActive: settings.occupation_id !== 1,
+    });
   };
 
-  const saveToDatabase = async (updatedFormState: typeof formState) => {
-    const payload = {
-      pronouns: updatedFormState.pronounsActive
-        ? updatedFormState.pronouns.toLowerCase()
-        : "none",
-      locale: navigator.language,
-      occupation_id: updatedFormState.occupationActive
-        ? updatedFormState.occupation
-        : "1",
-      user_id: twitchUser.id,
-      username: twitchUser.login,
+  const isInputDisabled =
+    liveProfile && !!watchingChannelName && !formState.editingLiveProfile;
+
+  const handleChange = async (
+    field: keyof FormState,
+    value: string | boolean,
+  ) => {
+    const updatedState = { ...formState, [field]: value };
+    setFormState(updatedState);
+
+    await saveToDatabase(updatedState);
+  };
+
+  const saveToDatabase = async (updatedFormState: FormState) => {
+    const isGlobalProfile = currentTab === undefined || "global-profile";
+
+    const payload: UpdateSettingsDTO = {
+      pronouns: isGlobalProfile
+        ? pronounsListEl.current.value.toLowerCase()
+        : updatedFormState.pronounsActive
+          ? pronounsListEl.current.value.toLowerCase()
+          : "none",
+      occupation_id: isGlobalProfile
+        ? Number.parseInt(occupationListEl.current.value)
+        : updatedFormState.occupationActive
+          ? Number.parseInt(occupationListEl.current.value)
+          : 1,
+      enabled: liveProfile ? updatedFormState.editingLiveProfile : false,
       channel_id: liveProfile ? watchingChannelName : "global",
-      enabled: liveProfile ? updatedFormState.editingLiveProfile : true,
-      pronouns_active: updatedFormState.pronounsActive,
-      occupation_active: updatedFormState.occupationActive,
+      effect_id: 1,
+      color_id: 1,
+      locale: navigator.language,
     };
+    await saveSettings(payload);
 
-    if (liveProfile && !updatedFormState.editingLiveProfile) {
-      payload.pronouns = "none";
-      payload.occupation_id = "1";
-    }
-
-    const response = await fetch(
-      `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken.access_token}`,
-        },
-        body: JSON.stringify(payload),
-      },
-    );
-
-    if (response.ok) {
-      const updatedSettings = (await response.json()) as UserSettings;
-      await userService.updateSettings(updatedSettings);
-    }
+    await fetchSettings({
+      currentTabValue: currentTab,
+      channelName: liveProfile ? watchingChannelName : undefined,
+    });
   };
 
   return (
@@ -135,23 +151,27 @@ export default function SettingsForm({
           id="pronouns"
           label="pronounsLabel"
           items={pronounsItems}
-          ref={pronounsListEl}
           selectedValue={formState.pronouns}
           onChange={(value: string) => handleChange("pronouns", value)}
           liveProfile={liveProfile}
           active={formState.pronounsActive}
           onActiveChange={(active) => handleChange("pronounsActive", active)}
+          disabled={isInputDisabled}
+          currentTab={currentTab}
+          ref={pronounsListEl}
         />
         <SelectField
           id="occupation"
           label="occupationLabel"
           items={occupationsItems}
-          ref={occupationListEl}
           selectedValue={formState.occupation}
           onChange={(value: string) => handleChange("occupation", value)}
           liveProfile={liveProfile}
           active={formState.occupationActive}
           onActiveChange={(active) => handleChange("occupationActive", active)}
+          disabled={isInputDisabled}
+          currentTab={currentTab}
+          ref={occupationListEl}
         />
       </div>
     </form>

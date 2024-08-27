@@ -39,6 +39,7 @@ export async function getUserFromConsumer(
     const { data } = await axios.get<ConsumerUserResponse>(
       `${BASE_URL}/settings/${username}`,
     );
+
     return data;
   } catch (error) {
     console.error("Error fetching user from consumer:", error);

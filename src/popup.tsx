@@ -5,6 +5,7 @@ import { Auth } from "@Pages/auth";
 import Profile from "@Pages/profile";
 
 import { useStorage } from "@plasmohq/storage/hook";
+import type { AccessTokenResponse } from "~types/types";
 
 function IndexPopup() {
   const [user] = useStorage("user");
