@@ -14,50 +14,12 @@ import type { User, UserSettings } from "~types/types";
 
 type ProfileProps = {
   user: User;
-  watchingChannelName: string;
+  channelName?: string;
 };
 
-function ProfileContent({ user, watchingChannelName }: ProfileProps) {
+function ProfileContent({ user, channelName }: ProfileProps) {
   const userService = new UserStorageService(user);
-  const [currentTabValue] = useStorage("currentTabValue", "global-profile");
   const [selectedItem, setSelectedItem] = useState("settings");
-
-  const {
-    fetchSettings,
-    globalSettings,
-    channelSettings,
-    isLoading,
-    isTokenReady,
-  } = useSettings();
-  
-  const [currentSettings, setCurrentSettings] = useState<UserSettings | null>(
-    null,
-  );
-
-  useEffect(() => {
-    const loadSettings = async () => {
-      if (isTokenReady) {
-        try {
-          await fetchSettings({
-            currentTabValue: currentTabValue || "global-profile",
-            channelName: watchingChannelName,
-          });
-        } catch (err) {
-          console.error("Error fetching settings:", err);
-        }
-      }
-    };
-  
-    loadSettings();
-  }, [isTokenReady, fetchSettings, currentTabValue, watchingChannelName]);
-
-  useEffect(() => {
-    if (currentTabValue === "global-profile") {
-      setCurrentSettings(globalSettings);
-    } else if (currentTabValue === "channel-profile") {
-      setCurrentSettings(channelSettings);
-    }
-  }, [currentTabValue, channelSettings, globalSettings]);
 
   return (
     <div className="flex flex-col max-w-96 gap min-h-[800px]">
@@ -70,11 +32,11 @@ function ProfileContent({ user, watchingChannelName }: ProfileProps) {
         />
       </div>
 
-      <ProfileCard
+      {/* <ProfileCard
         settings={currentSettings}
         user={userService.user}
         isLoading={isLoading}
-      />
+      /> */}
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -87,7 +49,7 @@ function ProfileContent({ user, watchingChannelName }: ProfileProps) {
           <MainContent
             selectedItem={selectedItem}
             userService={userService}
-            watchingChannelName={watchingChannelName}
+            channelName={channelName}
           />
         </motion.div>
       </AnimatePresence>

@@ -1,17 +1,13 @@
 import Logo from "data-base64:@Root/assets/icon.png";
 import { version } from "@Root/package.json";
-import { useStorage } from "@plasmohq/storage/dist/hook";
 import { env } from "~config/env";
 import { t } from "~utils/i18nUtils";
-import Sidebar from "./sidebar";
 
 type HeaderProps = {
   isSidebarVisible?: boolean;
 };
 
 export default function Header({ isSidebarVisible = true }: HeaderProps) {
-  const [isAuthenticated] = useStorage("accessToken");
-
   const appStage =
     env.data.APP_ENVIRONMENT === "production"
       ? `(${env.data.APP_STAGE})`

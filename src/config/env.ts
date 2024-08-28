@@ -43,11 +43,11 @@ const mapZodErrorMessages = (zodError: ZodError): string[] => {
   });
 };
 
-const env = envSchema.safeParse(raw_env);
+const envResult = envSchema.safeParse(raw_env);
 
-if (!env.success) {
-  if (env.error instanceof ZodError) {
-    const issues = mapZodErrorMessages(env.error);
+if (!envResult.success) {
+  if (envResult.error instanceof ZodError) {
+    const issues = mapZodErrorMessages(envResult.error);
     console.error(
       "Invalid environment variables:",
       JSON.stringify(issues, null, 2),
@@ -56,4 +56,4 @@ if (!env.success) {
   throw new Error("Invalid environment variables");
 }
 
-export { env };
+export const env = envResult;

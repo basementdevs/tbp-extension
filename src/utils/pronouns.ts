@@ -1,0 +1,17 @@
+export const pronounsItems = [
+  { apiValue: "none", translationKey: "None" },
+  { apiValue: "he-him", translationKey: "HeHim" },
+  { apiValue: "she-her", translationKey: "SheHer" },
+  { apiValue: "they-them", translationKey: "TheyThem" },
+  { apiValue: "she-they", translationKey: "SheThey" },
+  { apiValue: "he-they", translationKey: "HeThey" },
+  { apiValue: "he-she", translationKey: "HeShe" },
+  { apiValue: "xe-xem", translationKey: "XeXem" },
+  { apiValue: "it-its", translationKey: "ItIts" },
+  { apiValue: "fae-faer", translationKey: "FaeFaer" },
+  { apiValue: "ve-ver", translationKey: "VeVer" },
+  { apiValue: "ae-aer", translationKey: "AeAer" },
+  { apiValue: "zie-hir", translationKey: "ZieHir" },
+  { apiValue: "per-per", translationKey: "PerPer" },
+  { apiValue: "e-em", translationKey: "EEm" },
+];

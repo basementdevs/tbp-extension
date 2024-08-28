@@ -43,7 +43,7 @@ const TabContent: React.FC<{ value: string; content: React.ReactNode }> = ({
 );
 
 const Tabs: React.FC<TabsProps> = ({ tabData, onValueChange }) => {
-  const [currentValue, setCurrentValue] = useState(tabData[0].value);
+  const [currentValue, setCurrentValue] = useState(tabData[0]?.value);
 
   const handleValueChange = async (value: string) => {
     setCurrentValue(value);
@@ -53,7 +53,7 @@ const Tabs: React.FC<TabsProps> = ({ tabData, onValueChange }) => {
   return (
     <Tab.Root
       className="flex flex-col w-full gap-3 dark:bg-background"
-      defaultValue={tabData[0].value}
+      defaultValue={tabData[0]?.value}
       value={currentValue}
       onValueChange={handleValueChange}
     >
@@ -66,7 +66,7 @@ const Tabs: React.FC<TabsProps> = ({ tabData, onValueChange }) => {
             name={tab.name}
             value={tab.value}
             key={tab.value}
-            disabled={tab.disabled}
+            disabled={tab?.disabled || false}
           />
         ))}
       </Tab.List>

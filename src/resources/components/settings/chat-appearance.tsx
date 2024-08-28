@@ -18,6 +18,7 @@ export default function ChatAppearance({ userService }: ChatAppearanceProps) {
   const title = t("chatAppearanceTitle");
   const greeting = t("chatAppearanceGreeting");
   const description = t("chatAppearanceDescription");
+
   return (
     <div className="flex flex-col space-y-2">
       <h1 className="font-medium text-text-medium text-xs">{title}</h1>

@@ -7,7 +7,6 @@ import type {
   Effect,
   Occupation,
   Paginator,
-  SettingsOption,
   UserSettings,
 } from "~types/types";
 
@@ -19,7 +18,7 @@ export async function getOccupations(): Promise<Occupation[]> {
   return (await response.json()) as Occupation[];
 }
 
-export async function getEffects(): Promise<Paginator<Effect>> {
+export async function getEffects(): Promise<Paginator<Effect> | undefined> {
   try {
     const { data } = await axios.get<Paginator<Effect>>(
       `${env.data.APP_PLATFORM_API_URL}/effects`,
@@ -30,7 +29,7 @@ export async function getEffects(): Promise<Paginator<Effect>> {
   }
 }
 
-export async function getColors(): Promise<Paginator<Color>> {
+export async function getColors(): Promise<Paginator<Color> | undefined> {
   try {
     const { data } = await axios.get<Paginator<Color>>(
       `${env.data.APP_PLATFORM_API_URL}/colors`,
@@ -55,7 +54,7 @@ export type UpdateSettingsDTO = {
 export async function updateSettings(
   authorization: AccessTokenResponse,
   payload: UpdateSettingsDTO,
-): Promise<UserSettings> {
+): Promise<UserSettings | undefined> {
   try {
     const { data } = await axios.put<UserSettings>(
       `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
@@ -73,9 +72,25 @@ export async function updateSettings(
   }
 }
 
+const apiAxiosInstance = axios.create({
+  baseURL: env.data.APP_PLATFORM_API_URL,
+});
+
+export async function getUserGlobalSettings(
+  authorization: AccessTokenResponse,
+) {
+  const { data } = await apiAxiosInstance.get<UserSettings>("/me/settings", {
+    headers: {
+      Authorization: `Bearer ${authorization.access_token}`,
+    },
+  });
+
+  return data;
+}
+
 export async function getUserSettings(
   authorization: AccessTokenResponse,
-  channelId?: string,
+  channelId?: string | null,
 ): Promise<[UserSettings?, UserSettings?]> {
   if (!authorization) return [];
 
@@ -103,10 +118,11 @@ export async function getUserSettings(
 export const useGetUserSettingsQuery = ({
   channelId,
   authorization,
-}: { channelId: string; authorization: AccessTokenResponse }) =>
+}: { channelId: string | undefined; authorization: AccessTokenResponse }) =>
   useQuery({
     queryKey: ["userSettings", "channelId", channelId],
     queryFn: async () => {
+      console.log("autorization", authorization);
       const [globalSettings, channelSettings] = await getUserSettings(
         authorization,
         channelId,

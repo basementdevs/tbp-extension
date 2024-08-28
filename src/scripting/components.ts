@@ -2,6 +2,7 @@ import { Storage } from "@plasmohq/storage";
 import { env } from "~config/env";
 import { getUserSettings } from "~services/settings-service";
 import { getUserFromConsumer } from "~services/user/user-consumer-service";
+import type { Occupation } from "~types/types";
 import { t } from "~utils/i18nUtils";
 
 const API_URL: string = env.data.CONSUMER_API_URL;
@@ -19,8 +20,9 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
   const channelName = await storage.get("channelName");
   const accessToken = await storage.get("accessToken");
 
-  let badgesEl: Element;
+  let badgesEl: Element | null;
   badgesEl = messageEl.querySelector(TWITCH_BADGES_CONTAINER);
+
   if (badgesEl) {
     badgesEl = badgesEl.childNodes[0] as Element;
   } else {
@@ -32,7 +34,6 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
   }
   const username = usernameContainer.textContent;
 
-  // @ts-ignore
   const consumerUser = await getUserSettings(accessToken, channelName);
 
   if (!consumerUser) {
@@ -72,7 +73,7 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
   }
 };
 
-const buildBadge = (occupation) => {
+const buildBadge = (occupation: Occupation) => {
   // Create a div element
   const badgeContainer = document.createElement("div");
   badgeContainer.className =
@@ -96,13 +97,16 @@ const buildBadge = (occupation) => {
   return badgeContainer;
 };
 
-async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
-  const username = nameCard.textContent.trim();
+async function enhanceTwitchPopover(nameCard: Element, detailsCard: Element) {
+  const username = nameCard.textContent?.trim();
+
+  if (!username) {
+    return;
+  }
 
   const res = await getUserFromConsumer(username);
 
   const i18nPronouns = t(`pronouns${res.pronouns.translation_key}`);
-  // @ts-ignore
   nameCard.innerHTML += `<span class="pronouns-card">(${i18nPronouns})</span>`;
 
   const occupationContainer = document.createElement("div");
