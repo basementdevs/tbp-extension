@@ -1,6 +1,6 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { env } from "~config/env";
-import type { ConsumerUserResponse } from "~services/user/user-consumer-service";
 import type {
   AccessTokenResponse,
   Color,
@@ -76,7 +76,7 @@ export async function updateSettings(
 export async function getUserSettings(
   authorization: AccessTokenResponse,
   channelId?: string,
-): Promise<UserSettings[]> {
+): Promise<[UserSettings?, UserSettings?]> {
   if (!authorization) return [];
 
   const url = `${env.data.APP_PLATFORM_API_URL}/me/settings${
@@ -84,11 +84,14 @@ export async function getUserSettings(
   }`;
 
   try {
-    const { data } = await axios.get<{ data: UserSettings[] }>(url, {
-      headers: {
-        Authorization: `Bearer ${authorization.access_token}`,
+    const { data } = await axios.get<{ data: [UserSettings, UserSettings?] }>(
+      url,
+      {
+        headers: {
+          Authorization: `Bearer ${authorization.access_token}`,
+        },
       },
-    });
+    );
 
     return data.data;
   } catch (error) {
@@ -96,3 +99,33 @@ export async function getUserSettings(
     throw error;
   }
 }
+
+export const useGetUserSettingsQuery = ({
+  channelId,
+  authorization,
+}: { channelId: string; authorization: AccessTokenResponse }) =>
+  useQuery({
+    queryKey: ["userSettings", "channelId", channelId],
+    queryFn: async () => {
+      const [globalSettings, channelSettings] = await getUserSettings(
+        authorization,
+        channelId,
+      );
+
+      const result: {
+        globalSettings?: UserSettings;
+        channelSettings?: UserSettings;
+      } = { globalSettings, channelSettings };
+
+      return result;
+    },
+  });
+
+export const useGetUserSettingsMutation = () =>
+  useMutation({
+    mutationFn: ({
+      authorization,
+      payload,
+    }: { authorization: AccessTokenResponse; payload: UpdateSettingsDTO }) =>
+      updateSettings(authorization, payload),
+  });

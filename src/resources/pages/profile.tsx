@@ -21,6 +21,7 @@ function ProfileContent({ user, watchingChannelName }: ProfileProps) {
   const userService = new UserStorageService(user);
   const [currentTabValue] = useStorage("currentTabValue", "global-profile");
   const [selectedItem, setSelectedItem] = useState("settings");
+
   const {
     fetchSettings,
     globalSettings,
@@ -28,6 +29,7 @@ function ProfileContent({ user, watchingChannelName }: ProfileProps) {
     isLoading,
     isTokenReady,
   } = useSettings();
+  
   const [currentSettings, setCurrentSettings] = useState<UserSettings | null>(
     null,
   );
@@ -45,6 +47,7 @@ function ProfileContent({ user, watchingChannelName }: ProfileProps) {
         }
       }
     };
+  
     loadSettings();
   }, [isTokenReady, fetchSettings, currentTabValue, watchingChannelName]);
 

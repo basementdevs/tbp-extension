@@ -1,4 +1,3 @@
-import Skeleton from "react-loading-skeleton";
 import type { User, UserSettings } from "~types/types";
 import { t } from "~utils/i18nUtils";
 import "react-loading-skeleton/dist/skeleton.css";

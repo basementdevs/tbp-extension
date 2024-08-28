@@ -29,6 +29,8 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
+    "@tanstack/react-query": "5.52.2",
+    "@tanstack/react-query-devtools": "5.52.2",
     "@types/firefox": "^0.0.34",
     "@types/firefox-webext-browser": "^120.0.4",
     "axios": "1.7.4",
@@ -49,6 +51,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
+    "@tanstack/eslint-plugin-query": "5.52.0",
     "@types/chrome": "0.0.258",
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",

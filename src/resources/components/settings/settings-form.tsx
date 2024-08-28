@@ -1,15 +1,15 @@
 import SelectField from "@Shad/components/ui/SelectField";
 import { useStorage } from "@plasmohq/storage/hook";
 import { type MutableRefObject, useEffect, useRef, useState } from "react";
-import type { UpdateSettingsDTO } from "~services/settings-service";
-import type { Occupation } from "~types/types";
+import { useGetUserSettingsQuery, type UpdateSettingsDTO } from "~services/settings-service";
+import type { AccessTokenResponse, Occupation, UserSettings } from "~types/types";
 import Switch from "../../shad/components/switch";
 import AnnounceBadge from "../app/announce-badge";
 import { useSettings } from "../settings-provider";
 
 type SettingsFormProps = {
   liveProfile: boolean;
-  watchingChannelName: string | null;
+  watchingChannelName?: string;
 };
 
 type FormState = {
@@ -36,12 +36,39 @@ export const pronounsItems = [
   { apiValue: "zie-hir", translationKey: "ZieHir" },
   { apiValue: "per-per", translationKey: "PerPer" },
   { apiValue: "e-em", translationKey: "EEm" },
+  
 ];
+
+
+const DEFAULT_SETTINGS = {
+  editingLiveProfile: false,
+  pronouns: "none",
+  occupation: "1",
+  pronounsActive: true,
+  occupationActive: true,
+} as const
+
+
+const buildDefaultSettings = (settings: UserSettings) => ({
+  editingLiveProfile: settings.enabled,
+  pronouns: settings.pronouns.slug || "none",
+  occupation: `${settings.occupation_id || 1}`,
+  pronounsActive: settings.pronouns.slug !== "none",
+  occupationActive: settings.occupation_id !== 1,
+})
 
 export default function SettingsForm({
   liveProfile,
   watchingChannelName,
 }: SettingsFormProps) {
+  const [authorization] = useStorage<AccessTokenResponse>("accessToken");
+
+  const settingsQuery = useGetUserSettingsQuery({
+    authorization,
+    channelId: liveProfile ? watchingChannelName : null,
+  });
+
+
   const { globalSettings, channelSettings, saveSettings, fetchSettings } =
     useSettings();
   const [occupations] = useStorage<Occupation[]>("occupations", []);
@@ -57,30 +84,9 @@ export default function SettingsForm({
     translationKey: occupation.translation_key,
   }));
 
-  const [formState, setFormState] = useState<FormState>({
-    editingLiveProfile: false,
-    pronouns: "none",
-    occupation: "1",
-    pronounsActive: true,
-    occupationActive: true,
-  });
+  const setting = (liveProfile ? settingsQuery.data.channelSettings : settingsQuery.data.globalSettings)
 
-  useEffect(() => {
-    const relevantSettings = liveProfile ? channelSettings : globalSettings;
-    if (relevantSettings) {
-      updateFormState(relevantSettings);
-    }
-  }, [globalSettings, channelSettings, liveProfile]);
-
-  const updateFormState = (settings) => {
-    setFormState({
-      editingLiveProfile: settings.enabled,
-      pronouns: settings.pronouns.slug || "none",
-      occupation: `${settings.occupation_id || 1}`,
-      pronounsActive: settings.pronouns.slug !== "none",
-      occupationActive: settings.occupation_id !== 1,
-    });
-  };
+  const [formState, setFormState] = useState<FormState>(setting ? buildDefaultSettings(setting) : DEFAULT_SETTINGS);
 
   const isInputDisabled =
     liveProfile && !!watchingChannelName && !formState.editingLiveProfile;
@@ -117,13 +123,15 @@ export default function SettingsForm({
       color_id: 1,
       locale: navigator.language,
     };
-    await saveSettings(payload);
+    // await saveSettings(payload);
 
-    await fetchSettings({
-      currentTabValue: currentTabValue,
-      channelName: liveProfile ? watchingChannelName : undefined,
-    });
+    // await fetchSettings({
+    //   currentTabValue: currentTabValue,
+    //   channelName: liveProfile ? watchingChannelName : undefined,
+    // });
   };
+
+
   return (
     <form>
       <div className="flex flex-col w-full items-center gap-8 mb-8 mt-3">

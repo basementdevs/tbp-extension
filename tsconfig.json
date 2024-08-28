@@ -13,6 +13,9 @@
       "@Scripting/*": ["./src/scripting/*"],
       "@Root/*": ["./*"]
     },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
   }
 }
