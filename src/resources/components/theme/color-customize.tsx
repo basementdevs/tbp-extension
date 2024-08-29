@@ -3,35 +3,43 @@ import { Check } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import {
   type UpdateSettingsDTO,
-  updateSettings,
+  useUpdateUserSettingsMutation,
 } from "~services/settings-service";
-import type UserStorageService from "~services/user/user-storage-service";
-import type { AccessTokenResponse, Color } from "~types/types";
+import type { Color } from "~types/types";
+import { useAccessToken } from "../auth/access-token-provider";
+import { useUserSettings } from "../settings/hook";
 
 interface ColorCustomizerProps {
-  userService?: UserStorageService;
+  liveProfile: boolean;
+  channelName: string | undefined;
 }
 
-const ColorCustomizer = ({ userService }: ColorCustomizerProps) => {
-  const [selectedColor, setSelectedColor] = useState(
-    userService.getSettings().color_id,
-  );
-  const [accessToken] = useStorage<AccessTokenResponse>("accessToken");
+const ColorCustomizer = ({
+  liveProfile,
+  channelName,
+}: ColorCustomizerProps) => {
+  console.log(liveProfile, channelName, "aa");
+
   const [colors] = useStorage<Color[]>("settings-colors");
+  const { mutate } = useUpdateUserSettingsMutation();
+  const { accessToken } = useAccessToken();
 
-  const colorList = useMemo(() => {
-    if (!colors) {
-      return [];
-    }
+  const { activeSettings } = useUserSettings(liveProfile, channelName);
 
-    return colors;
-  }, [colors]);
+  const colorList = colors || [];
+
+  const handleChange = (key: string, value: number | undefined) => {
+    mutate({
+      authorization: accessToken,
+      payload: {
+        channel_id: liveProfile ? channelName : "global",
+        [key]: value,
+      },
+    });
+  };
 
   const updateEffect = async ({ color_id }: UpdateSettingsDTO) => {
-    setSelectedColor(color_id);
-
-    const settings = await updateSettings(accessToken, { color_id });
-    await userService.updateSettings(settings);
+    handleChange("color_id", color_id);
   };
 
   return (
@@ -41,11 +49,11 @@ const ColorCustomizer = ({ userService }: ColorCustomizerProps) => {
           <button
             type="button"
             className={`w-10 h-10 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white
-                ${selectedColor === color.id ? "ring-2 ring-white" : ""}`}
-            style={{ backgroundColor: color.hex }}
+                ${activeSettings?.color_id === color.id ? "ring-2 ring-white" : ""}`}
+            style={{ backgroundColor: color.hex ?? "#000" }}
             onClick={() => updateEffect({ color_id: color.id })}
           />
-          {selectedColor === color.id && (
+          {activeSettings?.color_id === color.id && (
             <div className="absolute -top-1 -right-1 bg-icon-high border-helper-outline rounded-full p-0.5">
               <Check size={12} className="text-elevation-surface font-bold" />
             </div>

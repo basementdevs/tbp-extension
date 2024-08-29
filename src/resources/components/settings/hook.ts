@@ -1,12 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { useGetUserSettingsQuery } from "~services/settings-service";
 import { useAccessToken } from "../auth/access-token-provider";
-import { getUserGlobalSettings } from "~services/settings-service";
 
-export const useGetUserGlobalSettingsQuery = () => {
+export function useUserSettings(liveProfile: boolean, channelName?: string) {
   const { accessToken } = useAccessToken();
 
-  return useQuery({
-    queryKey: ["userGlobalSettings"],
-    queryFn: () => getUserGlobalSettings(accessToken),
+  const { data, isLoading } = useGetUserSettingsQuery({
+    authorization: accessToken,
+    channelName: liveProfile ? channelName : undefined,
+    liveProfile: liveProfile,
   });
-};
+
+  const activeSettings = liveProfile
+    ? data?.channelSettings || data?.globalSettings
+    : data?.globalSettings;
+
+  return { activeSettings, isLoading };
+}

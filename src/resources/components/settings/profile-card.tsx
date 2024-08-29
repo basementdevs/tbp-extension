@@ -1,23 +1,30 @@
-import type { User, UserSettings } from "~types/types";
+import { useStorage } from "@plasmohq/storage/hook";
+import type { User } from "~types/types";
 import { t } from "~utils/i18nUtils";
-import "react-loading-skeleton/dist/skeleton.css";
+import { useUserSettings } from "./hook";
 
 type ProfileCardProps = {
-  settings: UserSettings;
   user: User;
-  isLoading: boolean;
+  channelName: string | undefined;
 };
 
-export default function ProfileCard({ settings, user }: ProfileCardProps) {
-  const occupationText = t(`occupation${settings?.occupation_id || 1}`);
-  const pronounsText = t(
-    `pronouns${settings?.pronouns?.translation_key || "none"}`,
+export default function ProfileCard({ user, channelName }: ProfileCardProps) {
+  const [currentTabValue] = useStorage("currentTabValue", "global-profile");
+
+  const { activeSettings } = useUserSettings(
+    currentTabValue === "channel-profile",
+    channelName,
   );
+
+  const occupationText = t(
+    `occupation${activeSettings?.occupation.translation_key}`,
+  );
+  const pronounsText = t(`pronouns${activeSettings?.pronouns.translation_key}`);
 
   return (
     <div className="flex items-center rounded-xl bg-elevation-04dp p-2">
       <img
-        src={user.accounts[0].avatar}
+        src={user?.accounts[0]?.avatar}
         alt="The user's profile"
         className="size-28 rounded-xl"
       />

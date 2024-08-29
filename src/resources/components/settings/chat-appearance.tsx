@@ -1,20 +1,26 @@
-import { cn } from "@Shad/lib/utils";
-
 import { env } from "@Config/env";
 import type UserStorageService from "~services/user/user-storage-service";
 
 import { t } from "~utils/i18nUtils";
+import { useUserSettings } from "./hook";
 
 type ChatAppearanceProps = {
   userService: UserStorageService;
+  liveProfile: boolean;
+  channelName: string | undefined;
 };
 
-export default function ChatAppearance({ userService }: ChatAppearanceProps) {
+export default function ChatAppearance({
+  userService,
+  liveProfile,
+  channelName,
+}: ChatAppearanceProps) {
+  const { activeSettings } = useUserSettings(liveProfile, channelName);
+
   const baseUrl = env.data.CONSUMER_API_URL;
-  const occupationIcon = userService.user.settings.occupation.slug;
-  const settings = userService.getSettings();
+  const occupationIcon = activeSettings?.occupation?.slug ?? "none";
   const pronounText =
-    t(`pronouns${settings.pronouns.translation_key}`) ?? "None";
+    t(`pronouns${activeSettings?.pronouns.translation_key}`) ?? "None";
   const title = t("chatAppearanceTitle");
   const greeting = t("chatAppearanceGreeting");
   const description = t("chatAppearanceDescription");

@@ -90,12 +90,12 @@ export async function getUserGlobalSettings(
 
 export async function getUserSettings(
   authorization: AccessTokenResponse,
-  channelId?: string | null,
+  channelName?: string | null,
 ): Promise<[UserSettings?, UserSettings?]> {
   if (!authorization) return [];
 
   const url = `${env.data.APP_PLATFORM_API_URL}/me/settings${
-    channelId ? `?channel_id=${channelId}` : ""
+    channelName ? `?channel_id=${channelName}` : ""
   }`;
 
   try {
@@ -116,16 +116,20 @@ export async function getUserSettings(
 }
 
 export const useGetUserSettingsQuery = ({
-  channelId,
+  channelName,
+  liveProfile,
   authorization,
-}: { channelId: string | undefined; authorization: AccessTokenResponse }) =>
+}: {
+  channelName: string | undefined;
+  liveProfile: boolean;
+  authorization: AccessTokenResponse;
+}) =>
   useQuery({
-    queryKey: ["userSettings", "channelId", channelId],
+    queryKey: ["userSettings", "channelId", channelName],
     queryFn: async () => {
-      console.log("autorization", authorization);
       const [globalSettings, channelSettings] = await getUserSettings(
         authorization,
-        channelId,
+        channelName,
       );
 
       const result: {
@@ -137,11 +141,13 @@ export const useGetUserSettingsQuery = ({
     },
   });
 
-export const useGetUserSettingsMutation = () =>
+export const useUpdateUserSettingsMutation = () =>
   useMutation({
     mutationFn: ({
       authorization,
       payload,
-    }: { authorization: AccessTokenResponse; payload: UpdateSettingsDTO }) =>
-      updateSettings(authorization, payload),
+    }: {
+      authorization: AccessTokenResponse;
+      payload: UpdateSettingsDTO;
+    }) => updateSettings(authorization, payload),
   });

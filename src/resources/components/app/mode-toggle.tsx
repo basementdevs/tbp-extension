@@ -1,7 +1,7 @@
 import { useTheme } from "@Components/app/theme-provide";
 import { ChevronRight } from "lucide-react";
-import React from "react";
 import { t } from "~utils/i18nUtils";
+import type { Theme } from "./theme-provide";
 
 export function ThemeSelect() {
   const { setTheme, theme } = useTheme();
@@ -12,8 +12,8 @@ export function ThemeSelect() {
     { value: "system", label: t("themeSystem") },
   ];
 
-  const handleChange = (event) => {
-    setTheme(event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setTheme(event.target.value as Theme);
   };
 
   return (

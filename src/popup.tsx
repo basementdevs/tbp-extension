@@ -1,15 +1,15 @@
 import "~style.css";
 
 import { ThemeProvider } from "@Components/app/theme-provide";
+import {
+  AccessTokenProvider,
+  useAccessTokenFromStorage,
+} from "@Components/auth/access-token-provider";
 import { Auth } from "@Pages/auth";
 import Profile from "@Pages/profile";
 import { useStorage } from "@plasmohq/storage/hook";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import {
-  AccessTokenProvider,
-  useAccessTokenFromStorage,
-} from "@Components/auth/access-token-provider";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +24,7 @@ function IndexPopup() {
         <div className="w-96 rounded bg-elevation-surface px-4 py-6">
           {user && accessToken ? (
             <AccessTokenProvider accessToken={accessToken}>
-              <Profile user={user} watchingChannelName={channelName} />
+              <Profile user={user} channelName={channelName} />
             </AccessTokenProvider>
           ) : (
             <Auth />

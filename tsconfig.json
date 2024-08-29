@@ -16,6 +16,6 @@
     "baseUrl": ".",
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
+    "noImplicitOverride": true
   }
 }

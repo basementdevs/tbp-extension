@@ -2,10 +2,10 @@ import AboutCard from "@Components/about/about";
 import ChatAppearance from "@Components/settings/chat-appearance";
 import Tabs from "~resources/shad/components/ui/tabs";
 import type UserStorageService from "~services/user/user-storage-service";
+import SettingsForm from "../settings/settings-form";
 import Stats from "../stats/stats";
 import ColorCustomizer from "../theme/color-customize";
 import Theme from "../theme/theme";
-import SettingsFormV2 from "../settings/settings-form-v2";
 
 type MainContentProps = {
   selectedItem: string;
@@ -18,13 +18,22 @@ const MainContent = ({
   userService,
   channelName,
 }: MainContentProps) => {
-  const renderSettingsContent = (isLiveProfile: boolean) => (
-    <>
-      <SettingsFormV2 liveProfile={isLiveProfile} channelName={channelName} />
-      <ChatAppearance userService={userService} />
-      <ColorCustomizer userService={userService} />
-    </>
-  );
+  const renderSettingsContent = (isLiveProfile: boolean) => {
+    return (
+      <>
+        <SettingsForm liveProfile={isLiveProfile} channelName={channelName} />
+        <ChatAppearance
+          userService={userService}
+          liveProfile={isLiveProfile}
+          channelName={channelName}
+        />
+        <ColorCustomizer
+          liveProfile={isLiveProfile}
+          channelName={channelName}
+        />
+      </>
+    );
+  };
   const tabSettingsList = [
     {
       name: "Perfil Global",

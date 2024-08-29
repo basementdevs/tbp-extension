@@ -1,57 +1,35 @@
 import { ChevronRight } from "lucide-react";
 import React, { useState, type MutableRefObject } from "react";
 import { t } from "../../../../utils/i18nUtils";
-import Switch from "../switch";
 
 type SelectFieldProps = {
   id: string;
   label: string;
   items: { translationKey: string; apiValue: string }[];
-  selectedValue?: string;
-  liveProfile: boolean;
+  value?: string;
+  isDisable?: boolean;
   onChange: (value: string) => void;
-  active: boolean;
-  onActiveChange: (active: boolean) => void;
-  disabled?: boolean;
-  currentTab: string;
+  children?: React.ReactNode;
 };
 
 const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
-  (
-    {
-      id,
-      label,
-      items,
-      selectedValue,
-      liveProfile,
-      onChange,
-      active,
-      onActiveChange,
-      disabled,
-      currentTab,
-    },
-    ref,
-  ) => {
-    const isDisabled = currentTab === "global-profile" ? disabled : !active;
-
+  ({ id, label, items, value, onChange, isDisable, children }, ref) => {
     return (
       <div className="flex flex-col gap-3 w-full">
         <div className="flex flex-row gap-x-5 items-center">
           <label className="font-medium text-text-high" htmlFor={id}>
             {t(label)}
           </label>
-          {liveProfile && (
-            <Switch onCheckedChange={onActiveChange} checked={active} />
-          )}
+          {children}
         </div>
         <div className="relative">
           <select
             ref={ref as MutableRefObject<HTMLSelectElement>}
             id={id}
             onChange={(e) => onChange(e.target.value)}
-            value={selectedValue}
+            value={value}
             className="flex w-full items-center justify-between px-4 py-3 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-pill appearance-none pr-10 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isDisabled}
+            disabled={isDisable}
           >
             {items.map(({ translationKey, apiValue }) => (
               <option

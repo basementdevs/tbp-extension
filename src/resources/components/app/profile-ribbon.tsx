@@ -16,7 +16,7 @@ function ProfileRibbon({ user }: ProfileRibbonType) {
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-x-2">
         <img
-          src={user.accounts[0].avatar}
+          src={user?.accounts[0]?.avatar}
           alt="avatar"
           width={32}
           className="rounded-pill"

@@ -1,4 +1,4 @@
-export const pronounsItems = [
+export const PRONOUNS_ITEMS = [
   { apiValue: "none", translationKey: "None" },
   { apiValue: "he-him", translationKey: "HeHim" },
   { apiValue: "she-her", translationKey: "SheHer" },
