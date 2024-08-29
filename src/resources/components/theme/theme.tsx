@@ -6,9 +6,11 @@ import ColorCustomizer from "./color-customize";
 
 interface ThemeProps {
   userService?: UserStorageService;
+  liveProfile: boolean;
+  channelName: string | undefined;
 }
 
-const Theme = ({ userService }: ThemeProps) => {
+const Theme = ({ userService, liveProfile, channelName }: ThemeProps) => {
   return (
     <div className="flex flex-col gap-y-8 mt-8">
       <div className="space-y-2 flex items-center justify-between">
@@ -32,7 +34,7 @@ const Theme = ({ userService }: ThemeProps) => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam libero
           risus, faucibus nec dui ac, varius rhoncus elit.
         </p>
-        <ColorCustomizer userService={userService} />
+        <ColorCustomizer liveProfile={liveProfile} channelName={channelName} />
       </div>
       <div className="space-y-2">
         <h1 className="font-bold text-xs text-text-high">
@@ -42,7 +44,7 @@ const Theme = ({ userService }: ThemeProps) => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam libero
           risus, faucibus nec dui ac, varius rhoncus elit.
         </p>
-        <EffectCustomize userService={userService} />
+        <EffectCustomize liveProfile={liveProfile} channelName={channelName} />
       </div>
     </div>
   );

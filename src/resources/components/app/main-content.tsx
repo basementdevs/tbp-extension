@@ -54,7 +54,13 @@ const MainContent = ({
       {selectedItem === "settings" && <Tabs tabData={tabSettingsList} />}
       {selectedItem === "stats" && <Stats />}
       {selectedItem === "about" && <AboutCard />}
-      {selectedItem === "themes" && <Theme userService={userService} />}
+      {selectedItem === "themes" && (
+        <Theme
+          userService={userService}
+          liveProfile={true}
+          channelName={channelName}
+        />
+      )}
     </div>
   );
 };

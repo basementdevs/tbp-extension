@@ -1,39 +1,35 @@
-import { Storage } from "@plasmohq/storage";
 import { useStorage } from "@plasmohq/storage/hook";
 import { Check } from "lucide-react";
-import React, { useMemo, useState } from "react";
-import {
-  type UpdateSettingsDTO,
-  updateSettings,
-} from "~services/settings-service";
-import type UserStorageService from "~services/user/user-storage-service";
-import type { AccessTokenResponse, Effect } from "~types/types";
+import { useUpdateUserSettingsMutation } from "~services/settings-service";
+import type { Effect } from "~types/types";
+import { useAccessToken } from "../auth/access-token-provider";
+import { useUserSettings } from "../settings/hook";
 
 interface EffectCustomizeProps {
-  userService?: UserStorageService;
+  liveProfile: boolean;
+  channelName: string | undefined;
 }
 
-const EffectCustomize = ({ userService }: EffectCustomizeProps) => {
-  const [selectedEffect, setSelectedEffect] = useState(
-    userService.getSettings().effect_id,
-  );
-  const [accessToken] = useStorage<AccessTokenResponse>("accessToken");
+const EffectCustomize = ({
+  liveProfile,
+  channelName,
+}: EffectCustomizeProps) => {
   const [effects] = useStorage<Effect[]>("settings-effects");
-  const storage = new Storage();
+  const { mutate } = useUpdateUserSettingsMutation();
+  const { accessToken } = useAccessToken();
 
-  const effectList = useMemo(() => {
-    if (!effects) {
-      return [];
-    }
+  const { activeSettings } = useUserSettings(liveProfile, channelName);
 
-    return effects;
-  }, [effects]);
+  const effectList = effects || [];
 
-  const updateEffect = async ({ effect_id }: UpdateSettingsDTO) => {
-    setSelectedEffect(effect_id);
-
-    const settings = await updateSettings(accessToken, { effect_id });
-    await userService.updateSettings(settings);
+  const handleChange = (key: string, value: number | undefined) => {
+    mutate({
+      authorization: accessToken,
+      payload: {
+        channel_id: liveProfile ? channelName : "global",
+        [key]: value,
+      },
+    });
   };
 
   return (
@@ -43,11 +39,11 @@ const EffectCustomize = ({ userService }: EffectCustomizeProps) => {
           <button
             type="button"
             className={`w-10 h-10 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white
-                ${selectedEffect === effect.id ? "ring-2 ring-white" : ""}`}
-            style={{ backgroundColor: effect.hex }}
-            onClick={() => updateEffect({ effect_id: effect.id })}
+                ${activeSettings?.effect_id === effect.id ? "ring-2 ring-white" : ""}`}
+            style={{ backgroundColor: effect.hex ?? "#000" }}
+            onClick={() => handleChange("effect_id", effect.id)}
           />
-          {selectedEffect === effect.id && (
+          {activeSettings?.effect_id === effect.id && (
             <div className="absolute -top-1 -right-1 bg-icon-high border-helper-outline rounded-full p-0.5">
               <Check size={12} className="text-elevation-surface font-bold" />
             </div>

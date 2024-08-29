@@ -1,6 +1,5 @@
 import { useStorage } from "@plasmohq/storage/hook";
 import { Check } from "lucide-react";
-import React, { useMemo, useState } from "react";
 import {
   type UpdateSettingsDTO,
   useUpdateUserSettingsMutation,
@@ -10,16 +9,14 @@ import { useAccessToken } from "../auth/access-token-provider";
 import { useUserSettings } from "../settings/hook";
 
 interface ColorCustomizerProps {
-  liveProfile: boolean;
-  channelName: string | undefined;
+  liveProfile?: boolean;
+  channelName?: string | undefined;
 }
 
 const ColorCustomizer = ({
   liveProfile,
   channelName,
 }: ColorCustomizerProps) => {
-  console.log(liveProfile, channelName, "aa");
-
   const [colors] = useStorage<Color[]>("settings-colors");
   const { mutate } = useUpdateUserSettingsMutation();
   const { accessToken } = useAccessToken();

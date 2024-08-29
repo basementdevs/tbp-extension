@@ -48,17 +48,15 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
     ".chat-author__display-name",
   );
 
-  console.log(settings);
+  if (settings.color && settings.color.slug !== "none") {
+    // @ts-ignore
+    usernameEl.style.color = settings.color.hex;
+  }
 
-  // if (settings.color && settings.color.slug !== "none") {
-  //   // @ts-ignore
-  //   usernameEl.style.color = settings.color.hex;
-  // }
-
-  // if (settings.effect && settings.effect.slug !== "none") {
-  //   // @ts-ignore
-  //   usernameEl.classList.add(settings.effect.class_name);
-  // }
+  if (settings.effect && settings.effect.slug !== "none") {
+    // @ts-ignore
+    usernameEl.classList.add(settings.effect.class_name);
+  }
 
   const child = usernameContainer.firstChild;
   const i18nPronouns = t(`pronouns${settings.pronouns.translation_key}`);
@@ -69,7 +67,7 @@ const enhanceChatMessage = async (messageEl: HTMLElement) => {
 
   if (child) {
     usernameContainer.appendChild(pronounsElement);
-    // badgesEl.appendChild(buildBadge(settings.occupation));
+    badgesEl.appendChild(buildBadge(settings.occupation));
   }
 };
 
