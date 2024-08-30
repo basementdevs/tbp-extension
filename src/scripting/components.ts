@@ -1,9 +1,9 @@
+import { env } from "@/config/env";
+import { getUserSettings } from "@/services/settings-service";
+import { getUserFromConsumer } from "@/services/user/user-consumer-service";
+import type { Occupation } from "@/types/types";
+import { t } from "@/utils/i18nUtils";
 import { Storage } from "@plasmohq/storage";
-import { env } from "~config/env";
-import { getUserSettings } from "~services/settings-service";
-import { getUserFromConsumer } from "~services/user/user-consumer-service";
-import type { Occupation } from "~types/types";
-import { t } from "~utils/i18nUtils";
 
 const API_URL: string = env.data.CONSUMER_API_URL;
 

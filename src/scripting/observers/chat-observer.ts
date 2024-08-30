@@ -1,4 +1,4 @@
-import MessageQueue from "~scripting/queue";
+import MessageQueue from "@/scripting/queue";
 
 const TWITCH_CHAT_CONTAINER = "chat-line__message";
 const SEVEN_TV_CHAT_CONTAINER = "seventv-message";

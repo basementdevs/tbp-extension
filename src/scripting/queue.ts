@@ -1,4 +1,4 @@
-import { enhanceChatMessage } from "@Scripting/components";
+import { enhanceChatMessage } from "@/scripting/components";
 
 export default class MessageQueue {
   messages: HTMLElement[] = [];

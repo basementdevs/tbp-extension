@@ -3,13 +3,13 @@ import browser from "webextension-polyfill";
 import type { PlasmoMessaging } from "@plasmohq/messaging";
 import { Storage } from "@plasmohq/storage";
 
-import { env } from "~config/env";
+import { env } from "@/config/env";
 import {
   getColors,
   getEffects,
   getOccupations,
-} from "~services/settings-service";
-import { authenticateWithServer } from "~services/user/user-consumer-service";
+} from "@/services/settings-service";
+import { authenticateWithServer } from "@/services/user/user-consumer-service";
 
 const CLIENT_ID = env.data.TWITCH_CLIENT_ID;
 

@@ -1,5 +1,4 @@
-import axios from "axios";
-import { env } from "~config/env";
+import { env } from "@/config/env";
 import type {
   AccessTokenResponse,
   Color,
@@ -7,7 +6,8 @@ import type {
   MetricsResponse,
   TwitchUser,
   User,
-} from "~types/types";
+} from "@/types/types";
+import axios from "axios";
 
 const API_URL = env.data.CONSUMER_API_URL;
 const API_VERSION = env.data.CONSUMER_API_VERSION;

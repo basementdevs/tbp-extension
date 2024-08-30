@@ -1,5 +1,5 @@
-import { enhanceTwitchPopover } from "~scripting/components";
-import MessageQueue from "~scripting/queue";
+import { enhanceTwitchPopover } from "@/scripting/components";
+import MessageQueue from "@/scripting/queue";
 
 const POPOVER_ELEMENT = ".viewer-card-layer";
 

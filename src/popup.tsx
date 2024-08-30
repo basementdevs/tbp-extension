@@ -1,12 +1,12 @@
-import "~style.css";
+import "./style.css";
 
-import { ThemeProvider } from "@Components/app/theme-provide";
+import { Auth } from "@/components/layouts/auth/auth";
+import Profile from "@/features/content-manager";
 import {
   AccessTokenProvider,
   useAccessTokenFromStorage,
-} from "@Components/auth/access-token-provider";
-import { Auth } from "@Pages/auth";
-import Profile from "@Pages/profile";
+} from "@/providers/access-token-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import { useStorage } from "@plasmohq/storage/hook";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

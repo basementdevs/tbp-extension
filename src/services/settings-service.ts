@@ -1,6 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { env } from "~config/env";
+import { env } from "@/config/env";
 import type {
   AccessTokenResponse,
   Color,
@@ -8,7 +6,9 @@ import type {
   Occupation,
   Paginator,
   UserSettings,
-} from "~types/types";
+} from "@/types/types";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export async function getOccupations(): Promise<Occupation[]> {
   const response = await fetch(`${env.data.APP_PLATFORM_API_URL}/occupations`);
@@ -117,11 +117,9 @@ export async function getUserSettings(
 
 export const useGetUserSettingsQuery = ({
   channelName,
-  liveProfile,
   authorization,
 }: {
   channelName: string | undefined;
-  liveProfile: boolean;
   authorization: AccessTokenResponse;
 }) =>
   useQuery({

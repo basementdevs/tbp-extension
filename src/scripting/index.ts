@@ -1,13 +1,11 @@
-import ChatMutationObserver from "@Scripting/observers/chat-observer";
-import PopoverMutationObserver from "@Scripting/observers/popover-observer";
-import PageWatcher, {
-  PageWatcherState,
-} from "@Scripting/watchers/page-watcher";
 import { Storage } from "@plasmohq/storage";
 import browser from "webextension-polyfill";
-import { sendHeartbeat } from "~services/user/user-consumer-service";
-import type { AccessTokenResponse } from "~types/types";
-import { extractUsername } from "~utils/regex";
+import { sendHeartbeat } from "../services/user/user-consumer-service";
+import type { AccessTokenResponse } from "../types/types";
+import { extractUsername } from "../utils/regex";
+import ChatMutationObserver from "./observers/chat-observer";
+import PopoverMutationObserver from "./observers/popover-observer";
+import PageWatcher, { PageWatcherState } from "./watchers/page-watcher";
 
 const TWITCH_CHAT_LIST = ".chat-list--default,.chat-list--other,.chat-list";
 const SEVEN_TV_CHAT_LIST = ".seventv-chat-list";
