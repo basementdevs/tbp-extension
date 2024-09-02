@@ -1,6 +1,6 @@
 import { useTheme } from "@/providers/theme-provider";
 import type { Theme } from "@/providers/theme-provider";
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 import { ChevronRight } from "lucide-react";
 
 export function ThemeSelect() {

@@ -1,7 +1,7 @@
 import { Github } from "lucide-react";
-import packageJson from "../../../package.json";
+import packageJson from "../../package.json";
 
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 
 export default function AboutCard() {
   const version = packageJson.version;

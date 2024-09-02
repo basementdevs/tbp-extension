@@ -1,8 +1,8 @@
-import ColorCustomizer from "@/features/theme/color-customize";
-import EffectCustomize from "@/features/theme/effect-customize";
-import { ThemeSelect } from "@/features/theme/mode-toggle";
+import ColorCustomizer from "@/components/color-customize";
+import EffectCustomize from "@/components/effect-customize";
+import { ThemeSelect } from "@/components/mode-toggle";
 import type UserStorageService from "@/services/user/user-storage-service";
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 
 interface ThemeProps {
   userService?: UserStorageService;
@@ -10,7 +10,7 @@ interface ThemeProps {
   channelName: string | undefined;
 }
 
-const Theme = ({ userService, liveProfile, channelName }: ThemeProps) => {
+const Theme = ({ liveProfile, channelName }: ThemeProps) => {
   return (
     <div className="flex flex-col gap-y-8 mt-8">
       <div className="space-y-2 flex items-center justify-between">

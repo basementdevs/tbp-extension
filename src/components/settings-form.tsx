@@ -9,6 +9,7 @@ import {
 import type { Occupation } from "@/types/types";
 import { PRONOUNS_ITEMS } from "@/utils/pronouns";
 import { useStorage } from "@plasmohq/storage/hook";
+import { Navigate } from "react-router-dom";
 
 type SettingsFormProps = {
   liveProfile: boolean;

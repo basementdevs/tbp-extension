@@ -1,7 +1,7 @@
 import { env } from "@/config/env";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import type UserStorageService from "@/services/user/user-storage-service";
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 
 type ChatAppearanceProps = {
   userService: UserStorageService;

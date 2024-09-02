@@ -1,6 +1,6 @@
 import Logo from "data-base64:../../../assets/icon.png";
 import { env } from "@/config/env";
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 import { version } from "../../../package.json";
 
 type HeaderProps = {

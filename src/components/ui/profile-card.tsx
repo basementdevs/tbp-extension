@@ -1,6 +1,6 @@
 import { useUserSettings } from "@/hooks/use-user-settings";
 import type { User } from "@/types/types";
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 import { useStorage } from "@plasmohq/storage/hook";
 
 type ProfileCardProps = {

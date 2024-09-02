@@ -3,7 +3,7 @@ import { LucideTwitch } from "lucide-react";
 
 import { sendToBackground } from "@plasmohq/messaging";
 
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 
 export default function AuthenticateButton() {
   const authenticate = async () => {

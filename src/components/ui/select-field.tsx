@@ -1,4 +1,4 @@
-import { t } from "@/utils/i18nUtils";
+import { t } from "@/utils/i18n";
 import { ChevronRight } from "lucide-react";
 import React, { useState, type MutableRefObject } from "react";
 

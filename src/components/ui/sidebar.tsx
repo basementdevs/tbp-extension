@@ -15,7 +15,7 @@ import Header from "./header";
 import ProfileRibbon from "./profile-ribbon";
 
 type SidebarProps = {
-  setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedSidebarItem: (item: string) => void;
   selectedItem: string;
   userService: UserStorageService;
 };
@@ -51,7 +51,7 @@ const SidebarItem = ({
 );
 
 const Sidebar = ({
-  setSelectedItem,
+  setSelectedSidebarItem,
   selectedItem,
   userService,
 }: SidebarProps) => {
@@ -108,7 +108,7 @@ const Sidebar = ({
                 icon={item.icon}
                 isSelected={selectedItem === item.key}
                 onClick={() => {
-                  setSelectedItem(item.key);
+                  setSelectedSidebarItem(item.key);
                   toggleSidebar();
                 }}
               />
