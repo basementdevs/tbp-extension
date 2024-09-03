@@ -4,12 +4,12 @@ import Switch from "@/components/ui/switch";
 import { useAccessToken } from "@/providers/access-token-provider";
 import {
   useGetUserSettingsQuery,
+  usePatchUserSettingsMutation,
   useUpdateUserSettingsMutation,
 } from "@/services/settings-service";
 import type { Occupation } from "@/types/types";
 import { PRONOUNS_ITEMS } from "@/utils/pronouns";
 import { useStorage } from "@plasmohq/storage/hook";
-import { Navigate } from "react-router-dom";
 
 type SettingsFormProps = {
   liveProfile: boolean;
@@ -19,9 +19,9 @@ type SettingsFormProps = {
 const DEFAULT_SETTINGS = {
   enabled: false,
   pronouns: "none",
-  occupation: "1",
-  pronounsActive: true,
-  occupationActive: true,
+  occupation_id: 1,
+  pronouns_active: true,
+  occupation_active: true,
 } as const;
 
 export default function SettingsForm({
@@ -42,10 +42,11 @@ export default function SettingsForm({
   });
 
   const activeSettings = liveProfile
-    ? data?.channelSettings || data?.globalSettings
+    ? data?.channelSettings
     : data?.globalSettings;
 
-  const { mutate } = useUpdateUserSettingsMutation();
+  const updateSettings = useUpdateUserSettingsMutation();
+  const patchSettings = usePatchUserSettingsMutation();
 
   const handleChange = (
     key: keyof typeof DEFAULT_SETTINGS,
@@ -66,17 +67,20 @@ export default function SettingsForm({
         locale: data?.globalSettings?.locale,
         enabled: true,
       };
+      updateSettings.mutate({
+        authorization: accessToken,
+        payload,
+      });
     } else {
       payload = {
         channel_id: liveProfile ? channelName : "global",
         [key]: value,
       };
+      patchSettings.mutate({
+        authorization: accessToken,
+        payload,
+      });
     }
-
-    mutate({
-      authorization: accessToken,
-      payload,
-    });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -118,8 +122,8 @@ export default function SettingsForm({
           id="occupation"
           label="occupationLabel"
           items={occupationsItems}
-          value={activeSettings?.occupation.slug}
-          onChange={(value: string) => handleChange("occupation", value)}
+          value={activeSettings?.occupation_id}
+          onChange={(value: string) => handleChange("occupation_id", value)}
         >
           {liveProfile && (
             <Switch

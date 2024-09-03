@@ -13,10 +13,12 @@ import { Login } from "./pages/login";
 
 const queryClient = new QueryClient();
 
-function IndexPopup() {
+function Popup() {
   const [user] = useStorage("user");
   const [channelName] = useStorage("channelName");
   const [accessToken] = useAccessTokenFromStorage();
+
+  console.log(channelName);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -36,4 +38,4 @@ function IndexPopup() {
   );
 }
 
-export default IndexPopup;
+export default Popup;

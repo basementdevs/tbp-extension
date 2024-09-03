@@ -7,7 +7,7 @@ import type {
   Paginator,
   UserSettings,
 } from "@/types/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 export async function getOccupations(): Promise<Occupation[]> {
@@ -57,6 +57,27 @@ export async function updateSettings(
 ): Promise<UserSettings | undefined> {
   try {
     const { data } = await axios.put<UserSettings>(
+      `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authorization.access_token}`,
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    console.error("Error fetching effects from platform:", error);
+  }
+}
+
+export async function patchSettings(
+  authorization: AccessTokenResponse,
+  payload: UpdateSettingsDTO,
+): Promise<UserSettings | undefined> {
+  try {
+    const { data } = await axios.patch<UserSettings>(
       `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
       payload,
       {
@@ -139,8 +160,9 @@ export const useGetUserSettingsQuery = ({
     },
   });
 
-export const useUpdateUserSettingsMutation = () =>
-  useMutation({
+export const useUpdateUserSettingsMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: ({
       authorization,
       payload,
@@ -148,4 +170,26 @@ export const useUpdateUserSettingsMutation = () =>
       authorization: AccessTokenResponse;
       payload: UpdateSettingsDTO;
     }) => updateSettings(authorization, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      // This is a workaround, but the correct approach would be to invalidate directly the key, but is not working idk why
+    },
   });
+};
+
+export const usePatchUserSettingsMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      authorization,
+      payload,
+    }: {
+      authorization: AccessTokenResponse;
+      payload: UpdateSettingsDTO;
+    }) => patchSettings(authorization, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+};
