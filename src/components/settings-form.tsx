@@ -19,9 +19,7 @@ type SettingsFormProps = {
 const DEFAULT_SETTINGS = {
   enabled: false,
   pronouns: "none",
-  occupation_id: 1,
-  pronouns_active: true,
-  occupation_active: true,
+  occupation_id: "1",
 } as const;
 
 export default function SettingsForm({
@@ -110,28 +108,16 @@ export default function SettingsForm({
           items={PRONOUNS_ITEMS}
           value={activeSettings?.pronouns.slug}
           onChange={(value: string) => handleChange("pronouns", value)}
-        >
-          {liveProfile && (
-            <Switch
-              onCheckedChange={(checked) => handleChange("enabled", checked)}
-              checked={true} // Waiting for backend return
-            />
-          )}
-        </SelectField>
+          disabled={!activeSettings?.enabled}
+        />
         <SelectField
           id="occupation"
           label="occupationLabel"
           items={occupationsItems}
-          value={activeSettings?.occupation_id}
+          value={activeSettings?.occupation_id?.toString()}
           onChange={(value: string) => handleChange("occupation_id", value)}
-        >
-          {liveProfile && (
-            <Switch
-              onCheckedChange={(checked) => handleChange("enabled", checked)}
-              checked={true} // Waiting for backend return
-            />
-          )}
-        </SelectField>
+          disabled={!activeSettings?.enabled}
+        />
       </div>
     </form>
   );

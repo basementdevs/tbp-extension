@@ -7,20 +7,18 @@ type SelectFieldProps = {
   label: string;
   items: { translationKey: string; apiValue: string }[];
   value?: string;
-  isDisable?: boolean;
+  disabled?: boolean;
   onChange: (value: string) => void;
-  children?: React.ReactNode;
 };
 
 const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
-  ({ id, label, items, value, onChange, isDisable, children }, ref) => {
+  ({ id, label, items, value, onChange, disabled }, ref) => {
     return (
       <div className="flex flex-col gap-3 w-full">
         <div className="flex flex-row gap-x-5 items-center">
           <label className="font-medium text-text-high" htmlFor={id}>
             {t(label)}
           </label>
-          {children}
         </div>
         <div className="relative">
           <select
@@ -29,7 +27,7 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
             onChange={(e) => onChange(e.target.value)}
             value={value}
             className="flex w-full items-center justify-between px-4 py-3 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-pill appearance-none pr-10 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isDisable}
+            disabled={disabled}
           >
             {items.map(({ translationKey, apiValue }) => (
               <option

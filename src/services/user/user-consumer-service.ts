@@ -34,10 +34,16 @@ export type ConsumerUserResponse = {
 
 export async function getUserFromConsumer(
   username: string,
-): Promise<ConsumerUserResponse> {
+  channel_id?: string,
+): Promise<ConsumerUserResponse | undefined> {
   try {
     const { data } = await axios.get<ConsumerUserResponse>(
       `${BASE_URL}/settings/${username}`,
+      {
+        params: {
+          channel_id: channel_id,
+        },
+      },
     );
 
     return data;
