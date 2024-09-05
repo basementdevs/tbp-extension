@@ -17,12 +17,14 @@ export default function ProfileCard({ user, channelName }: ProfileCardProps) {
   );
 
   const occupationText = t(
-    `occupation${activeSettings?.occupation.translation_key}`,
+    `occupation${activeSettings?.occupation.translation_key || "None"}`,
   );
-  const pronounsText = t(`pronouns${activeSettings?.pronouns.translation_key}`);
+  const pronounsText = t(
+    `pronouns${activeSettings?.pronouns.translation_key || "None"}`,
+  );
 
   return (
-    <div className="flex items-center rounded-xl bg-elevation-04dp p-2">
+    <div className="flex items-center rounded-xl bg-elevation-04dp p-2 border border-helper-outline">
       <img
         src={user?.accounts[0]?.avatar}
         alt="The user's profile"
@@ -38,7 +40,7 @@ export default function ProfileCard({ user, channelName }: ProfileCardProps) {
           </span>
         </div>
         <div className="flex items-center mt-2">
-          <span className="font-bold text-xxs text-text-high">ID:&nbsp;</span>
+          <span className="font-bold text-xs text-text-high">ID:&nbsp;</span>
           <span className="font-medium text-xs text-text-medium" id="idEl">
             {user.id}
           </span>

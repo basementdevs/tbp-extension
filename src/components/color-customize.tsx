@@ -2,7 +2,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAccessToken } from "@/providers/access-token-provider";
 import {
   type UpdateSettingsDTO,
-  useUpdateUserSettingsMutation,
+  usePatchUserSettingsMutation,
 } from "@/services/settings-service";
 import type { Color } from "@/types/types";
 import { useStorage } from "@plasmohq/storage/hook";
@@ -18,7 +18,7 @@ const ColorCustomizer = ({
   channelName,
 }: ColorCustomizerProps) => {
   const [colors] = useStorage<Color[]>("settings-colors");
-  const { mutate } = useUpdateUserSettingsMutation();
+  const { mutate } = usePatchUserSettingsMutation();
   const { accessToken } = useAccessToken();
 
   const { activeSettings } = useUserSettings(liveProfile ?? false, channelName);
@@ -45,7 +45,7 @@ const ColorCustomizer = ({
         <div key={color.id} className="relative">
           <button
             type="button"
-            className={`w-10 h-10 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white
+            className={`w-8 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white
                 ${activeSettings?.color_id === color.id ? "ring-2 ring-white" : ""}`}
             style={{ backgroundColor: color.hex ?? "#000" }}
             onClick={() => updateEffect({ color_id: color.id })}

@@ -23,13 +23,13 @@ export default function Stats() {
       <p className="font-bold text-xs text-text-hight">{title}</p>
       <div className="flex flex-row gap-5">
         {images?.map((src) => (
-          <div key={src} className="relative">
+          <div key={src} className="relative w-16 h-16">
             <img
               src={src}
               alt={title}
               width={64}
               height={64}
-              className="border border-helper-outline rounded-sm"
+              className="border border-helper-outline rounded-sm object-cover w-full h-full"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[rgba(9,9,10,0.64)] rounded-sm" />
           </div>

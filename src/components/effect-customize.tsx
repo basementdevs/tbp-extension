@@ -1,6 +1,6 @@
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAccessToken } from "@/providers/access-token-provider";
-import { useUpdateUserSettingsMutation } from "@/services/settings-service";
+import { usePatchUserSettingsMutation } from "@/services/settings-service";
 import type { Effect } from "@/types/types";
 import { useStorage } from "@plasmohq/storage/hook";
 import { Check } from "lucide-react";
@@ -15,7 +15,7 @@ const EffectCustomize = ({
   channelName,
 }: EffectCustomizeProps) => {
   const [effects] = useStorage<Effect[]>("settings-effects");
-  const { mutate } = useUpdateUserSettingsMutation();
+  const { mutate } = usePatchUserSettingsMutation();
   const { accessToken } = useAccessToken();
 
   const { activeSettings } = useUserSettings(liveProfile, channelName);
@@ -38,7 +38,7 @@ const EffectCustomize = ({
         <div key={effect.id} className="relative">
           <button
             type="button"
-            className={`w-10 h-10 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white
+            className={`w-8 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white
                 ${activeSettings?.effect_id === effect.id ? "ring-2 ring-white" : ""}`}
             style={{ backgroundColor: effect.hex ?? "#000" }}
             onClick={() => handleChange("effect_id", effect.id)}

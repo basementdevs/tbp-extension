@@ -10,6 +10,7 @@ import AboutCard from "@/pages/about";
 import Settings from "@/pages/settings";
 import Stats from "@/pages/stats";
 import Theme from "@/pages/theme";
+import { t } from "@/utils/i18n";
 
 type ProfileProps = {
   user: User;
@@ -30,6 +31,12 @@ export default function Profile({ user, channelName }: ProfileProps) {
           selectedItem={currentPage}
         />
       </div>
+
+      <hr className="border-helper-outline w-full mt-2 mb-4" />
+
+      <h1 className="font-secondary text-sm text-text-high mb-4">
+        {t(`${currentPage}`)}
+      </h1>
 
       <ProfileCard user={userService.user} channelName={channelName} />
 

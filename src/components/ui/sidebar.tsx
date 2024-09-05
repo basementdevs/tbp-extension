@@ -85,7 +85,7 @@ const Sidebar = ({
         onKeyUp={toggleSidebar}
       />
       <aside
-        className={`fixed top-0 right-0 w-80 h-full bg-elevation-01dp shadow-lg transform transition-transform duration-300 ease-in-out z-50 border border-helper-outline rounded-md px-4 py-6 ${
+        className={`fixed top-0 right-0 w-80 h-full bg-elevation-01dp shadow-lg transform transition-transform duration-300 ease-in-out z-50 border border-helper-outline rounded-md px-4 py-4 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
