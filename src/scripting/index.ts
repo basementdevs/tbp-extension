@@ -108,7 +108,11 @@ export default class Kernel {
             res.accessToken,
           );
 
-          if (!authorization) {
+          const isStreaming =
+            document.getElementsByClassName("liveIndicator--x8p4l").length ===
+            1;
+
+          if (!authorization || !isStreaming) {
             return;
           }
           sendHeartbeat(
