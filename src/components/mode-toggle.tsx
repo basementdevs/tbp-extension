@@ -13,7 +13,10 @@ export function ThemeSelect() {
   ];
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTheme(event.target.value as Theme);
+    const value = event.target.value;
+    if (["light", "dark", "system"].includes(value)) {
+      setTheme(value as Theme);
+    }
   };
 
   return (
