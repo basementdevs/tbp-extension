@@ -1,5 +1,5 @@
+import type { User, UserSettings } from "@/types/types";
 import { Storage } from "@plasmohq/storage";
-import type { User, UserSettings } from "~types/types";
 
 export default class UserStorageService {
   user: User;

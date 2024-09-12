@@ -1,10 +1,6 @@
 import type { PlasmoCSConfig } from "plasmo";
-
-import "@Scripting/scripting.css";
-
-import Kernel from "@Scripting/index";
-import browser from "webextension-polyfill";
-import type { AccessTokenResponse } from "~types/types";
+import Kernel from "./scripting/index";
+import "./scripting/scripting.css";
 
 export const config: PlasmoCSConfig = {
   matches: [

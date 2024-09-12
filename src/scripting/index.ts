@@ -1,18 +1,18 @@
-import ChatMutationObserver from "@Scripting/observers/chat-observer";
-import PopoverMutationObserver from "@Scripting/observers/popover-observer";
-import PageWatcher, {
-  PageWatcherState,
-} from "@Scripting/watchers/page-watcher";
+import { Storage } from "@plasmohq/storage";
 import browser from "webextension-polyfill";
-import { sendHeartbeat } from "~services/user/user-consumer-service";
-import type { AccessTokenResponse } from "~types/types";
-import { extractUsername } from "~utils/regex";
+import { sendHeartbeat } from "../services/user/user-consumer-service";
+import type { AccessTokenResponse } from "../types/types";
+import { extractUsername } from "../utils/regex";
+import ChatMutationObserver from "./observers/chat-observer";
+import PopoverMutationObserver from "./observers/popover-observer";
+import PageWatcher, { PageWatcherState } from "./watchers/page-watcher";
 
 const TWITCH_CHAT_LIST = ".chat-list--default,.chat-list--other,.chat-list";
 const SEVEN_TV_CHAT_LIST = ".seventv-chat-list";
 const CHAT_LIST = `${TWITCH_CHAT_LIST},${SEVEN_TV_CHAT_LIST}`;
 const POPOVER_ELEMENT = ".viewer-card-layer";
 const CATEGORY_ELEMENT_SELECTOR = 'a[data-a-target="stream-game-link"]';
+const storage = new Storage();
 
 let interval: number | null = null;
 let currentCategory = "";
@@ -31,7 +31,7 @@ export default class Kernel {
   }
 
   init = () => {
-    setInterval(() => {
+    setInterval(async () => {
       if (this.pageWatcher.matches() && !this.pageWatcher.observerRunning) {
         console.log(
           "TBP: PageWatcher matched, starting to listen to Twitch DOM...",
@@ -50,14 +50,14 @@ export default class Kernel {
         !this.pageWatcher.matches() &&
         !this.pageWatcher.observerRunning
       ) {
-        //console.log("TBP: Not on a watchable page...");
+        // console.log("TBP: Not on a watchable page...");
       } else {
         //console.log("TBP: Waiting...");
       }
     }, 25);
   };
 
-  private listenToTwitchDOM() {
+  private async listenToTwitchDOM() {
     console.log("TBP: Loading Twitch Better Profile...");
 
     const chatElements = document.querySelector(CHAT_LIST);
@@ -92,6 +92,8 @@ export default class Kernel {
       return;
     }
 
+    await storage.set("channelName", channelName);
+
     setTimeout(() => {
       const categoryElement = document.querySelector(CATEGORY_ELEMENT_SELECTOR);
       if (categoryElement) {
@@ -106,7 +108,11 @@ export default class Kernel {
             res.accessToken,
           );
 
-          if (!authorization) {
+          const isStreaming =
+            document.getElementsByClassName("liveIndicator--x8p4l").length ===
+            1;
+
+          if (!authorization || !isStreaming) {
             return;
           }
           sendHeartbeat(
@@ -117,6 +123,10 @@ export default class Kernel {
         });
       }, 60 * 1000);
     }, 5000);
+
+    window.addEventListener("beforeunload", async () => {
+      await storage.set("channelName", "");
+    });
   }
 
   stop = () => {
