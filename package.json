@@ -50,7 +50,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
+    "@biomejs/biome": "1.9.2",
     "@tanstack/eslint-plugin-query": "5.52.0",
     "@types/chrome": "0.0.258",
     "@types/node": "20.11.5",
