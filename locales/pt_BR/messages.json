@@ -154,5 +154,8 @@
   },
   "themes": {
     "message": "Temas"
+  },
+  "effectsLabel": {
+    "message": "Selecione um Efeito"
   }
 }

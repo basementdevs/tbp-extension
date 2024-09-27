@@ -2,17 +2,17 @@ import { t } from "@/utils/i18n";
 import { ChevronDown } from "lucide-react";
 import React, { useState, type MutableRefObject } from "react";
 
-type SelectFieldProps = {
+type DynamicSelectProps = {
   id: string;
   label: string;
-  items: { translationKey: string; apiValue: string }[];
+  items: { name: string; apiValue: string }[];
   value?: string;
   disabled?: boolean;
   onChange: (value: string) => void;
   children?: React.ReactNode;
 };
 
-const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
+const DynamicSelect = React.forwardRef<HTMLSelectElement, DynamicSelectProps>(
   ({ id, label, items, value, onChange, disabled, children }, ref) => {
     return (
       <div className="flex flex-col gap-3 w-full">
@@ -30,13 +30,13 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
             className="flex w-full items-center justify-between px-4 py-2 border border-helper-outline hover:border-icon-medium focus:border-primary-600 focus:outline-none font-medium bg-elevation-surface rounded-md appearance-none pr-10 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={disabled}
           >
-            {items.map(({ translationKey, apiValue }) => (
+            {items.map(({ name, apiValue }) => (
               <option
-                key={translationKey}
+                key={name}
                 value={apiValue}
                 className="bg-helper-outline font-primary text-text-medium focus:border-primary-600"
               >
-                {t(`${id}${translationKey}`)}
+                {name}
               </option>
             ))}
           </select>
@@ -50,6 +50,6 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(
   },
 );
 
-SelectField.displayName = "SelectField";
+DynamicSelect.displayName = "DynamicSelect";
 
-export default SelectField;
+export default DynamicSelect;

@@ -27,15 +27,15 @@ const Settings: React.FC<SettingsProps> = ({ userService, channelName }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-y-3 mb-5">
-          <p className="text-text-high text-xs font-bold">
-            Customize suas cores
-          </p>
-          <ColorCustomizer
-            liveProfile={isLiveProfile}
-            channelName={channelName}
-          />
-        </div>
+        {/*<div className="flex flex-col gap-y-3 mb-5">*/}
+        {/*  <p className="text-text-high text-xs font-bold">*/}
+        {/*    Customize suas cores*/}
+        {/*  </p>*/}
+        {/*  <ColorCustomizer*/}
+        {/*    liveProfile={isLiveProfile}*/}
+        {/*    channelName={channelName}*/}
+        {/*  />*/}
+        {/*</div>*/}
         <ChatAppearance
           userService={userService}
           liveProfile={isLiveProfile}

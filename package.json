@@ -76,6 +76,7 @@
       "identity",
       "*://*.twitch.tv/*",
       "https://*.danielheart.dev/*",
+      "https://*.basementdevs.com.br/*",
       "*://localhost/*",
       "storage"
     ]
