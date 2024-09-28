@@ -1,4 +1,5 @@
 import type UserStorageService from "@/services/user/user-storage-service";
+import { t } from "@/utils/i18n";
 import {
   Info,
   type LucideIcon,
@@ -58,10 +59,10 @@ const Sidebar = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const sidebarItems = [
-    { name: "Configurações", key: "settings", icon: Settings },
-    { name: "Estatísticas", key: "stats", icon: PieChart },
-    { name: "Temas", key: "themes", icon: Palette },
-    { name: "Sobre", key: "about", icon: Info },
+    { name: t("sidebarItemSettings"), key: "settings", icon: Settings },
+    { name: t("sidebarItemStatistics"), key: "stats", icon: PieChart },
+    { name: t("sidebarItemThemes"), key: "themes", icon: Palette },
+    { name: t("sidebarItemAbout"), key: "about", icon: Info },
   ];
 
   const toggleSidebar = () => {

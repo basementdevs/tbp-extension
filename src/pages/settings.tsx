@@ -5,6 +5,7 @@ import ChatAppearance from "@/components/ui/chat-appearance";
 import Tabs from "@/components/ui/tabs";
 import type UserStorageService from "@/services/user/user-storage-service";
 import type { User } from "@/types/types";
+import { t } from "@/utils/i18n";
 
 type SettingsProps = {
   userService: UserStorageService;
@@ -19,7 +20,7 @@ const Settings: React.FC<SettingsProps> = ({ userService, channelName }) => {
 
         <div className="flex flex-col gap-y-3 mb-5">
           <p className="text-text-high text-xs font-bold">
-            Adicione Efeitos ao seu Nickname
+            {t("featureEffectsTitle")}
           </p>
           <EffectCustomize
             liveProfile={isLiveProfile}
@@ -47,13 +48,13 @@ const Settings: React.FC<SettingsProps> = ({ userService, channelName }) => {
 
   const tabItems = [
     {
-      name: "Perfil Global",
+      name: t("tabGeneralProfile"),
       value: "global-profile",
       disabled: false,
       content: renderChannelSettings(false),
     },
     {
-      name: "Perfil da Live",
+      name: t("tabStreamProfile"),
       value: "channel-profile",
       disabled: !channelName,
       content: renderChannelSettings(true),
