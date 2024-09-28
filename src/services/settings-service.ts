@@ -10,8 +10,10 @@ import type {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
+const BASE_URL = `${env.data.APP_PLATFORM_API_URL}/api/${env.data.CONSUMER_API_VERSION}`;
+
 export async function getOccupations(): Promise<Occupation[]> {
-  const response = await fetch(`${env.data.APP_PLATFORM_API_URL}/occupations`);
+  const response = await fetch(`${BASE_URL}/occupations`);
   if (!response.ok) {
     return [];
   }
@@ -20,9 +22,7 @@ export async function getOccupations(): Promise<Occupation[]> {
 
 export async function getEffects(): Promise<Paginator<Effect> | undefined> {
   try {
-    const { data } = await axios.get<Paginator<Effect>>(
-      `${env.data.APP_PLATFORM_API_URL}/effects`,
-    );
+    const { data } = await axios.get<Paginator<Effect>>(`${BASE_URL}/effects`);
     return data;
   } catch (error) {
     console.error("Error fetching effects from platform:", error);
@@ -31,9 +31,7 @@ export async function getEffects(): Promise<Paginator<Effect> | undefined> {
 
 export async function getColors(): Promise<Paginator<Color> | undefined> {
   try {
-    const { data } = await axios.get<Paginator<Color>>(
-      `${env.data.APP_PLATFORM_API_URL}/colors`,
-    );
+    const { data } = await axios.get<Paginator<Color>>(`${BASE_URL}/colors`);
     return data;
   } catch (error) {
     console.error("Error fetching effects from platform:", error);
@@ -57,7 +55,7 @@ export async function updateSettings(
 ): Promise<UserSettings | undefined> {
   try {
     const { data } = await axios.put<UserSettings>(
-      `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
+      `${BASE_URL}/me/update-settings`,
       payload,
       {
         headers: {
@@ -78,7 +76,7 @@ export async function patchSettings(
 ): Promise<UserSettings | undefined> {
   try {
     const { data } = await axios.patch<UserSettings>(
-      `${env.data.APP_PLATFORM_API_URL}/me/update-settings`,
+      `${BASE_URL}/me/update-settings`,
       payload,
       {
         headers: {
@@ -115,7 +113,7 @@ export async function getUserSettings(
 ): Promise<[UserSettings?, UserSettings?]> {
   if (!authorization) return [];
 
-  const url = `${env.data.APP_PLATFORM_API_URL}/me/settings${
+  const url = `${BASE_URL}/me/settings${
     channelName ? `?channel_id=${channelName}` : ""
   }`;
 

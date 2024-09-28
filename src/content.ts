@@ -1,3 +1,4 @@
+import { env } from "@/config/env";
 import type { PlasmoCSConfig } from "plasmo";
 import Kernel from "./scripting/index";
 
@@ -20,7 +21,7 @@ const cssDocumentEl = document.getElementById("tbp-effects");
 
 if (!cssDocumentEl) {
   const current_ts = Date.now();
-  const uri = `https://tbp.danielheart.dev/storage/effects.css?ts=${current_ts}`;
+  const uri = `${env.data.APP_PLATFORM_API_URL}/storage/effects.css?ts=${current_ts}`;
   const link = document.createElement("link");
   link.id = "tbp-effects";
   link.rel = "stylesheet";

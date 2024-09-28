@@ -57,7 +57,7 @@ export async function authenticateWithServer(code: string) {
     const { data } = await axios.post<{
       user: User;
       authorization: AccessTokenResponse;
-    }>(`${env.data.APP_PLATFORM_API_URL}/authenticate/twitch`, { code });
+    }>(`${env.data.APP_PLATFORM_API_URL}/api/v1/authenticate/twitch`, { code });
 
     const { user, authorization } = data;
 
