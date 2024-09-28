@@ -1,111 +1,157 @@
-import { occupations, pronounsItems } from "@Components/settings/settings-form";
-import { t } from "~utils/i18nUtils";
+import { env } from "@/config/env";
+import {
+  type ConsumerUserResponse,
+  type SettingsOption,
+  getUserFromConsumer,
+} from "@/services/user/user-consumer-service";
+import { t } from "@/utils/i18n";
+import { Storage } from "@plasmohq/storage";
 
-const API_URL: string = process.env.PLASMO_PUBLIC_API_URL;
+const API_URL: string = env.data.CONSUMER_API_URL;
 
-const TWITCH_BADGES_CONTAINER = ".chat-line__username-container";
-const SEVEN_TV_BADGES_CONTAINER = ".seventv-chat-user-badge-list";
-
-const TWITCH_USERNAME_CONTAINER = ".chat-line__username";
-const SEVEN_TV_USERNAME_CONTAINER = ".seventv-chat-user-username";
-const USERNAME_CONTAINER = `${TWITCH_USERNAME_CONTAINER},${SEVEN_TV_USERNAME_CONTAINER}`;
+const SELECTORS = {
+  TWITCH_BADGES: ".chat-line__username-container",
+  SEVEN_TV_BADGES: ".seventv-chat-user-badge-list",
+  TWITCH_USERNAME: ".chat-line__username",
+  SEVEN_TV_USERNAME: ".seventv-chat-user-username",
+  get USERNAME() {
+    return `${this.TWITCH_USERNAME},${this.SEVEN_TV_USERNAME}`;
+  },
+};
 
 const enhanceChatMessage = async (messageEl: HTMLElement) => {
-  const usernameEl = messageEl.querySelector(USERNAME_CONTAINER);
+  try {
+    const usernameContainer = messageEl.querySelector(SELECTORS.USERNAME);
+    if (!usernameContainer) return;
 
-  /**
-   * TODO: make adapters based on which plugins the user has installed (compatibility mode)
-   * Restructure the code to make it more modular and easy to maintain (Goal: 1.0.0)
-   **/
-  let badgesEl: Element;
-  badgesEl = messageEl.querySelector(TWITCH_BADGES_CONTAINER);
-  if (badgesEl) {
-    badgesEl = badgesEl.childNodes[0] as Element;
-  } else {
-    badgesEl = messageEl.querySelector(SEVEN_TV_BADGES_CONTAINER);
-  }
+    const storage = new Storage();
+    const channelId = await storage.get("channelName");
+    const username = usernameContainer.textContent || "";
+    const consumerUser = await getUserFromConsumer(username, channelId);
+    if (!consumerUser) return;
 
-  if (!usernameEl) {
-    return;
-  }
-
-  const username = usernameEl.textContent;
-  const uri = `${API_URL}/settings/${username}`;
-  const req = await fetch(uri);
-
-  if (!req.ok) {
-    return;
-  }
-
-  const res = await req.json();
-  const child = usernameEl.firstChild;
-
-  const pronouns = res.pronouns.replace("/", "");
-  const i18nPronouns = t(`pronouns${pronouns}`);
-  const pronounsElement = document.createElement("span");
-  pronounsElement.textContent = `(${i18nPronouns})`;
-  pronounsElement.style.color = "gray";
-  pronounsElement.style.marginLeft = "4px";
-
-  if (child) {
-    usernameEl.appendChild(pronounsElement);
-    badgesEl.appendChild(buildBadge(res.occupation));
+    const badgesEl = getBadgesElement(messageEl);
+    updateUsername(usernameContainer, consumerUser);
+    addPronouns(usernameContainer, consumerUser.pronouns);
+    addOccupationBadge(badgesEl, consumerUser.occupation);
+  } catch (error) {
+    console.error("Error enhancing chat message:", error);
   }
 };
 
-const buildBadge = (occupation) => {
-  // Create a div element
+const getBadgesElement = (messageEl: HTMLElement): Element | null => {
+  const badgesEl = messageEl.querySelector(SELECTORS.TWITCH_BADGES);
+  if (badgesEl) {
+    return badgesEl.childNodes[0] as Element;
+  }
+  return messageEl.querySelector(SELECTORS.SEVEN_TV_BADGES);
+};
+
+const updateUsername = (container: Element, user: ConsumerUserResponse) => {
+  const usernameEl = container.querySelector(".chat-author__display-name");
+  if (!usernameEl) return;
+
+  if (user.color && user.color.slug !== "none") {
+    (usernameEl as HTMLElement).style.color = user.color.hex || "";
+  }
+
+  if (user.effect && user.effect.slug !== "none") {
+    usernameEl.classList.add(user.effect.class_name);
+  }
+};
+
+const addPronouns = (container: Element, pronouns: SettingsOption) => {
+  const i18nPronouns =
+    pronouns.translation_key === "None"
+      ? "-"
+      : t(`pronouns${pronouns.translation_key}`);
+
+  const pronounsElement = createPronounsElement(i18nPronouns);
+  container.appendChild(pronounsElement);
+};
+
+const createPronounsElement = (text: string): HTMLSpanElement => {
+  const element = document.createElement("span");
+  element.textContent = `(${text})`;
+  element.style.color = "gray";
+  element.style.marginLeft = "4px";
+  return element;
+};
+
+const addOccupationBadge = (
+  badgesEl: Element | null,
+  occupation: SettingsOption,
+) => {
+  if (badgesEl) {
+    badgesEl.appendChild(buildBadge(occupation));
+  }
+};
+
+const buildBadge = (occupation: SettingsOption): HTMLDivElement => {
   const badgeContainer = document.createElement("div");
   badgeContainer.className =
     "InjectLayout-sc-1i43xsx-0 jbmPmA seventv-chat-badge";
-  // SevenTV Stuff
   badgeContainer.setAttributeNode(document.createAttribute("data-v-9f956e7d"));
 
-  // Create an img element
   const img = document.createElement("img");
   img.alt = "Just a thing";
   img.width = 18;
   img.setAttribute("aria-label", "Just a thing");
   img.className = "chat-badge";
-  const badgeUrl = `${API_URL}/static/icons/${occupation}.png`;
+  const badgeUrl = `${API_URL}/static/icons/${occupation.slug}.png`;
   img.src = badgeUrl;
   img.srcset = `${badgeUrl} 1x,${badgeUrl} 2x,${badgeUrl} 4x`;
 
-  // Append the img to the div
   badgeContainer.appendChild(img);
-
   return badgeContainer;
 };
 
 async function enhanceTwitchPopover(nameCard: Node, detailsCard: Node) {
-  const username = nameCard.textContent.trim();
+  const username = nameCard.textContent?.trim() || "";
+  const storage = new Storage();
+  const channelId = await storage.get("channelName");
+  const res = await getUserFromConsumer(username, channelId);
 
-  const uri = `${API_URL}/settings/${username}`;
-  const req = await fetch(uri);
-
-  if (!req.ok) {
-    return;
-  }
-
-  const res = await req.json();
-  const currentPronoun = pronounsItems.find((p) => p.apiValue === res.pronouns);
-
-  const i18nPronouns = t(`pronouns${currentPronoun.translationKey}`);
-  // @ts-ignore
-  nameCard.innerHTML += `<span class="pronouns-card">(${i18nPronouns})</span>`;
-  const occupationObject = occupations.find(
-    (o) => o.apiValue === res.occupation,
+  addPronounsToNameCard(
+    nameCard,
+    res?.pronouns || {
+      name: "",
+      slug: "",
+      translation_key: "None",
+    },
   );
-  const occupation = t(`occupation${occupationObject.translationKey}`);
-
-  const occupationContainer = document.createElement("div");
-  occupationContainer.className = "occupation-job";
-  occupationContainer.innerHTML = `
-            ${buildBadge(res.occupation).outerHTML}
-            <span>${occupation}</span>
-          `;
-
-  detailsCard.appendChild(occupationContainer);
+  addOccupationToDetailsCard(
+    detailsCard,
+    res?.occupation || {
+      name: "",
+      slug: "",
+      translation_key: "None",
+    },
+  );
 }
+
+const addPronounsToNameCard = (nameCard: Node, pronouns: SettingsOption) => {
+  const i18nPronouns = t(
+    `${pronouns.translation_key === "None" ? "-" : "pronouns"}${pronouns.translation_key}`,
+  );
+  if (nameCard instanceof HTMLElement) {
+    nameCard.innerHTML += `<span class="pronouns-card">(${i18nPronouns})</span>`;
+  }
+};
+
+const addOccupationToDetailsCard = (
+  detailsCard: Node,
+  occupation: SettingsOption,
+) => {
+  if (detailsCard instanceof HTMLElement) {
+    const occupationContainer = document.createElement("div");
+    occupationContainer.className = "occupation-job";
+    occupationContainer.innerHTML = `
+      ${buildBadge(occupation).outerHTML}
+      <span>${occupation.name}</span>
+    `;
+    detailsCard.appendChild(occupationContainer);
+  }
+};
 
 export { enhanceChatMessage, enhanceTwitchPopover };

@@ -1,8 +1,6 @@
+import { env } from "@/config/env";
 import type { PlasmoCSConfig } from "plasmo";
-
-import "@Scripting/scripting.css";
-
-import Kernel from "@Scripting/index";
+import Kernel from "./scripting/index";
 
 export const config: PlasmoCSConfig = {
   matches: [
@@ -18,5 +16,17 @@ export const config: PlasmoCSConfig = {
   ],
   all_frames: true,
 };
+
+const cssDocumentEl = document.getElementById("tbp-effects");
+
+if (!cssDocumentEl) {
+  const current_ts = Date.now();
+  const uri = `${env.data.APP_PLATFORM_API_URL}/storage/effects.css?ts=${current_ts}`;
+  const link = document.createElement("link");
+  link.id = "tbp-effects";
+  link.rel = "stylesheet";
+  link.href = uri;
+  document.head.appendChild(link);
+}
 
 new Kernel().init();

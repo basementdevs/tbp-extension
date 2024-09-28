@@ -15,22 +15,25 @@
     "message": "Sistema"
   },
   "headerTitle": {
-    "message": "Perfil da Twitch"
+    "message": "Twitch Profile"
   },
   "authenticateButtonText": {
-    "message": "Autenticar com a Twitch"
+    "message": "Entrar com a Twitch"
   },
   "heroTitle": {
-    "message": "Perfil da Twitch"
+    "message": "Crie o seu"
+  },
+  "heroProfileTitle": {
+    "message": "Perfil"
   },
   "heroSubtitle": {
-    "message": "Faça login com a Twitch para começar"
+    "message": "Parece que você ainda não fez login com a Twitch"
   },
   "pronounsLabel": {
-    "message": "Selecione seu pronome"
+    "message": "⚧\uFE0F Selecione seu pronome"
   },
   "occupationLabel": {
-    "message": "Selecione sua profissão"
+    "message": "\uD83D\uDCBC Selecione sua profissão"
   },
   "pronounsTitle": {
     "message": "Pronomes"
@@ -139,5 +142,59 @@
   },
   "pronounsItIts": {
     "message": "Isto/Sua"
+  },
+  "settings": {
+    "message": "Configurações"
+  },
+  "stats": {
+    "message": "Estatísticas"
+  },
+  "about": {
+    "message": "Sobre"
+  },
+  "themes": {
+    "message": "Temas"
+  },
+  "effectsLabel": {
+    "message": "Selecione um Efeito"
+  },
+  "tabGeneralProfile": {
+    "message": "Perfil Geral"
+  },
+  "tabStreamProfile": {
+    "message": "Perfil Live Atual"
+  },
+  "sidebarItemSettings": {
+    "message": "Configurações"
+  },
+  "sidebarItemStatistics": {
+    "message": "Estatísticas"
+  },
+  "sidebarItemThemes": {
+    "message": "Temas"
+  },
+  "sidebarItemAbout": {
+    "message": "Sobre"
+  },
+  "themeToggleTitle": {
+    "message": "Selecione um Tema"
+  },
+  "featureEffectsTitle": {
+    "message": "✨ Adicione Efeitos ao seu Nickname"
+  },
+  "featureStreamProfileLabel": {
+    "message": "Você está editando o canal"
+  },
+  "featureStatsWatchedHours": {
+    "message": "Horas Assistidas"
+  },
+  "featureStatsMessagesSent": {
+    "message": "Mensagens Enviadas"
+  },
+  "featureStatsMostWatchedChannels": {
+    "message": "Canais Mais Assistidos"
+  },
+  "featureStatsMostWatchedCategories": {
+    "message": "Categorias Mais Assistidas"
   }
 }

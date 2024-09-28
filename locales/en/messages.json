@@ -15,22 +15,25 @@
     "message": "System"
   },
   "headerTitle": {
-    "message": "Twitch Profiler"
+    "message": "Twitch Profile"
   },
   "authenticateButtonText": {
     "message": "Authenticate with Twitch"
   },
   "heroTitle": {
-    "message": "Twitch Profiler"
+    "message": "Create your "
+  },
+  "heroProfileTitle": {
+    "message": "Profile"
   },
   "heroSubtitle": {
-    "message": "Sign in with Twitch to get started"
+    "message": "It looks like you haven't logged in with Twitch yet"
   },
   "pronounsLabel": {
-    "message": "Select your pronoun"
+    "message": "⚧\uFE0F Select your pronoun"
   },
   "occupationLabel": {
-    "message": "Select your occupation"
+    "message": "\uD83D\uDCBC Select your occupation"
   },
   "pronounsTitle": {
     "message": "Pronouns"
@@ -139,5 +142,47 @@
   },
   "pronounsItIts": {
     "message": "It/Its"
+  },
+  "effectsLabel": {
+    "message": "Select your effect"
+  },
+  "tabGeneralProfile": {
+    "message": "General Profile"
+  },
+  "tabStreamProfile": {
+    "message": "Current Stream Profile"
+  },
+  "sidebarItemSettings": {
+    "message": "Settings"
+  },
+  "sidebarItemStatistics": {
+    "message": "Statistics"
+  },
+  "sidebarItemThemes": {
+    "message": "Themes"
+  },
+  "sidebarItemAbout": {
+    "message": "About"
+  },
+  "themeToggleTitle": {
+    "message": "Select a Theme"
+  },
+  "featureEffectsTitle": {
+    "message": "✨ Enhance your Username with Effects "
+  },
+  "featureStreamProfileLabel": {
+    "message": "You're editing the channel "
+  },
+  "featureStatsWatchedHours": {
+    "message": "Watched Hours"
+  },
+  "featureStatsMessagesSent": {
+    "message": "Messages Sent"
+  },
+  "featureStatsMostWatchedChannels": {
+    "message": "Most Watched Channels"
+  },
+  "featureStatsMostWatchedCategories": {
+    "message": "Most Watched Categories"
   }
 }

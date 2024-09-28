@@ -1,4 +1,4 @@
-import MessageQueue from "~scripting/queue";
+import MessageQueue from "@/scripting/queue";
 
 const TWITCH_CHAT_CONTAINER = "chat-line__message";
 const SEVEN_TV_CHAT_CONTAINER = "seventv-message";
@@ -87,7 +87,7 @@ export default class ChatMutationObserver {
         if (this.processedNodes.has(addedNode)) {
           return; // Skip already processed nodes
         }
-        console.log("TBP: ", addedNode.classList);
+
         for (const container of CHAT_CONTAINER) {
           if (addedNode.classList.contains(container)) {
             console.log("TBP: Added node detected");

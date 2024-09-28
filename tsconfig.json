@@ -5,14 +5,12 @@
   "compilerOptions": {
     "types": ["firefox-webext-browser", "chrome", "node"],
     "paths": {
-      "~*": ["./src/*"],
-      "@Shad/*": ["./src/resources/shad/*"],
-      "@Components/*": ["./src/resources/components/*"],
-      "@Pages/*": ["./src/resources/pages/*"],
-      "@Config/*": ["./src/config/*"],
-      "@Scripting/*": ["./src/scripting/*"],
-      "@Root/*": ["./*"]
+      "@/*": ["./src/*"],
+      "~/*": ["./*"]
     },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true
   }
 }
