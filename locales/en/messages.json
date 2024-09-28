@@ -139,5 +139,8 @@
   },
   "pronounsItIts": {
     "message": "It/Its"
+  },
+  "effectsLabel": {
+    "message": "Select your effect"
   }
 }

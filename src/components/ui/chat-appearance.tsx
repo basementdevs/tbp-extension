@@ -1,6 +1,7 @@
 import { env } from "@/config/env";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import type UserStorageService from "@/services/user/user-storage-service";
+import { cn } from "@/utils/cn";
 import { t } from "@/utils/i18n";
 
 type ChatAppearanceProps = {
@@ -34,7 +35,12 @@ export default function ChatAppearance({
           alt="Occupation icon"
           className="rounded"
         />
-        <span className="font-bold text-gray text-xs">
+        <span
+          className={cn(
+            "font-bold text-gray text-xs",
+            activeSettings?.effect.class_name,
+          )}
+        >
           {userService.user.name}
         </span>
         <span className="font-medium text-text-low text-xs">

@@ -1,4 +1,5 @@
 import "./style.css";
+import { env } from "@/config/env";
 import {
   AccessTokenProvider,
   useAccessTokenFromStorage,
@@ -12,6 +13,18 @@ import Profile from "./components/profile";
 import { Login } from "./pages/login";
 
 const queryClient = new QueryClient();
+
+const cssDocumentEl = document.getElementById("tbp-effects");
+
+if (!cssDocumentEl) {
+  const current_ts = Date.now();
+  const uri = `${env.data.APP_PLATFORM_API_URL}/storage/effects.css?ts=${current_ts}`;
+  const link = document.createElement("link");
+  link.id = "tbp-effects";
+  link.rel = "stylesheet";
+  link.href = uri;
+  document.head.appendChild(link);
+}
 
 function Popup() {
   const [user] = useStorage("user");

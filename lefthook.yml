@@ -9,9 +9,9 @@ pre-commit:
   parallel: false
   commands:
     lint:
-      run: pnpx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true -- {staged_files}
+      run: pnpx @biomejs/biome@1.8.3 check --no-errors-on-unmatched --files-ignore-unknown=true -- {staged_files}
 pre-push:
   parallel: false
   commands:
     lint:
-      run: pnpx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true -- {push_files}
+      run: pnpx @biomejs/biome@1.8.3 check --no-errors-on-unmatched --files-ignore-unknown=true -- {push_files}

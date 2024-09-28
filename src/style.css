@@ -4,9 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
-  
   body {
     font-family: "Satoshi", sans-serif;
   }
@@ -39,7 +37,7 @@
 
   :root {
     /* Opacity */
-    --opacity-semiopaque: 0.80;
+    --opacity-semiopaque: 0.8;
     --opacity-intense: 0.64;
     --opacity-medium: 0.32;
     --opacity-light: 0.16;
@@ -109,7 +107,6 @@
     --line-height-xs: 150%;
   }
 
-  
   :root,
   .light,
   [data-theme="light"] {
@@ -205,6 +202,6 @@
     --color-elevation-02dp: 26 26 27;
     --color-elevation-03dp: 28 28 29;
     --color-elevation-04dp: 31 31 32;
-    --color-elevation-05dp: 36 36 37
+    --color-elevation-05dp: 36 36 37;
   }
 }
