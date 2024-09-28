@@ -8,6 +8,7 @@ import {
   useUpdateUserSettingsMutation,
 } from "@/services/settings-service";
 import type { Occupation } from "@/types/types";
+import { t } from "@/utils/i18n";
 import { PRONOUNS_ITEMS } from "@/utils/pronouns";
 import { useStorage } from "@plasmohq/storage/hook";
 
@@ -88,17 +89,19 @@ export default function SettingsForm({
       <div className="flex flex-col w-full items-center gap-8 mb-8 mt-3">
         {liveProfile && (
           <AnnounceBadge>
-            <div className="flex flex-col items-center justify-center w-full gap-y-2">
-              <p className="text-xs text-text-medium">
-                Você está editando o canal{" "}
-                <span className="font-bold text-text-high capitalize">
-                  {channelName}
-                </span>
-              </p>
+            <div className="flex flex-row items-center justify-between w-full gap-y-2">
               <Switch
                 onCheckedChange={(checked) => handleChange("enabled", checked)}
                 checked={activeSettings?.enabled || DEFAULT_SETTINGS.enabled}
               />
+              <div className="flex flex-col items-end space-x-4">
+                <p className="text-xs text-text-medium ">
+                  {t("featureStreamProfileLabel")}
+                </p>
+                <p className="font-bold  text-text-high">
+                  {channelName?.toLowerCase()}
+                </p>
+              </div>
             </div>
           </AnnounceBadge>
         )}

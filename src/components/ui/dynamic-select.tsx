@@ -16,11 +16,6 @@ const DynamicSelect = React.forwardRef<HTMLSelectElement, DynamicSelectProps>(
   ({ id, label, items, value, onChange, disabled, children }, ref) => {
     return (
       <div className="flex flex-col gap-3 w-full">
-        <div className="flex flex-row gap-x-5 items-center">
-          <label className="font-medium text-text-high" htmlFor={id}>
-            {t(label)}
-          </label>
-        </div>
         <div className="relative">
           <select
             ref={ref as MutableRefObject<HTMLSelectElement>}

@@ -21,6 +21,16 @@ export default function Profile({ user, channelName }: ProfileProps) {
   const userService = new UserStorageService(user);
   const [currentPage, setCurrentPage] = useState("settings");
 
+  const pagesTitle = {
+    settings: t("sidebarItemSettings"),
+    stats: t("sidebarItemStatistics"),
+    themes: t("sidebarItemThemes"),
+    about: t("sidebarItemAbout"),
+  };
+
+  // @ts-ignore
+  const currentPageTitle = pagesTitle[currentPage];
+
   return (
     <div className="flex flex-col max-w-96 gap min-h-[800px]">
       <div className="flex justify-between w-full">
@@ -35,7 +45,7 @@ export default function Profile({ user, channelName }: ProfileProps) {
       <hr className="border-helper-outline w-full mt-2 mb-4" />
 
       <h1 className="font-secondary text-sm text-text-high mb-4">
-        {t(`${currentPage}`)}
+        {currentPageTitle}
       </h1>
 
       <ProfileCard user={userService.user} channelName={channelName} />

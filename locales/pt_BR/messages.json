@@ -30,10 +30,10 @@
     "message": "Parece que você ainda não fez login com a Twitch"
   },
   "pronounsLabel": {
-    "message": "Selecione seu pronome"
+    "message": "⚧\uFE0F Selecione seu pronome"
   },
   "occupationLabel": {
-    "message": "Selecione sua profissão"
+    "message": "\uD83D\uDCBC Selecione sua profissão"
   },
   "pronounsTitle": {
     "message": "Pronomes"
@@ -157,5 +157,44 @@
   },
   "effectsLabel": {
     "message": "Selecione um Efeito"
+  },
+  "tabGeneralProfile": {
+    "message": "Perfil Geral"
+  },
+  "tabStreamProfile": {
+    "message": "Perfil Live Atual"
+  },
+  "sidebarItemSettings": {
+    "message": "Configurações"
+  },
+  "sidebarItemStatistics": {
+    "message": "Estatísticas"
+  },
+  "sidebarItemThemes": {
+    "message": "Temas"
+  },
+  "sidebarItemAbout": {
+    "message": "Sobre"
+  },
+  "themeToggleTitle": {
+    "message": "Selecione um Tema"
+  },
+  "featureEffectsTitle": {
+    "message": "✨ Adicione Efeitos ao seu Nickname"
+  },
+  "featureStreamProfileLabel": {
+    "message": "Você está editando o canal"
+  },
+  "featureStatsWatchedHours": {
+    "message": "Horas Assistidas"
+  },
+  "featureStatsMessagesSent": {
+    "message": "Mensagens Enviadas"
+  },
+  "featureStatsMostWatchedChannels": {
+    "message": "Canais Mais Assistidos"
+  },
+  "featureStatsMostWatchedCategories": {
+    "message": "Categorias Mais Assistidas"
   }
 }
