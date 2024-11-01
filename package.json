@@ -37,7 +37,7 @@
     "axios": "1.7.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "cmdk": "^1.0.0",
+    "cmdk": "^1.0.3",
     "framer-motion": "11.11.10",
     "lucide-react": "^0.408.0",
     "plasmo": "0.89.3",
