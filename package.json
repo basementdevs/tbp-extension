@@ -15,7 +15,8 @@
     "package": "plasmo package",
     "check": "biome check",
     "check:fix": "biome check --write",
-    "check:ci": "biome ci ."
+    "check:ci": "biome ci .",
+    "check:hook": "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
   },
   "dependencies": {
     "@plasmohq/messaging": "^0.6.2",
