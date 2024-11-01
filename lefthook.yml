@@ -2,16 +2,16 @@
 
 # Refer for explanation to following link:
 # https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
- 
+
 assert_lefthook_installed: true
 
 pre-commit:
   parallel: false
   commands:
     lint:
-      run: pnpx @biomejs/biome@1.8.3 check --no-errors-on-unmatched --files-ignore-unknown=true -- {staged_files}
+      run: pnpm run check:hook -- {staged_files}
 pre-push:
   parallel: false
   commands:
     lint:
-      run: pnpx @biomejs/biome@1.8.3 check --no-errors-on-unmatched --files-ignore-unknown=true -- {push_files}
+      run: pnpm run check:hook -- {push_files}
