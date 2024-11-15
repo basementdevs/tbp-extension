@@ -1,16 +1,29 @@
 version: 2
 
 updates:
-  - package-ecosystem: github-actions
-    directories:
-      - '/'
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: weekly
-    target-branch: develop
+      interval: 'daily'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
+    groups:
+      devDependencies:
+        dependency-type: development
+        patterns:
+          - '*'
+      dependencies:
+        dependency-type: production
+        patterns:
+          - '*'
 
-  - package-ecosystem: npm
-    directories:
-      - '/'
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: daily
-    target-branch: develop
+      interval: 'weekly'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
