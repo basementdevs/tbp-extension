@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@tanstack/eslint-plugin-query": "5.62.1",
+    "@tanstack/eslint-plugin-query": "5.62.9",
     "@types/chrome": "0.0.287",
     "@types/node": "22.10.2",
     "@types/react": "18.3.12",
